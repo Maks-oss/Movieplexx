@@ -8,6 +8,6 @@ ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} backend.jar
 
 CMD apt-get update -y
-#EXPOSE 8080
+EXPOSE 8080
 # Set the default command to run the Java application
 ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/backend.jar"]

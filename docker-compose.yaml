@@ -16,7 +16,7 @@ services:
     ports:
       - "5433:8080"
     volumes:
-      - ./backend/src/main:/app
+      - ./backend/src/main/java/com/example/backend:/app
     networks:
       - backend-tier
 
