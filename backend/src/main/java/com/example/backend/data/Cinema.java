@@ -1,14 +1,11 @@
 package com.example.backend.data;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cinema")
 public class Cinema {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "cinemaid", nullable = false)
     private Integer id;
 
@@ -23,6 +20,13 @@ public class Cinema {
 
     @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
+
+//    public Cinema(Integer id) {
+//        this.id = id;
+//    }
+
+    public Cinema() {
+    }
 
     public Integer getId() {
         return id;

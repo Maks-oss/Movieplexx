@@ -29,8 +29,6 @@ public class Ticket {
     @Column(name = "dateofissue")
     private LocalDate dateOfIssue;
 
-    @Column(name = "seatid")
-    private Integer seatId;
 
     public Integer getId() {
         return id;
@@ -78,14 +76,6 @@ public class Ticket {
 
     public void setDateOfIssue(LocalDate dateOfIssue) {
         this.dateOfIssue = dateOfIssue;
-    }
-
-    public Integer getSeatId() {
-        return seatId;
-    }
-
-    public void setSeatId(Integer seatId) {
-        this.seatId = seatId;
     }
 
 }

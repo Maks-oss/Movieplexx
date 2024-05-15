@@ -1,9 +1,8 @@
 package com.example.backend.data;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "role")
@@ -17,6 +16,9 @@ public class Role {
 
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<Employee> employees;
 
     public Integer getId() {
         return id;

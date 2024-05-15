@@ -2,6 +2,8 @@ package com.example.backend.data;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -24,6 +26,13 @@ public class Employee {
 
     @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employeerole",
+            joinColumns = @JoinColumn(name = "employeeid"),
+            inverseJoinColumns = @JoinColumn(name = "roleid"))
+    private Set<Role> roles;
 
     public Integer getId() {
         return id;

@@ -11,7 +11,7 @@ public class Seat {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hallid")
-    private Moviehall hallId;
+    private MovieHall hallId;
 
     @Column(name = "\"row\"", length = Integer.MAX_VALUE)
     private String row;
@@ -34,11 +34,11 @@ public class Seat {
         this.id = id;
     }
 
-    public Moviehall getHallId() {
+    public MovieHall getHallId() {
         return hallId;
     }
 
-    public void setHallId(Moviehall hallId) {
+    public void setHallId(MovieHall hallId) {
         this.hallId = hallId;
     }
 

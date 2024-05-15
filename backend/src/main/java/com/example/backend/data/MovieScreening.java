@@ -7,7 +7,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "moviescreening")
 public class MovieScreening {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "screeningid", nullable = false)
     private Integer id;
 
@@ -17,7 +17,7 @@ public class MovieScreening {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moviehallid")
-    private Moviehall moviehall;
+    private MovieHall moviehall;
 
     @Column(name = "starttime")
     private Instant startTime;
@@ -41,11 +41,11 @@ public class MovieScreening {
         this.movie = movie;
     }
 
-    public Moviehall getMoviehall() {
+    public MovieHall getMoviehall() {
         return moviehall;
     }
 
-    public void setMoviehall(Moviehall moviehall) {
+    public void setMoviehall(MovieHall moviehall) {
         this.moviehall = moviehall;
     }
 

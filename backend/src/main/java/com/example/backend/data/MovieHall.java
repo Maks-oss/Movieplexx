@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "moviehall")
-public class Moviehall {
-    @Id
+public class MovieHall {
+    @Id @GeneratedValue
     @Column(name = "hallid", nullable = false)
     private Integer id;
 

@@ -1,16 +1,13 @@
 package com.example.backend.data;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "movie")
 public class Movie {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "movieid", nullable = false)
     private Integer id;
 
