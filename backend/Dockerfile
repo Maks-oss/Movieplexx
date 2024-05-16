@@ -1,14 +1,21 @@
-# the base image
-FROM debian:latest
-RUN apt-get update && apt-get install -y default-jre
-#CMD apt-get install default-jdk
-# the JAR file path
-ARG JAR_FILE=build/libs/*.jar
+# Use the official OpenJDK image as base
+FROM gradle:8.7.0-jdk17 AS build
 
-# Copy the JAR file from the build context into the Docker image
-COPY ${JAR_FILE} backend.jar
+# Set the working directory in the container
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle bootJar
 
-#CMD apt-get update -y
+# Create a new stage for the runtime image
+FROM openjdk:17-jdk-slim
+# Set the working directory in the container
+
+# Copy the JAR file from the build stage to the runtime image
+COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
+
+# Expose the port the application runs on
 EXPOSE 8080
-# Set the default command to run the Java application
-ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/backend.jar"]
+
+# Set the default command to run the application
+CMD ["java", "-jar", "app.jar"]
+

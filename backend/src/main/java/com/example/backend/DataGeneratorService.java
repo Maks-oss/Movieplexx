@@ -57,7 +57,6 @@ public class DataGeneratorService {
                 return ((Number) count).intValue() == 0;
             }
         }
-        // If the result is empty or not a number, assume the table is empty
         return true;
     }
     private void clearData() {
