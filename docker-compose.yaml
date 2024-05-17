@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  backend:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: backend
+    container_name: backend
+    depends_on:
+      - movieplexxdb
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://movieplexxdb:5432/movieplexx
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=test
+    ports:
+      - "5433:8080"
+    volumes:
+      - ./backend/src/main/java/com/example/backend:/app
+    networks:
+      - backend-tier
+
+
+  movieplexxdb:
+    image: postgres:14-alpine
+    expose:
+      - "5432:5432"
+    volumes:
+      - movieplexxdata:/var/lib/postgresql/data
+    environment:
+      - 'POSTGRES_USER=user'
+      - 'POSTGRES_DB=movieplexx'
+      - 'POSTGRES_PASSWORD=test'
+    networks:
+      - backend-tier
+
+volumes:
+  movieplexxdata:
+
+networks:
+  backend-tier:
