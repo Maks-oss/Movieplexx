@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "seat")
 public class Seat {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "seatid", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hallid")
-    private MovieHall hallId;
+    private MovieHall movieHall;
 
     @Column(name = "\"row\"", length = Integer.MAX_VALUE)
     private String row;
@@ -34,12 +34,12 @@ public class Seat {
         this.id = id;
     }
 
-    public MovieHall getHallId() {
-        return hallId;
+    public MovieHall getMovieHall() {
+        return movieHall;
     }
 
-    public void setHallId(MovieHall hallId) {
-        this.hallId = hallId;
+    public void setMovieHall(MovieHall movieHall) {
+        this.movieHall = movieHall;
     }
 
     public String getRow() {

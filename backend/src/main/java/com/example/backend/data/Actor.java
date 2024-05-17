@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "actor")
 public class Actor {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "actorid", nullable = false)
     private Integer id;
 

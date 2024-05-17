@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 @Table(name = "employee")
 public class Employee {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "employeeid", nullable = false)
     private Integer id;
 
@@ -27,12 +27,16 @@ public class Employee {
     @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "employeerole",
             joinColumns = @JoinColumn(name = "employeeid"),
             inverseJoinColumns = @JoinColumn(name = "roleid"))
     private Set<Role> roles;
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     public Integer getId() {
         return id;
@@ -82,4 +86,20 @@ public class Employee {
         this.password = password;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", manager=" + manager +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 }

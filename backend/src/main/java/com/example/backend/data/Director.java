@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "director")
 public class Director {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "directorid", nullable = false)
     private Integer id;
 

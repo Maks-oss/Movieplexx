@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "ticket")
 public class Ticket {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "ticketid", nullable = false)
     private Integer id;
 

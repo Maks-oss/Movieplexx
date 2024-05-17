@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 public class Role {
-    @Id
+    @Id @GeneratedValue
     @Column(name = "roleid", nullable = false)
     private Integer id;
 
@@ -19,6 +19,22 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     private Set<Employee> employees;
+
+    public Role(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Role() {
+    }
+
+    public Set<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
+    }
 
     public Integer getId() {
         return id;
