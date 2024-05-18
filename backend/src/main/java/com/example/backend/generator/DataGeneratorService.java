@@ -171,7 +171,7 @@ public class DataGeneratorService {
         var moviePromo = new MoviePromo();
         moviePromo.setMovie(movie);
         moviePromo.setTitle(faker.videoGame().title());
-        moviePromo.setDescription(faker.superhero().descriptor());
+        moviePromo.setDescription(faker.movie().quote());
         moviePromo.setImage(null);
         entityManager.persist(moviePromo);
     }
