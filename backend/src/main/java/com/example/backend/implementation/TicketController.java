@@ -1,4 +1,4 @@
-package com.example.backend.usecases;
+package com.example.backend.implementation;
 
 import com.example.backend.data.Ticket;
 import org.springframework.http.ResponseEntity;

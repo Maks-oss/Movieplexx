@@ -1,11 +1,9 @@
-package com.example.backend.usecases;
+package com.example.backend.implementation;
 
 import com.example.backend.data.Seat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("seats")

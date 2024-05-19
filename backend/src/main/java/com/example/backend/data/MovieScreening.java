@@ -11,11 +11,11 @@ public class MovieScreening {
     @Column(name = "screeningid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "movieid")
     private Movie movie;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "moviehallid")
     private MovieHall moviehall;
 

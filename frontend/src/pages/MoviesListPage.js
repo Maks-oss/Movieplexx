@@ -3,7 +3,7 @@ import {fetchMovies} from '../ApiCalls'
 import React, {useState, useEffect} from "react";
 import {Row, Col, Card} from 'react-bootstrap';
 
-const ListItem = ({image, title, description}) => {
+const ListItem = ({image, title, releaseDate}) => {
     const alertClicked = () => {
         alert('You clicked the third ListGroupItem');
     };
@@ -13,7 +13,7 @@ const ListItem = ({image, title, description}) => {
             <Card.Img variant="top" src={/*image*/ 'https://via.placeholder.com/150'}/>
             <Card.Body>
                 <Card.Title>{title}</Card.Title>
-                <Card.Text>{description}</Card.Text>
+                <Card.Text>{releaseDate}</Card.Text>
                 {/*<Button variant="primary">Go somewhere</Button>*/}
             </Card.Body>
         </Card>
@@ -31,7 +31,7 @@ function MoviesListPage() {
                 <Row>
                     {movies.map((item, index) => (
                         <Col key={index} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                            <ListItem image={item.image} title={item.name} description={item.description}/>
+                            <ListItem image={item.image} title={item.name} releaseDate={'Release date: ' + item.releaseDate}/>
 
                         </Col>
                     ))}

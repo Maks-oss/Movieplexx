@@ -15,7 +15,7 @@ public class MovieHall {
     @Column(name = "type", length = Integer.MAX_VALUE)
     private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "cinemaid")
     private Cinema cinema;
 
