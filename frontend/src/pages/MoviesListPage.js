@@ -1,7 +1,6 @@
 import {fetchMovies} from '../ApiCalls'
-// import Card from 'react-bootstrap/Card';
 import React, {useState, useEffect} from "react";
-import {Row, Col, Card} from 'react-bootstrap';
+import {CardActionArea, Card, CardContent, CardMedia, Typography, Grid} from '@mui/material';
 
 const ListItem = ({image, title, releaseDate}) => {
     const alertClicked = () => {
@@ -9,13 +8,23 @@ const ListItem = ({image, title, releaseDate}) => {
     };
 
     return (
-        <Card style={{cursor: 'pointer'}} action onClick={alertClicked}>
-            <Card.Img variant="top" src={/*image*/ 'https://via.placeholder.com/150'}/>
-            <Card.Body>
-                <Card.Title>{title}</Card.Title>
-                <Card.Text>{releaseDate}</Card.Text>
-                {/*<Button variant="primary">Go somewhere</Button>*/}
-            </Card.Body>
+        <Card>
+            <CardActionArea onClick={alertClicked}>
+                <CardMedia
+                    component="img"
+                    height="200"
+                    src='https://via.placeholder.com/200'
+                    title="Paella dish"
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                        {title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {releaseDate}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
         </Card>
     );
 };
@@ -23,20 +32,20 @@ const ListItem = ({image, title, releaseDate}) => {
 function MoviesListPage() {
     const [movies, setMovies] = useState(null);
     useEffect(() => {
-        fetchMovies().then((data) => {setMovies(data)})
+        fetchMovies().then((data) => {
+            setMovies(data)
+        })
     }, [])
     if (movies) {
         return (
-            <div style={{margin: '10px'}}>
-                <Row>
-                    {movies.map((item, index) => (
-                        <Col key={index} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                            <ListItem image={item.image} title={item.name} releaseDate={'Release date: ' + item.releaseDate}/>
-
-                        </Col>
-                    ))}
-                </Row>
-            </div>
+            <Grid container sx ={{padding: '10px'}} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} margin={8}>
+                {movies.map((item, index) => (
+                    <Grid item xs={4} sm={4} md={3} key={index}>
+                        <ListItem image={item.image} title={item.name}
+                                  releaseDate={'Release date: ' + item.releaseDate}/>
+                    </Grid>
+                ))}
+            </Grid>
         );
     }
 }
