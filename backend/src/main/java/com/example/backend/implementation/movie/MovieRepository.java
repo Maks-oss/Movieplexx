@@ -11,13 +11,13 @@ import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
-    @Query(value = """
+    /*@Query(value = """
             SELECT new com.example.backend.implementation.movie.MovieCast(CONCAT(d.firstname, ' ', d.lastname),  CONCAT(a.firstname, ' ', a.lastname), m.name) FROM Actor a
             INNER JOIN Movie m on m.id = a.movie.id
             INNER JOIN Director d on d.movie.id = m.id
             WHERE m.id = :movieId
             """)
-    List<MovieCast> findMovieCast(@Param("movieId") int movieId);
+    List<MovieCast> findMovieCast(@Param("movieId") int movieId);*/
 
     @Query("SELECT a FROM Movie m INNER JOIN Actor a on a.movie.id = m.id WHERE m.id = :movieId")
     List<Actor> findMovieActors(@Param("movieId") int movieId);

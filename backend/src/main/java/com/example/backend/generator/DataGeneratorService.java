@@ -264,7 +264,7 @@ public class DataGeneratorService {
     private void generateSeats(MovieHall movieHall) {
         for (int i = 1; i <= 50; i++) {
             var seat = new Seat();
-            seat.setNumber(faker.number().numberBetween(1, 50));
+            seat.setNumber(i);
             seat.setRow(faker.letterify("?"));
             seat.setType(faker.restaurant().type());
             seat.setMovieHall(movieHall);

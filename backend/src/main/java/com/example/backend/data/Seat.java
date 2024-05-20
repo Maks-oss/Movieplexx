@@ -9,7 +9,7 @@ public class Seat {
     @Column(name = "seatid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "hallid")
     private MovieHall movieHall;
 
@@ -22,7 +22,7 @@ public class Seat {
     @Column(name = "number")
     private Integer number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "ticketid")
     private Ticket ticket;
 

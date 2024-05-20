@@ -9,7 +9,7 @@ public class MoviePromo {
     @Column(name = "title", length = Integer.MAX_VALUE)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "movieid")
     private Movie movie;
 

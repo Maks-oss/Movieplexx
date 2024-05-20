@@ -22,7 +22,7 @@ public class MovieController {
     @GetMapping
     public ResponseEntity<?> getMovieItems() {
         return ResponseEntity.ok(movieRepository.findAll().stream().map(movie ->
-                new MovieItemDto(movie.getId(), movie.getName(), null, movie.getReleaseDate().toString())
+                new MovieItemResponse(movie.getId(), movie.getName(), null, movie.getReleaseDate().toString())
         ));
     }
 
