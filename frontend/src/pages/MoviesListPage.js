@@ -1,15 +1,19 @@
 import {fetchMovies} from '../ApiCalls'
 import React, {useState, useEffect} from "react";
 import {CardActionArea, Card, CardContent, CardMedia, Typography, Grid} from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
-const ListItem = ({image, title, releaseDate}) => {
-    const alertClicked = () => {
-        alert('You clicked the third ListGroupItem');
+const ListItem = ({itemId, image, title, releaseDate}) => {
+    const navigation = useNavigate();
+    const itemClicked = () => {
+        navigation(`/movies/${itemId}`, {
+            itemId: itemId
+        })
     };
 
     return (
         <Card>
-            <CardActionArea onClick={alertClicked}>
+            <CardActionArea onClick={itemClicked}>
                 <CardMedia
                     component="img"
                     height="200"
@@ -38,10 +42,10 @@ function MoviesListPage() {
     }, [])
     if (movies) {
         return (
-            <Grid container sx ={{padding: '10px'}} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} margin={8}>
+            <Grid container sx={{padding: '20px'}} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} margin={8}>
                 {movies.map((item, index) => (
                     <Grid item xs={4} sm={4} md={3} key={index}>
-                        <ListItem image={item.image} title={item.name}
+                        <ListItem image={item.image} title={item.name} itemId={item.movieId}
                                   releaseDate={'Release date: ' + item.releaseDate}/>
                     </Grid>
                 ))}

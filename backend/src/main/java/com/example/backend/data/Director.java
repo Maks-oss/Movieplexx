@@ -1,5 +1,7 @@
 package com.example.backend.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -27,6 +29,8 @@ public class Director {
         this.id = id;
     }
 
+    @JsonIgnore
+    @JsonProperty(value = "movie")
     public Movie getMovie() {
         return movie;
     }

@@ -1,5 +1,7 @@
 package com.example.backend.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -10,6 +12,7 @@ public class MovieScreening {
     @Id @GeneratedValue
     @Column(name = "screeningid", nullable = false)
     private Integer id;
+
 
     @ManyToOne
     @JoinColumn(name = "movieid")
@@ -33,6 +36,8 @@ public class MovieScreening {
         this.id = id;
     }
 
+    @JsonIgnore
+    @JsonProperty(value = "movie")
     public Movie getMovie() {
         return movie;
     }

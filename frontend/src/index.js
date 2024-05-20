@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import AppNavigation from "./AppNavigation";
+import App from "./App";
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -16,7 +16,7 @@ root.render(
     <React.StrictMode>
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <AppNavigation/>
+            <App/>
         </ThemeProvider>
     </React.StrictMode>
 );
