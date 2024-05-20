@@ -1,7 +1,8 @@
 import {BrowserRouter as Router, Routes, Route, Outlet} from "react-router-dom";
 import MoviesListPage from "./pages/MoviesListPage";
 import MovieplexxAppBar from "./components/MovieplexxAppBar";
-import MovieDetailsPage from "./pages/MovieDetailsPage";
+import MovieScreeningsPage from "./pages/MovieScreeningsPage";
+import SeatPickerPage from "./pages/SeatPickerPage";
 function App() {
     return (
         <Router>
@@ -10,7 +11,8 @@ function App() {
                 <Route path="/" element={<Outlet/>}>
                     <Route index element={<p> Home page</p>}/>
                     <Route path="/movies" element={<MoviesListPage/>}/>
-                    <Route path="/movies/:itemId" element={<MovieDetailsPage/>} />
+                    <Route path="/movies/screening" element={<MovieScreeningsPage/>} />
+                    <Route path="/movies/screening/seatPicker" element={<SeatPickerPage/>} />
                     <Route path="*" element={<p>Not found</p>}/>
                 </Route>
             </Routes>

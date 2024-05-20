@@ -1,19 +1,18 @@
-import {fetchMovies} from '../ApiCalls'
+import {fetchApi, fetchMovies} from '../ApiCalls'
 import React, {useState, useEffect} from "react";
 import {CardActionArea, Card, CardContent, CardMedia, Typography, Grid} from '@mui/material';
 import { useNavigate } from "react-router-dom";
 
-const ListItem = ({itemId, image, title, releaseDate}) => {
+const ListItem = ({ image, title, releaseDate, itemId}) => {
     const navigation = useNavigate();
-    const itemClicked = () => {
-        navigation(`/movies/${itemId}`, {
-            itemId: itemId
+    const onMovieItemClicked = () => {
+        navigation(`/movies/screening`, {
+            state: itemId
         })
     };
-
     return (
         <Card>
-            <CardActionArea onClick={itemClicked}>
+            <CardActionArea onClick={onMovieItemClicked}>
                 <CardMedia
                     component="img"
                     height="200"
@@ -35,11 +34,13 @@ const ListItem = ({itemId, image, title, releaseDate}) => {
 
 function MoviesListPage() {
     const [movies, setMovies] = useState(null);
+
     useEffect(() => {
-        fetchMovies().then((data) => {
+        fetchApi('http://localhost:5433/movies').then((data) => {
             setMovies(data)
         })
     }, [])
+
     if (movies) {
         return (
             <Grid container sx={{padding: '20px'}} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} margin={8}>
