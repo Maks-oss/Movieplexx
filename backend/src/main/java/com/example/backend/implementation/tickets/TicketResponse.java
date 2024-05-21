@@ -7,6 +7,7 @@ import java.util.List;
 
 public record TicketResponse(
         Integer ticketId,
+        String movieName,
         Float price,
         LocalDate dateOfIssue,
         String movieHall,

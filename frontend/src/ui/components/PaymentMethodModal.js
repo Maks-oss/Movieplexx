@@ -21,16 +21,16 @@ const paymentMethods = [
     {value: 'bank', label: 'Bank Transfer'}
 ];
 
-const ChoosePaymentMethod = () => {
+const ChoosePaymentMethod = ({confirm,onConfirmClick}) => {
     const [selectedMethod, setSelectedMethod] = useState('');
-    const [confirm, setConfirm] = useState(false)
+    // const [confirm, setConfirm] = useState(false)
     const handleChange = (event) => {
         setSelectedMethod(event.target.value);
     };
 
-    const handleSubmit = () => {
-        setConfirm(true)
-    };
+    // const handleSubmit = () => {
+    //     setConfirm(true)
+    // };
     if (!confirm) {
         return (
             <Container maxWidth="sm">
@@ -53,7 +53,7 @@ const ChoosePaymentMethod = () => {
                     </RadioGroup>
                 </FormControl>
                 <Box mt={2}>
-                    <Button variant="contained" color="primary" onClick={handleSubmit} disabled={!selectedMethod}>
+                    <Button variant="contained" color="primary" onClick={onConfirmClick} disabled={!selectedMethod}>
                         Confirm Payment
                     </Button>
                 </Box>
@@ -80,7 +80,7 @@ const modalStyle = {
     boxShadow: 24,
     p: 4,
 };
-const PaymentMethodModal = ({open, handleClose}) => {
+const PaymentMethodModal = ({open, handleClose,confirm,onConfirmClick}) => {
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -97,7 +97,7 @@ const PaymentMethodModal = ({open, handleClose}) => {
         >
             <Fade in={open}>
                 <Box sx={modalStyle}>
-                    <ChoosePaymentMethod/>
+                    <ChoosePaymentMethod confirm={confirm} onConfirmClick={onConfirmClick}/>
                 </Box>
             </Fade>
         </Modal>)

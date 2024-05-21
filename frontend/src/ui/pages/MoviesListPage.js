@@ -1,4 +1,4 @@
-import {fetchApi, fetchMovies} from '../ApiCalls'
+import {fetchApi, fetchMovies} from '../../utils/ApiCalls'
 import React, {useState, useEffect} from "react";
 import {CardActionArea, Card, CardContent, CardMedia, Typography, Grid} from '@mui/material';
 import { useNavigate } from "react-router-dom";

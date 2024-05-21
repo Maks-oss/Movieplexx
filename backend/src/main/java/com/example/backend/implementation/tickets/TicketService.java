@@ -21,16 +21,20 @@ public class TicketService {
     }
     public TicketResponse createTicketResponse(TicketGenerationData ticketGenerationData) {
         var ticket = createTicket(ticketGenerationData);
+//        ticketGenerationData.movieScreening().getMoviehall().getId();
         var reservedSeats = reserveSeats(ticketGenerationData.seatsIds(), ticket);
+        ticket.setPrice(calculateTicketPrice(reservedSeats));
         var movieHall = reservedSeats.get(0).getMovieHall();
         var cinema = movieHall.getCinema();
+        var screening = ticket.getScreening();
         return new TicketResponse(
                 ticket.getId(),
+                screening.getMovie().getName(),
                 ticket.getPrice(),
                 ticket.getDateOfIssue(),
                 movieHall.getType() + " " + movieHall.getNumber(),
                 cinema.getName(),
-                ticket.getScreening().getStartTime().toString(),
+                screening.getStartTime().toString(),
                 reservedSeats.stream().map(seat -> seat.getRow() + " " + seat.getNumber()).collect(Collectors.toList())
         );
     }
@@ -53,12 +57,12 @@ public class TicketService {
         if (ticketGenerationData.employee() != null) {
             ticket.setEmployee(ticketGenerationData.employee());
         }
-        ticket.setPrice(ticketGenerationData.ticketPrice());
+//        ticket.setPrice(ticketGenerationData.ticketPrice());
         ticket.setDateOfIssue(LocalDate.now());
         return ticketRepository.save(ticket);
     }
     private List<Seat> reserveSeats(List<Integer> seatsIds, Ticket ticket) {
-        var seats = seatsRepository.findAll();
+        var seats = seatsRepository.findSeatsByMovieHallId(ticket.getScreening().getMoviehall().getId());
         for (var seat: seats) {
             if (seatsIds.contains(seat.getId())) {
                 seat.setTicket(ticket);
@@ -66,6 +70,11 @@ public class TicketService {
         }
         seatsRepository.saveAll(seats);
         return seatsRepository.findSeatsByTicket(ticket);
+    }
+
+    private float calculateTicketPrice(List<Seat> reservedSeats) {
+        // TODO change generation to include seat price
+        return /*(float) reservedSeats.stream().mapToDouble(Seat::getPrice).sum()*/ 0f;
     }
 
 }

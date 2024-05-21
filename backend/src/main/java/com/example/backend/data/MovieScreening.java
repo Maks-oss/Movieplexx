@@ -35,9 +35,6 @@ public class MovieScreening {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    @JsonIgnore
-    @JsonProperty(value = "movie")
     public Movie getMovie() {
         return movie;
     }

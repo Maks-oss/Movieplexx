@@ -10,7 +10,6 @@ public record TicketGenerationData(
         MovieScreening movieScreening,
         Customer customer,
         Employee employee,
-        float ticketPrice,
         List<Integer> seatsIds
 ) {
 }

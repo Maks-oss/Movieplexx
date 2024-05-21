@@ -26,6 +26,9 @@ public class Seat {
     @JoinColumn(name = "ticketid")
     private Ticket ticket;
 
+    @Column(name = "price")
+    private Float price;
+
     public Integer getId() {
         return id;
     }
@@ -68,6 +71,14 @@ public class Seat {
 
     public Ticket getTicket() {
         return ticket;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     public void setTicket(Ticket ticket) {

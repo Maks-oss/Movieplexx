@@ -14,15 +14,6 @@ public class TicketController {
 
     @PostMapping
     public ResponseEntity<?> generateTicket(@RequestBody TicketGenerationData ticketGenerationData) {
-//        var ticket = ticketService.createTicket(ticketGenerationData);
-//        var reservedSeats = seatsService.reserveSeats(ticketGenerationData.seatsIds(), ticket);
-//        return ResponseEntity.ok(
-////                new TicketResponse(ticket.getId(), ticket.getPrice(), ticket.getDateOfIssue(),reservedSeats.get(0).getMovieHall().)
-////                Map.of(
-////                        "ticket", ticket,
-////                        "seats", reservedSeats
-////                )
-//        );
         return ResponseEntity.ok(ticketService.createTicketResponse(ticketGenerationData));
 
     }
