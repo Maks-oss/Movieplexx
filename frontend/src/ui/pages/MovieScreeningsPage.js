@@ -1,6 +1,6 @@
 import {useLocation} from 'react-router-dom';
 import {fetchApi} from "../../utils/ApiCalls";
-import React, {useState, useEffect, createContext} from "react";
+import React, {useState, useEffect} from "react";
 import {Stack} from '@mui/material';
 import {MovieDetailsCard} from "../components/movie/MovieDetailsCard";
 import {MovieScreenings} from "../components/movie/MovieScreenings";

@@ -1,5 +1,5 @@
-import {Card, CardMedia, CardContent, CardHeader, IconButton, Collapse} from '@mui/material';
-import {Button, Stack, Typography, Box} from '@mui/material';
+import {Card, CardContent, CardHeader} from '@mui/material';
+import {Button, Stack} from '@mui/material';
 import {getTime, groupMovieScreeningsByCinema} from "../../../utils/Utils";
 
 export const MovieScreeningsCard = ({cinemaName, screenings, onScreeningClick}) => {

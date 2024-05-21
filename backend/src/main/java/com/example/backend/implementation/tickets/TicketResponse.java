@@ -1,7 +1,5 @@
 package com.example.backend.implementation.tickets;
 
-import jakarta.persistence.Column;
-
 import java.time.LocalDate;
 import java.util.List;
 

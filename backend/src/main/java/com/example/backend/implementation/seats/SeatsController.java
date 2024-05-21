@@ -1,19 +1,15 @@
 package com.example.backend.implementation.seats;
 
-import com.example.backend.data.Seat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("seats")
 public class SeatsController {
     private final SeatsRepository seatsRepository;
-    private final Logger seatsLogger = Logger.getLogger("seats");
 
     public SeatsController(SeatsRepository seatsRepository) {
         this.seatsRepository = seatsRepository;

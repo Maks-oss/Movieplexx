@@ -5,7 +5,6 @@ export async function fetchApi(endpoint) {
     console.log(data);
     return data
 }
-//http://localhost:5433/ticket
 export async function createTicketRequest(paymentMethod , data={}) {
     console.log('BEFORE SEND: ' + JSON.stringify(data))
     const response = await fetch(`http://localhost:5433/ticket?paymentMethod=${paymentMethod}`, {

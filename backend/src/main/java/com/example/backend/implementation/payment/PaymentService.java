@@ -1,7 +1,6 @@
 package com.example.backend.implementation.payment;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
