@@ -15,9 +15,7 @@ export function groupSeatsByRow(seats) {
         return acc;
     }, {});
 }
-export function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+
 
 export function groupMovieScreeningsByCinema(movieScreenings) {
     return movieScreenings.reduce((acc, screening) => {

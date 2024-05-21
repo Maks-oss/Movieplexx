@@ -1,21 +1,27 @@
 package com.example.backend.implementation.tickets;
 
+import com.example.backend.implementation.payment.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("ticket")
 public class TicketController {
-    private TicketService ticketService;
+    private final TicketService ticketService;
+    private final PaymentService paymentService;
 
-    public TicketController(TicketService ticketService) {
+    public TicketController(TicketService ticketService, PaymentService paymentService) {
         this.ticketService = ticketService;
+        this.paymentService = paymentService;
     }
 
     @PostMapping
-    public ResponseEntity<?> generateTicket(@RequestBody TicketGenerationData ticketGenerationData) {
-        return ResponseEntity.ok(ticketService.createTicketResponse(ticketGenerationData));
-
+    public ResponseEntity<?> createTicket(
+            @RequestParam String paymentMethod,
+            @RequestBody CreateTicketRequestBody createTicketRequestBody
+    ) {
+        paymentService.processPayment(paymentMethod);
+        return ResponseEntity.ok(ticketService.createTicketResponse(createTicketRequestBody));
     }
     @GetMapping("/{customerId}")
     public ResponseEntity<?> getCustomerTickets(@PathVariable int customerId) {

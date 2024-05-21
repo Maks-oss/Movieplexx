@@ -3,8 +3,8 @@ import './Seats.css';
 import {Button} from '@mui/material';
 import Fade from '@mui/material/Fade';
 import PaymentMethodModal from "../PaymentMethodModal";
-import {postRequest} from "../../../utils/ApiCalls";
-import { useNavigate } from "react-router-dom";
+import {createTicketRequest} from "../../../utils/ApiCalls";
+import {useNavigate} from "react-router-dom";
 import {groupSeatsByRow, sleep} from "../../../utils/Utils";
 
 const SeatSelection = ({seats, movieScreening}) => {
@@ -12,12 +12,13 @@ const SeatSelection = ({seats, movieScreening}) => {
     const [isConfirm, setIsConfirm] = React.useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [confirm, setConfirm] = useState(false)
+    const [selectedMethod, setSelectedMethod] = useState('');
+
     const rows = groupSeatsByRow(seats);
     const navigation = useNavigate();
     const handleConfirmClick = async () => {
         setConfirm(true)
-        await sleep(2000)
-        postRequest('http://localhost:5433/ticket', {
+        createTicketRequest(selectedMethod, {
             seatsIds: selectedSeats,
             movieScreening: movieScreening
         }).then((data) => {
@@ -85,7 +86,9 @@ const SeatSelection = ({seats, movieScreening}) => {
                     Confirm
                 </Button>
             </Fade>
-            <PaymentMethodModal open={openModal} confirm={confirm} handleClose={handleClose} onConfirmClick={handleConfirmClick}/>
+            <PaymentMethodModal open={openModal} confirm={confirm} handleClose={handleClose}
+                                onConfirmClick={handleConfirmClick} selectedMethod={selectedMethod}
+                                setSelectedMethod={setSelectedMethod}/>
         </div>
     );
 };

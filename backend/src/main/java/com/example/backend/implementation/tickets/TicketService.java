@@ -19,10 +19,10 @@ public class TicketService {
         this.ticketRepository = ticketRepository;
         this.seatsRepository = seatsRepository;
     }
-    public TicketResponse createTicketResponse(TicketGenerationData ticketGenerationData) {
-        var ticket = createTicket(ticketGenerationData);
+    public TicketResponse createTicketResponse(CreateTicketRequestBody createTicketRequestBody) {
+        var ticket = createTicket(createTicketRequestBody);
 //        ticketGenerationData.movieScreening().getMoviehall().getId();
-        var reservedSeats = reserveSeats(ticketGenerationData.seatsIds(), ticket);
+        var reservedSeats = reserveSeats(createTicketRequestBody.seatsIds(), ticket);
         ticket.setPrice(calculateTicketPrice(reservedSeats));
         var movieHall = reservedSeats.get(0).getMovieHall();
         var cinema = movieHall.getCinema();
@@ -48,14 +48,14 @@ public class TicketService {
         ticketRepository.findAll().forEach(t -> seatsRepository.dissociateTicket(t.getId()));
         ticketRepository.deleteAll();
     }
-    private Ticket createTicket(TicketGenerationData ticketGenerationData) {
+    private Ticket createTicket(CreateTicketRequestBody createTicketRequestBody) {
         var ticket = new Ticket();
-        ticket.setScreening(ticketGenerationData.movieScreening());
-        if (ticketGenerationData.customer() != null) {
-            ticket.setCustomer(ticketGenerationData.customer());
+        ticket.setScreening(createTicketRequestBody.movieScreening());
+        if (createTicketRequestBody.customer() != null) {
+            ticket.setCustomer(createTicketRequestBody.customer());
         }
-        if (ticketGenerationData.employee() != null) {
-            ticket.setEmployee(ticketGenerationData.employee());
+        if (createTicketRequestBody.employee() != null) {
+            ticket.setEmployee(createTicketRequestBody.employee());
         }
 //        ticket.setPrice(ticketGenerationData.ticketPrice());
         ticket.setDateOfIssue(LocalDate.now());

@@ -21,16 +21,10 @@ const paymentMethods = [
     {value: 'bank', label: 'Bank Transfer'}
 ];
 
-const ChoosePaymentMethod = ({confirm,onConfirmClick}) => {
-    const [selectedMethod, setSelectedMethod] = useState('');
-    // const [confirm, setConfirm] = useState(false)
+const ChoosePaymentMethod = ({confirm,onConfirmClick,selectedMethod, setSelectedMethod}) => {
     const handleChange = (event) => {
         setSelectedMethod(event.target.value);
     };
-
-    // const handleSubmit = () => {
-    //     setConfirm(true)
-    // };
     if (!confirm) {
         return (
             <Container maxWidth="sm">
@@ -80,7 +74,7 @@ const modalStyle = {
     boxShadow: 24,
     p: 4,
 };
-const PaymentMethodModal = ({open, handleClose,confirm,onConfirmClick}) => {
+const PaymentMethodModal = ({open, handleClose,confirm,onConfirmClick, selectedMethod, setSelectedMethod}) => {
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -97,7 +91,7 @@ const PaymentMethodModal = ({open, handleClose,confirm,onConfirmClick}) => {
         >
             <Fade in={open}>
                 <Box sx={modalStyle}>
-                    <ChoosePaymentMethod confirm={confirm} onConfirmClick={onConfirmClick}/>
+                    <ChoosePaymentMethod confirm={confirm} onConfirmClick={onConfirmClick} selectedMethod={selectedMethod} setSelectedMethod={setSelectedMethod}/>
                 </Box>
             </Fade>
         </Modal>)

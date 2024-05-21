@@ -6,7 +6,7 @@ import com.example.backend.data.MovieScreening;
 
 import java.util.List;
 
-public record TicketGenerationData(
+public record CreateTicketRequestBody(
         MovieScreening movieScreening,
         Customer customer,
         Employee employee,
