@@ -11,15 +11,14 @@ public class DataGeneratorController {
     @Autowired
     private DataGeneratorService generatorService;
     @PostMapping("/generate")
-    public ResponseEntity<?> generateData(@RequestParam(required = false) Boolean newData, UriComponentsBuilder uriComponentsBuilder) {
-        generatorService.generateData(newData != null && newData);
-//        return ResponseEntity.ok(generatorService.retrieveGeneratedData());
+    public ResponseEntity<?> generateData(UriComponentsBuilder uriComponentsBuilder) {
+        generatorService.generateData();
         var uri = uriComponentsBuilder.path("/generate").query("type=YOUR_TYPE").build().toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @RequestMapping("/generate")
-    public ResponseEntity<?> getGeneratedData(@RequestParam(required = false,defaultValue = "emp") String type) {
+    public ResponseEntity<?> getGeneratedData(@RequestParam(defaultValue = "emp") String type) {
         return ResponseEntity.ok(generatorService.retrieveGeneratedData(type));
     }
 

@@ -5,7 +5,8 @@ public enum DataType {
     CUSTOMER("cus"),
     MOVIE_DATA("mov"),
     TICKET("tic"),
-    SEAT("seat");
+    SEAT("seat"),
+    CINEMA("cin");
 
     private final String stringValue;
 
