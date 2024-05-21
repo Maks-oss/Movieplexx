@@ -2,6 +2,7 @@ package com.example.backend.data;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -101,5 +102,17 @@ public class Employee {
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Employee employee)) return false;
+        return Objects.equals(getId(), employee.getId()) && Objects.equals(getManager(), employee.getManager()) && Objects.equals(getFirstname(), employee.getFirstname()) && Objects.equals(getLastname(), employee.getLastname()) && Objects.equals(getEmail(), employee.getEmail()) && Objects.equals(getPassword(), employee.getPassword()) && Objects.equals(getRoles(), employee.getRoles());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getManager(), getFirstname(), getLastname(), getEmail(), getPassword(), getRoles());
     }
 }

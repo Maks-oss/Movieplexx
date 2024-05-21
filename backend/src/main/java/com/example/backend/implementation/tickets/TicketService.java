@@ -7,24 +7,28 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
     private TicketRepository ticketRepository;
     private SeatsRepository seatsRepository;
+    private final Logger ticketLogger = Logger.getLogger("ticket");
 
     public TicketService(TicketRepository ticketRepository, SeatsRepository seatsRepository) {
         this.ticketRepository = ticketRepository;
         this.seatsRepository = seatsRepository;
     }
+    @Transactional
     public TicketResponse createTicketResponse(CreateTicketRequestBody createTicketRequestBody) {
         var ticket = createTicket(createTicketRequestBody);
-//        ticketGenerationData.movieScreening().getMoviehall().getId();
-        var reservedSeats = reserveSeats(createTicketRequestBody.seatsIds(), ticket);
-        ticket.setPrice(calculateTicketPrice(reservedSeats));
-        var movieHall = reservedSeats.get(0).getMovieHall();
+        var ticketSeats = seatsRepository.findSeatsByTicket(ticket);
+        var movieHall = ticketSeats.get(0).getMovieHall();
         var cinema = movieHall.getCinema();
         var screening = ticket.getScreening();
         return new TicketResponse(
@@ -35,7 +39,7 @@ public class TicketService {
                 movieHall.getType() + " " + movieHall.getNumber(),
                 cinema.getName(),
                 screening.getStartTime().toString(),
-                reservedSeats.stream().map(seat -> seat.getRow() + " " + seat.getNumber()).collect(Collectors.toList())
+                ticketSeats.stream().map(seat -> seat.getRow() + " " + seat.getNumber()).collect(Collectors.toList())
         );
     }
 
@@ -48,6 +52,7 @@ public class TicketService {
         ticketRepository.findAll().forEach(t -> seatsRepository.dissociateTicket(t.getId()));
         ticketRepository.deleteAll();
     }
+
     private Ticket createTicket(CreateTicketRequestBody createTicketRequestBody) {
         var ticket = new Ticket();
         ticket.setScreening(createTicketRequestBody.movieScreening());
@@ -57,24 +62,27 @@ public class TicketService {
         if (createTicketRequestBody.employee() != null) {
             ticket.setEmployee(createTicketRequestBody.employee());
         }
-//        ticket.setPrice(ticketGenerationData.ticketPrice());
         ticket.setDateOfIssue(LocalDate.now());
-        return ticketRepository.save(ticket);
+        var seats = getPreferredSeats(createTicketRequestBody.seatsIds(), ticket.getScreening().getMoviehall().getId());
+        ticket.setPrice((float) seats.stream().mapToDouble(Seat::getPrice).sum());
+        Ticket saved = ticketRepository.save(ticket);
+        reserveSeats(seats, saved);
+        return saved;
     }
-    private List<Seat> reserveSeats(List<Integer> seatsIds, Ticket ticket) {
-        var seats = seatsRepository.findSeatsByMovieHallId(ticket.getScreening().getMoviehall().getId());
+    private void reserveSeats(List<Seat> seats, Ticket ticket) {
+        for (var seat: seats) {
+            seat.setTicket(ticket);
+        }
+    }
+    private List<Seat> getPreferredSeats(List<Integer> seatsIds, int movieHallId) {
+        var seats = seatsRepository.findSeatsByMovieHallId(movieHallId);
+        var occupiedSeats = new ArrayList<Seat>();
         for (var seat: seats) {
             if (seatsIds.contains(seat.getId())) {
-                seat.setTicket(ticket);
+                occupiedSeats.add(seat);
             }
         }
-        seatsRepository.saveAll(seats);
-        return seatsRepository.findSeatsByTicket(ticket);
-    }
-
-    private float calculateTicketPrice(List<Seat> reservedSeats) {
-        // TODO change generation to include seat price
-        return /*(float) reservedSeats.stream().mapToDouble(Seat::getPrice).sum()*/ 0f;
+        return occupiedSeats;
     }
 
 }

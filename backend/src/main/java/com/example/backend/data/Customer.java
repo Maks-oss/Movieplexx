@@ -2,6 +2,8 @@ package com.example.backend.data;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -61,4 +63,15 @@ public class Customer {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Customer customer)) return false;
+        return Objects.equals(getId(), customer.getId()) && Objects.equals(getFirstname(), customer.getFirstname()) && Objects.equals(getLastname(), customer.getLastname()) && Objects.equals(getEmail(), customer.getEmail()) && Objects.equals(getPassword(), customer.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFirstname(), getLastname(), getEmail(), getPassword());
+    }
 }

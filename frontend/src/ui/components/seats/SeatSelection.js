@@ -22,7 +22,6 @@ const SeatSelection = ({seats, movieScreening}) => {
             seatsIds: selectedSeats,
             movieScreening: movieScreening
         }).then((data) => {
-            console.log('Ticket: ' + data)
             navigation('/movies/screening/seatPicker/ticket', {
                 state: data
             })
@@ -30,7 +29,6 @@ const SeatSelection = ({seats, movieScreening}) => {
         })
     };
     const toggleSeatSelection = (seatId) => {
-        console.log('Selected seat id: ' + seatId)
         const newSelectedSeats = [...selectedSeats];
         if (newSelectedSeats.includes(seatId)) {
             newSelectedSeats.splice(newSelectedSeats.indexOf(seatId), 1);
@@ -79,13 +77,14 @@ const SeatSelection = ({seats, movieScreening}) => {
                         ))}
                     </div>
                 ))}
+                <Fade in={isConfirm}>
+                    <Button size="medium" color="secondary" variant="outlined"
+                            sx={{flexShrink: 0, borderRadius: '20px', margin: '10px'}} onClick={handleOpen}>
+                        Confirm
+                    </Button>
+                </Fade>
             </div>
-            <Fade in={isConfirm}>
-                <Button size="medium" color="secondary" variant="outlined"
-                        sx={{flexShrink: 0, borderRadius: '20px', margin: '10px'}} onClick={handleOpen}>
-                    Confirm
-                </Button>
-            </Fade>
+
             <PaymentMethodModal open={openModal} confirm={confirm} handleClose={handleClose}
                                 onConfirmClick={handleConfirmClick} selectedMethod={selectedMethod}
                                 setSelectedMethod={setSelectedMethod}/>

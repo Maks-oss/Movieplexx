@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record TicketResponse(
-        Integer ticketId,
+        String ticketId,
         String movieName,
         Float price,
         LocalDate dateOfIssue,

@@ -26,7 +26,7 @@ export const MovieDetailsCard = ({movieInfo, movieActors, movieDirectors}) => {
             <CardMedia
                 component="img"
                 height="400"
-                src='https://via.placeholder.com/400'
+                src={movieInfo.image}
                 title=""
             />
             <CardContent>

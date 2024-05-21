@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface SeatsRepository extends JpaRepository<Seat, Integer> {
 
@@ -20,5 +21,5 @@ public interface SeatsRepository extends JpaRepository<Seat, Integer> {
 
     @Modifying
     @Query("UPDATE Seat s SET s.ticket = NULL WHERE s.ticket.id = :ticketId")
-    void dissociateTicket(int ticketId);
+    void dissociateTicket(String ticketId);
 }

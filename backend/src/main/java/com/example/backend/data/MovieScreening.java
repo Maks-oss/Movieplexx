@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "moviescreening")
@@ -67,4 +68,15 @@ public class MovieScreening {
         this.endTime = endTime;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof MovieScreening that)) return false;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getMovie(), that.getMovie()) && Objects.equals(getMoviehall(), that.getMoviehall()) && Objects.equals(getStartTime(), that.getStartTime()) && Objects.equals(getEndTime(), that.getEndTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getMovie(), getMoviehall(), getStartTime(), getEndTime());
+    }
 }

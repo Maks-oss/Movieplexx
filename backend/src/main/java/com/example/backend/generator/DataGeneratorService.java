@@ -8,12 +8,15 @@ import jakarta.transaction.Transactional;
 import net.datafaker.Faker;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +24,7 @@ import java.util.logging.Logger;
 public class DataGeneratorService {
     private final Faker faker = new Faker();
     private Logger generatorLogger = Logger.getLogger("generator");
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -32,14 +36,15 @@ public class DataGeneratorService {
             for (int i = 0; i < 10; i++) {
                 var customer = generateCustomer();
 //                var employee = generateEmployee(i % 2 == 0 ? "Manager" : "Cashier",roles);
-                var movie = generateMovie();
+                var movie = generateMovie(i);
                 generateActors(movie);
                 generateDirectors(movie);
-                generateMoviePromo(movie);
+                generateMoviePromo(movie,i);
                 var cinema = generateCinema();
                 for (int j = 0; j < 5; j++) {
                     var movieHall = generateMovieHall(cinema);
                     var movieScreening = generateMovieScreening(movie, movieHall);
+                    var ticket = generateTicket(customer, movieScreening);
                     generateSeats(movieHall);
                 }
             }
@@ -74,12 +79,24 @@ public class DataGeneratorService {
                         SELECT * FROM Customer
                         """, Map.class).getResultList();
             }
+            case TICKET -> {
+                return entityManager
+                        .createNativeQuery("""
+                                SELECT * FROM Ticket
+                                """, Map.class).getResultList();
+            }
+            case SEAT -> {
+                return entityManager
+                        .createNativeQuery("""
+                                SELECT * FROM Seat
+                                """, Map.class).getResultList();
+            }
         }
         return null;
     }
 
     private boolean isTableEmpty() {
-        Query query = entityManager.createNativeQuery("SELECT COUNT(m) FROM Movie m");
+        Query query = entityManager.createNativeQuery("SELECT COUNT(m) FROM Ticket m");
         List<?> result = query.getResultList();
         if (!result.isEmpty()) {
             Object count = result.get(0);
@@ -95,16 +112,17 @@ public class DataGeneratorService {
                             TRUNCATE TABLE 
                             Role, EmployeeRole, Seat, Employee, 
                             Customer, Actor, Director, MoviePromo, 
-                            MovieScreening, Movie, MovieHall, Cinema 
+                            MovieScreening, Movie, MovieHall, Cinema, Ticket
                             CASCADE
                 """).executeUpdate();
         generatorLogger.log(Level.INFO, "Deletion " + isTableEmpty());
     }
 
-    private Movie generateMovie() {
+    private Movie generateMovie(int i) {
         var movie = new Movie();
         var oscarMovie = faker.oscarMovie();
         movie.setName(oscarMovie.movieName());
+        movie.setImage("https://source.unsplash.com/random/400x400?sig="+i);
         movie.setDescription(oscarMovie.quote());
         movie.setReleaseDate(faker.date().birthdayLocalDate());
         movie.setRuntime(faker.number().numberBetween(90, 180));
@@ -131,16 +149,12 @@ public class DataGeneratorService {
         entityManager.persist(movieHall);
         return movieHall;
     }
-
     private MovieScreening generateMovieScreening(Movie movie, MovieHall movieHall) {
         var movieScreening = new MovieScreening();
-        // Generate random values for seconds and nanoseconds
-        long randomSeconds = ThreadLocalRandom.current().nextLong(System.currentTimeMillis() / 1000);
-        int randomNanos = ThreadLocalRandom.current().nextInt(0, 999999999);
-        Instant randomInstant = Instant.ofEpochSecond(randomSeconds, randomNanos);
-
-        movieScreening.setStartTime(randomInstant);
-        movieScreening.setEndTime(randomInstant.plus(movie.getRuntime(), ChronoUnit.MINUTES));
+        Timestamp start = Timestamp.valueOf(faker.date().future(30, TimeUnit.DAYS).toLocalDateTime().withMinute(0).withSecond(0).withNano(0));
+        Timestamp end = new Timestamp(start.getTime() + TimeUnit.MINUTES.toMillis(movie.getRuntime()));
+        movieScreening.setStartTime(start.toInstant());
+        movieScreening.setEndTime(end.toInstant());
         movieScreening.setMovie(movie);
         movieScreening.setMoviehall(movieHall);
         entityManager.persist(movieScreening);
@@ -167,12 +181,12 @@ public class DataGeneratorService {
         }
     }
 
-    private void generateMoviePromo(Movie movie) {
+    private void generateMoviePromo(Movie movie, int i) {
         var moviePromo = new MoviePromo();
         moviePromo.setMovie(movie);
         moviePromo.setTitle(faker.videoGame().title());
         moviePromo.setDescription(faker.movie().quote());
-        moviePromo.setImage(null);
+        moviePromo.setImage("https://source.unsplash.com/random/400x400?sig=" + i);
         entityManager.persist(moviePromo);
     }
 
@@ -185,51 +199,15 @@ public class DataGeneratorService {
         entityManager.persist(customer);
         return customer;
     }
-
-    /*@SuppressWarnings("unchecked")
-    private Employee generateEmployee(String position, Set<Role> roles) {
-        var employee = new Employee();
-        employee.setFirstname(faker.naruto().character());
-        employee.setLastname(faker.naruto().demon());
-        employee.setEmail(faker.internet().emailAddress());
-        employee.setPassword(faker.internet().password());
-
-        if (position.equals("manager")) {
-            generatorLogger.log(Level.INFO, "Manager position");
-            employee.setManager(null);
-            employee.setRoles(roles);
-        } else {
-            // set manager for cashier
-            List<Employee> managers = entityManager.createNativeQuery("""
-                    SELECT em.employeeid, em.managerid,em.firstname, em.lastname, em.email, em.password FROM Role r
-                    INNER JOIN EmployeeRole emr on emr.roleid = r.roleid
-                    INNER JOIN Employee em on em.employeeid = emr.employeeid
-                    WHERE r.name = 'Manager'
-                    """, Employee.class).getResultList();
-            employee.setManager(managers.get(faker.number().numberBetween(0, managers.size() - 1)));
-            employee.setRoles(roles
-                    .stream()
-                    .filter(r -> r.getName().equals("Cashier"))
-                    .collect(Collectors.toSet())
-            );
-        }
-        entityManager.persist(employee);
-        return employee;
-    }*/
-
-    /*private Set<Role> generateRoles() {
-        Role cashierRole = new Role("Cashier", "Sell tickets");
-        Role managerRole = new Role("Manager", "Supervises cashier and updates movies");
-        cashierRole.setEmployees(
-                Set.of(new Employee(), new Employee())
-        );
-        managerRole.setEmployees(
-                Set.of(new Employee())
-        );
-        entityManager.persist(cashierRole);
-        entityManager.persist(managerRole);
-        return Set.of(cashierRole, managerRole);
-    }*/
+    private Ticket generateTicket(Customer customer, MovieScreening screening) {
+        var ticket = new Ticket();
+        ticket.setCustomer(customer);
+        ticket.setScreening(screening);
+        ticket.setPrice(ThreadLocalRandom.current().nextFloat(2.99f, 50.99f));
+        ticket.setDateOfIssue(LocalDate.now());
+        entityManager.persist(ticket);
+        return ticket;
+    }
     private void generateFirstEmployeesWithRoles() {
         Role cashierRole = new Role("Cashier", "Sell tickets");
         Role managerRole = new Role("Manager", "Supervises cashier and updates movies");
@@ -258,15 +236,18 @@ public class DataGeneratorService {
         }
         managerRole.setEmployees(Set.of(manager));
         entityManager.persist(managerRole);
-//        return Set.of(cashierRole, managerRole);
     }
 
     private void generateSeats(MovieHall movieHall) {
-        for (int i = 1; i <= 50; i++) {
+        int rowsNum = faker.number().numberBetween(10, 15);
+        int seatsPerRow = 10;
+        for (int i = 1; i < rowsNum * seatsPerRow; i++) {
             var seat = new Seat();
             seat.setNumber(i);
-            seat.setRow(faker.letterify("?"));
-            seat.setType(faker.restaurant().type());
+            seat.setRow(String.valueOf((char)((i / seatsPerRow) + 65)));
+            String seatType = Math.random() < 0.3 ? "vip" : "ordinary";
+            seat.setType(seatType);
+            seat.setPrice(seatType.equals("vip") ? 20f : 10f);
             seat.setMovieHall(movieHall);
             entityManager.persist(seat);
         }

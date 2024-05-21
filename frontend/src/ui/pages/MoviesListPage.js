@@ -16,7 +16,7 @@ const ListItem = ({ image, title, releaseDate, itemId}) => {
                 <CardMedia
                     component="img"
                     height="200"
-                    src='https://via.placeholder.com/200'
+                    src={image}
                     title="Paella dish"
                 />
                 <CardContent>
