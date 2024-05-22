@@ -1,7 +1,12 @@
 package com.example.backend.generator;
 
 public enum DataType {
-    EMPLOYEE("emp"), CUSTOMER("cus"), MOVIE_DATA("mov");
+    EMPLOYEE("emp"),
+    CUSTOMER("cus"),
+    MOVIE_DATA("mov"),
+    TICKET("tic"),
+    SEAT("seat"),
+    CINEMA("cin");
 
     private final String stringValue;
 

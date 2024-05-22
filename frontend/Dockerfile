@@ -8,7 +8,9 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install  \
+    && npm install @mui/material @emotion/react @emotion/styled @mui/icons-material \
+    && npm install react-router-dom@6
 
 # Copy the rest of the application code to the container
 COPY . .

@@ -3,23 +3,25 @@ package com.example.backend.data;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ticket")
 public class Ticket {
-    @Id @GeneratedValue
+    @Id
     @Column(name = "ticketid", nullable = false)
-    private Integer id;
+    private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "screeningid")
     private MovieScreening screening;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "customerid")
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "employeeid")
     private Employee employee;
 
@@ -29,12 +31,15 @@ public class Ticket {
     @Column(name = "dateofissue")
     private LocalDate dateOfIssue;
 
+    public Ticket() {
+        id = UUID.randomUUID().toString();
+    }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -78,4 +83,21 @@ public class Ticket {
         this.dateOfIssue = dateOfIssue;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ticket ticket = (Ticket) o;
+        return Objects.equals(id, ticket.id) &&
+               Objects.equals(screening, ticket.screening) &&
+               Objects.equals(customer, ticket.customer) &&
+               Objects.equals(employee, ticket.employee) &&
+               Objects.equals(price, ticket.price) &&
+               Objects.equals(dateOfIssue, ticket.dateOfIssue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, screening, customer, employee, price, dateOfIssue);
+    }
 }

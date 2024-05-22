@@ -9,7 +9,7 @@ public class Seat {
     @Column(name = "seatid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "hallid")
     private MovieHall movieHall;
 
@@ -22,9 +22,12 @@ public class Seat {
     @Column(name = "number")
     private Integer number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "ticketid")
     private Ticket ticket;
+
+    @Column(name = "price")
+    private Float price;
 
     public Integer getId() {
         return id;
@@ -70,8 +73,24 @@ public class Seat {
         return ticket;
     }
 
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
+
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
 
+    @Override
+    public String toString() {
+        return "Seat{" +
+               ", row='" + row + '\'' +
+               ", number=" + number +
+               ", ticket=" + ticket +
+               '}';
+    }
 }

@@ -1,8 +1,11 @@
 package com.example.backend.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "moviescreening")
@@ -11,11 +14,12 @@ public class MovieScreening {
     @Column(name = "screeningid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne
     @JoinColumn(name = "movieid")
     private Movie movie;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "moviehallid")
     private MovieHall moviehall;
 
@@ -32,7 +36,6 @@ public class MovieScreening {
     public void setId(Integer id) {
         this.id = id;
     }
-
     public Movie getMovie() {
         return movie;
     }
@@ -65,4 +68,15 @@ public class MovieScreening {
         this.endTime = endTime;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof MovieScreening that)) return false;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getMovie(), that.getMovie()) && Objects.equals(getMoviehall(), that.getMoviehall()) && Objects.equals(getStartTime(), that.getStartTime()) && Objects.equals(getEndTime(), that.getEndTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getMovie(), getMoviehall(), getStartTime(), getEndTime());
+    }
 }

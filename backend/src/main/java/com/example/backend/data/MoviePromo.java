@@ -9,7 +9,7 @@ public class MoviePromo {
     @Column(name = "title", length = Integer.MAX_VALUE)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "movieid")
     private Movie movie;
 
@@ -17,7 +17,7 @@ public class MoviePromo {
     private String description;
 
     @Column(name = "image")
-    private byte[] image;
+    private String image;
 
     public String getTitle() {
         return title;
@@ -43,11 +43,11 @@ public class MoviePromo {
         this.description = description;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

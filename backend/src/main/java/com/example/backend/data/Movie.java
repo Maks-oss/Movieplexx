@@ -14,6 +14,9 @@ public class Movie {
     @Column(name = "name", length = Integer.MAX_VALUE)
     private String name;
 
+    @Column(name = "image", length = Integer.MAX_VALUE)
+    private String image;
+
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
 
@@ -74,4 +77,11 @@ public class Movie {
         this.ageRating = ageRating;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

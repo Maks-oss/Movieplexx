@@ -2,6 +2,7 @@ package com.example.backend.data;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -11,7 +12,7 @@ public class Employee {
     @Column(name = "employeeid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "managerid")
     private Employee manager;
 
@@ -27,7 +28,7 @@ public class Employee {
     @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "employeerole",
             joinColumns = @JoinColumn(name = "employeeid"),
@@ -101,5 +102,17 @@ public class Employee {
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Employee employee)) return false;
+        return Objects.equals(getId(), employee.getId()) && Objects.equals(getManager(), employee.getManager()) && Objects.equals(getFirstname(), employee.getFirstname()) && Objects.equals(getLastname(), employee.getLastname()) && Objects.equals(getEmail(), employee.getEmail()) && Objects.equals(getPassword(), employee.getPassword()) && Objects.equals(getRoles(), employee.getRoles());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getManager(), getFirstname(), getLastname(), getEmail(), getPassword(), getRoles());
     }
 }
