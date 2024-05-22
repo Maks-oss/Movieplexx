@@ -1,15 +1,17 @@
 version: '3.9'
 
 services:
-#  frontend:
-#    build:
-#      context: frontend
-#    container_name: frontend
-#    ports:
-#      - "8081:443"
-#      - "8080:80"
-#    volumes:
-#      - ./frontend/src:/app
+  frontend:
+    build:
+      context: frontend
+    container_name: frontend
+    ports:
+      - "8081:443"
+      - "8080:80"
+    volumes:
+      - ./frontend/src:/app
+    networks:
+      - frontend-tier
   backend:
     image: 'docker-spring-boot-postgres:latest'
     build:
@@ -27,7 +29,8 @@ services:
     volumes:
       - ./backend/src/main/java/com/example/backend:/app
     networks:
-      - backend-tier
+      - data-tier
+      - frontend-tier
 
 
   movieplexxdb:
@@ -41,10 +44,13 @@ services:
       - 'POSTGRES_DB=movieplexx'
       - 'POSTGRES_PASSWORD=test'
     networks:
-      - backend-tier
+      - data-tier
 
 volumes:
   movieplexxdata:
 
 networks:
-  backend-tier:
+  data-tier:
+    driver: bridge
+  frontend-tier:
+    driver: bridge
