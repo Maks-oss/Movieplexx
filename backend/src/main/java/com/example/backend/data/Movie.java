@@ -1,13 +1,19 @@
 package com.example.backend.data;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "movie")
 public class Movie {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "movieid", nullable = false)
     private Integer id;
 
@@ -29,12 +35,42 @@ public class Movie {
     @Column(name = "agerating")
     private Integer ageRating;
 
+    @ManyToMany(mappedBy = "movies")
+    private Set<Actor> actors;
+
+    @ManyToMany(mappedBy = "movies")
+    private Set<Director> directors;
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+    @JsonBackReference
+    public Set<Actor> getActors() {
+        return actors;
+    }
+
+    public void setActors(Set<Actor> actors) {
+        this.actors = actors;
+    }
+    public void addActor(Actor actor) {
+        this.actors.add(actor);
+        actor.getMovies().add(this);
+    }
+    public void addDirector(Director director) {
+        this.directors.add(director);
+        director.getMovies().add(this);
+    }
+    @JsonBackReference
+    public Set<Director> getDirectors() {
+        return directors;
+    }
+
+    public void setDirectors(Set<Director> directors) {
+        this.directors = directors;
     }
 
     public String getName() {

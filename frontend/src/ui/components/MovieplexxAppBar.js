@@ -21,7 +21,7 @@ function MovieplexxAppBar() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const pages = ['Movies'];
+    const pages = ['Movies', 'New movie'];
     const settings = ['Profile', 'Logout'];
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
@@ -53,7 +53,7 @@ function MovieplexxAppBar() {
                             {pages.map((page) => (
                                 <Button
                                     key={page}
-                                    onClick={() => navigate("/"+page.toLowerCase())}
+                                    onClick={() => navigate("/"+page.replaceAll(' ','').toLowerCase())}
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                 >
                                     {page}

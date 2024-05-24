@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -30,10 +28,10 @@ public class DataGeneratorService {
     public void generateData() {
         if (!isTableEmpty()) clearData();
         generateFirstEmployeesWithRoles();
+        var actors = generateActors(5);
+        var directors = generateDirectors(2);
         for (int i = 0; i < 10; i++) {
-            var movie = generateMovie(i);
-            generateActors(movie);
-            generateDirectors(movie);
+            var movie = generateMovie(i,actors,directors);
             generateMoviePromo(movie, i);
             /*
              * For each movie, generate random num of cinemas
@@ -136,7 +134,7 @@ public class DataGeneratorService {
         generatorLogger.log(Level.INFO, "Deletion " + isTableEmpty());
     }
 
-    private Movie generateMovie(int i) {
+    private Movie generateMovie(int i, Set<Actor> actors, Set<Director> directors) {
         var movie = new Movie();
         var oscarMovie = faker.oscarMovie();
         movie.setName(oscarMovie.movieName());
@@ -145,6 +143,28 @@ public class DataGeneratorService {
         movie.setReleaseDate(faker.date().birthdayLocalDate());
         movie.setRuntime(faker.number().numberBetween(90, 180));
         movie.setAgeRating(faker.number().numberBetween(6, 18));
+
+        if (movie.getActors() == null) {
+            movie.setActors(new HashSet<>());
+        }
+        if (movie.getDirectors() == null) {
+            movie.setDirectors(new HashSet<>());
+        }
+
+        List<Actor> actorList = new ArrayList<>(actors);
+        Collections.shuffle(actorList);
+        for (int j = 0; j < actorList.size(); j++) {
+            Actor actor = actorList.get(j);
+            movie.addActor(actor);
+        }
+
+        List<Director> directorList = new ArrayList<>(directors);
+        Collections.shuffle(directorList);
+        for (int j = 0; j < directorList.size(); j++) {
+            Director director = directorList.get(j);
+            movie.addDirector(director);
+        }
+
         entityManager.persist(movie);
         return movie;
     }
@@ -180,24 +200,28 @@ public class DataGeneratorService {
         return movieScreening;
     }
 
-    private void generateActors(Movie movie) {
-        for (int i = 0; i < 5; i++) {
+    private Set<Actor> generateActors(int numberOfAct) {
+        Set<Actor> actors = new HashSet<>();
+        for (int i = 0; i < numberOfAct; i++) {
             var actor = new Actor();
             actor.setFirstname(faker.elderScrolls().firstName());
             actor.setLastname(faker.elderScrolls().lastName());
-            actor.setMovie(movie);
             entityManager.persist(actor);
+            actors.add(actor);
         }
+        return actors;
     }
 
-    private void generateDirectors(Movie movie) {
-        for (int i = 0; i < 2; i++) {
+    private Set<Director> generateDirectors(int numberOfDir) {
+        Set<Director> directors = new HashSet<>();
+        for (int i = 0; i < numberOfDir; i++) {
             var director = new Director();
             director.setFirstname(faker.elderScrolls().firstName());
             director.setLastname(faker.elderScrolls().lastName());
-            director.setMovie(movie);
             entityManager.persist(director);
+            directors.add(director);
         }
+        return directors;
     }
 
     private void generateMoviePromo(Movie movie, int i) {

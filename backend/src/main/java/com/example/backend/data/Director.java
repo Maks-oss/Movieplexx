@@ -1,8 +1,13 @@
 package com.example.backend.data;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "director")
@@ -11,15 +16,18 @@ public class Director {
     @Column(name = "directorid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movieid")
-    private Movie movie;
-
     @Column(name = "firstname", length = Integer.MAX_VALUE)
     private String firstname;
 
     @Column(name = "lastname", length = Integer.MAX_VALUE)
     private String lastname;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "directormovie",
+            joinColumns = @JoinColumn(name = "directorid"),
+            inverseJoinColumns = @JoinColumn(name = "movieid"))
+    private Set<Movie> movies = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -29,14 +37,13 @@ public class Director {
         this.id = id;
     }
 
-    @JsonIgnore
-    @JsonProperty(value = "movie")
-    public Movie getMovie() {
-        return movie;
+    @JsonManagedReference
+    public Set<Movie> getMovies() {
+        return movies;
     }
 
-    public void setMovie(Movie movie) {
-        this.movie = movie;
+    public void setMovies(Set<Movie> movies) {
+        this.movies = movies;
     }
 
     public String getFirstname() {
