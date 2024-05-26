@@ -204,8 +204,8 @@ public class DataGeneratorService {
         Set<Actor> actors = new HashSet<>();
         for (int i = 0; i < numberOfAct; i++) {
             var actor = new Actor();
-            actor.setFirstname(faker.elderScrolls().firstName());
-            actor.setLastname(faker.elderScrolls().lastName());
+            actor.setFirstname(faker.eldenRing().npc());
+            actor.setLastname(faker.name().lastName());
             entityManager.persist(actor);
             actors.add(actor);
         }
@@ -216,8 +216,8 @@ public class DataGeneratorService {
         Set<Director> directors = new HashSet<>();
         for (int i = 0; i < numberOfDir; i++) {
             var director = new Director();
-            director.setFirstname(faker.elderScrolls().firstName());
-            director.setLastname(faker.elderScrolls().lastName());
+            director.setFirstname(faker.leagueOfLegends().champion());
+            director.setLastname(faker.name().lastName());
             entityManager.persist(director);
             directors.add(director);
         }
@@ -227,6 +227,7 @@ public class DataGeneratorService {
     private void generateMoviePromo(Movie movie, int i) {
         var moviePromo = new MoviePromo();
         moviePromo.setMovie(movie);
+        moviePromo.setMoviePromoId(i);
         moviePromo.setTitle(faker.videoGame().title());
         moviePromo.setDescription(faker.movie().quote());
         moviePromo.setImage("https://source.unsplash.com/random/400x400?sig=" + i);

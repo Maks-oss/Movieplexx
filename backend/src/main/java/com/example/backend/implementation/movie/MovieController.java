@@ -47,7 +47,7 @@ public class MovieController {
                 )
         );
     }
-    @PostMapping("/addmovie")
+    @PostMapping
     public ResponseEntity<?> insertMovie(@RequestBody MovieInsertRequest movieToInsert){
         var insertedMovie = movieService.insertMovie(movieToInsert);
         return  ResponseEntity.ok( Map.of(

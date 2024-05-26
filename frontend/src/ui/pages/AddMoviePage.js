@@ -68,20 +68,21 @@ const AddMoviePage = () => {
                     <FormLabel>Runtime</FormLabel>
                     <TextField value={insertMovie.runTime} onChange={handleChange} name="runTime" variant="standard" margin="normal" />
                     <FormLabel>Release Date</FormLabel>
-                    <TextField sx={{ color: "white" }} type="date" value={insertMovie.releaseDate} onChange={handleChange} name="releaseDate" variant="standard" margin="normal" />
+                    <TextField sx={{ svg: { color: '#fff' }, input: { color: '#fff' } }} type="date" value={insertMovie.releaseDate} onChange={handleChange} name="releaseDate" variant="standard" margin="normal" />
                     <FormLabel>Age rating</FormLabel>
                     <TextField value={insertMovie.ageRating} onChange={handleChange} name="ageRating" variant="standard" margin="normal" />
 
                     <FormLabel>Add Actors</FormLabel>
                     <Box display={"flex"}>
                         <Select
+                            fullWidth
                             multiple
                             value={actorsId}
                             onChange={handleActorChange}
                             input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                             renderValue={(selected) => (
                                 selected.map((value) => (
-                                    <Box key={value.id} sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, marginTop:'3px' }}>
+                                    <Box key={value.id} sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, marginTop: '3px' }}>
                                         <Chip key={value.id} label={`${value.firstname} ${value.lastname}`} />
                                     </Box>
                                 ))
@@ -97,13 +98,14 @@ const AddMoviePage = () => {
                     <FormLabel>Add Directors</FormLabel>
                     <Box display={"flex"}>
                         <Select
+                            fullWidth
                             multiple
                             value={directorsId}
                             onChange={handleDirectorChange}
                             input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                             renderValue={(selected) => (
                                 selected.map((value) => (
-                                    <Box key={value.id} sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, marginTop:'3px' }}>
+                                    <Box key={value.id} sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, marginTop: '3px' }}>
                                         <Chip key={value.id} label={`${value.firstname} ${value.lastname}`} />
                                     </Box>
                                 ))

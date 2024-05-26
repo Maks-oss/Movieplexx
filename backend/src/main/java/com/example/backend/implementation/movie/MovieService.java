@@ -26,12 +26,12 @@ public class MovieService {
 
     public Movie insertMovie (MovieInsertRequest movieInsertRequest){
         Movie movie = new Movie();
-        movie.setName(movieInsertRequest.getName());
-        movie.setDescription(movieInsertRequest.getDescription());
-        movie.setImage(movieInsertRequest.getImage());
-        movie.setRuntime(movieInsertRequest.getRunTime());
-        movie.setReleaseDate(movieInsertRequest.getReleaseDate());
-        movie.setAgeRating(movieInsertRequest.getAgeRating());
+        movie.setName(movieInsertRequest.name());
+        movie.setDescription(movieInsertRequest.description());
+        movie.setImage(movieInsertRequest.image());
+        movie.setRuntime(movieInsertRequest.runTime());
+        movie.setReleaseDate(movieInsertRequest.releaseDate());
+        movie.setAgeRating(movieInsertRequest.ageRating());
 
         if (movie.getActors() == null) {
             movie.setActors(new HashSet<>());
@@ -40,13 +40,13 @@ public class MovieService {
             movie.setDirectors(new HashSet<>());
         }
 
-        for (Integer actorId : movieInsertRequest.getActorIds()) {
+        for (Integer actorId : movieInsertRequest.actorIds()) {
             Optional<Actor> actor = actorRepository.findById(actorId);
             if(actor.isPresent())
                 movie.addActor(actor.get());
         }
 
-        for (Integer directorId : movieInsertRequest.getDirectorIds()) {
+        for (Integer directorId : movieInsertRequest.directorIds()) {
             Optional<Director> director = directorRepository.findById(directorId);
             if(director.isPresent())
                 movie.addDirector(director.get());
