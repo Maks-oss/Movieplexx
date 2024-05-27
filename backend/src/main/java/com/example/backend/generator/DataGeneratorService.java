@@ -187,8 +187,8 @@ public class DataGeneratorService {
         entityManager.persist(movieHall);
         return movieHall;
     }
-
-    private MovieScreening generateMovieScreening(Movie movie, MovieHall movieHall) {
+    @Transactional
+    public MovieScreening generateMovieScreening(Movie movie, MovieHall movieHall) {
         var movieScreening = new MovieScreening();
         Timestamp start = Timestamp.valueOf(faker.date().future(30, TimeUnit.DAYS).toLocalDateTime().withMinute(0).withSecond(0).withNano(0));
         Timestamp end = new Timestamp(start.getTime() + TimeUnit.MINUTES.toMillis(movie.getRuntime()));
