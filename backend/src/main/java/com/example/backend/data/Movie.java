@@ -1,13 +1,11 @@
 package com.example.backend.data;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
+
 
 @Entity
 @Table(name = "movie")
@@ -34,10 +32,10 @@ public class Movie {
 
     @Column(name = "agerating")
     private Integer ageRating;
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "movies")
     private Set<Actor> actors;
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "movies")
     private Set<Director> directors;
 
@@ -48,7 +46,7 @@ public class Movie {
     public void setId(Integer id) {
         this.id = id;
     }
-    @JsonBackReference
+
     public Set<Actor> getActors() {
         return actors;
     }
@@ -56,15 +54,7 @@ public class Movie {
     public void setActors(Set<Actor> actors) {
         this.actors = actors;
     }
-    public void addActor(Actor actor) {
-        this.actors.add(actor);
-        actor.getMovies().add(this);
-    }
-    public void addDirector(Director director) {
-        this.directors.add(director);
-        director.getMovies().add(this);
-    }
-    @JsonBackReference
+
     public Set<Director> getDirectors() {
         return directors;
     }

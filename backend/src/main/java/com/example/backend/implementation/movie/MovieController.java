@@ -34,13 +34,12 @@ public class MovieController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getMovieDetails(@PathVariable int id) {
         var screenings = movieScreeningRepository.findAllByMovieId(id);
-        var movie = movieRepository.findById(id);
         var actors = movieRepository.findMovieActors(id);
         var directors = movieRepository.findMovieDirectors(id);
         if (screenings == null || actors == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(
                 Map.of(
-                        "movieInfo", movie.get(),
+                        "movieInfo", screenings.get(0).getMovie(),
                         "movieScreenings", screenings,
                         "movieActors", actors,
                         "movieDirectors", directors
@@ -50,11 +49,6 @@ public class MovieController {
     @PostMapping
     public ResponseEntity<?> insertMovie(@RequestBody MovieInsertRequest movieToInsert){
         var insertedMovie = movieService.insertMovie(movieToInsert);
-        return  ResponseEntity.ok( Map.of(
-                "movieName", insertedMovie.getName(),
-                "movieRelease", insertedMovie.getReleaseDate(),
-                "movieImage", insertedMovie.getImage(),
-                "movieDesc", insertedMovie.getDescription()
-        ));
+        return  ResponseEntity.noContent().build();
     }
 }

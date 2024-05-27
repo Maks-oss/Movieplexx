@@ -31,7 +31,7 @@ public class DataGeneratorService {
         var actors = generateActors(5);
         var directors = generateDirectors(2);
         for (int i = 0; i < 10; i++) {
-            var movie = generateMovie(i,actors,directors);
+            var movie = generateMovie(i, actors, directors);
             generateMoviePromo(movie, i);
             /*
              * For each movie, generate random num of cinemas
@@ -86,7 +86,7 @@ public class DataGeneratorService {
                         .createQuery("""
                                 SELECT c, t.price FROM Customer c
                                 INNER JOIN Ticket t on t.customer.id = c.id
-                             
+                                                             
                                 """, Map.class).getResultList();
             }
             case TICKET -> {
@@ -143,27 +143,19 @@ public class DataGeneratorService {
         movie.setReleaseDate(faker.date().birthdayLocalDate());
         movie.setRuntime(faker.number().numberBetween(90, 180));
         movie.setAgeRating(faker.number().numberBetween(6, 18));
+        movie.setActors(new HashSet<>());
+        movie.setDirectors(new HashSet<>());
 
-        if (movie.getActors() == null) {
-            movie.setActors(new HashSet<>());
+        for (Actor el : actors) {
+            el.addMovie(movie);
         }
-        if (movie.getDirectors() == null) {
-            movie.setDirectors(new HashSet<>());
-        }
+        movie.setActors(actors);
 
-        List<Actor> actorList = new ArrayList<>(actors);
-        Collections.shuffle(actorList);
-        for (int j = 0; j < actorList.size(); j++) {
-            Actor actor = actorList.get(j);
-            movie.addActor(actor);
+        for (Director el : directors) {
+            el.addMovie(movie);
         }
+        movie.setDirectors(directors);
 
-        List<Director> directorList = new ArrayList<>(directors);
-        Collections.shuffle(directorList);
-        for (int j = 0; j < directorList.size(); j++) {
-            Director director = directorList.get(j);
-            movie.addDirector(director);
-        }
 
         entityManager.persist(movie);
         return movie;
@@ -187,6 +179,7 @@ public class DataGeneratorService {
         entityManager.persist(movieHall);
         return movieHall;
     }
+
     @Transactional
     public MovieScreening generateMovieScreening(Movie movie, MovieHall movieHall) {
         var movieScreening = new MovieScreening();

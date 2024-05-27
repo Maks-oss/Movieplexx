@@ -1,9 +1,6 @@
 package com.example.backend.data;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -22,7 +19,7 @@ public class Actor {
 
     @Column(name = "lastname", length = Integer.MAX_VALUE)
     private String lastname;
-
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "actormovie",
@@ -38,7 +35,6 @@ public class Actor {
         this.id = id;
     }
 
-    @JsonManagedReference
     public Set<Movie> getMovies() {
         return movies;
     }
@@ -63,4 +59,7 @@ public class Actor {
         this.lastname = lastname;
     }
 
+    public void addMovie(Movie movie) {
+        this.movies.add(movie);
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MovieService {
@@ -35,29 +36,31 @@ public class MovieService {
         movie.setReleaseDate(movieInsertRequest.releaseDate());
         movie.setAgeRating(movieInsertRequest.ageRating());
 
-        if (movie.getActors() == null) {
-            movie.setActors(new HashSet<>());
-        }
-        if (movie.getDirectors() == null) {
-            movie.setDirectors(new HashSet<>());
-        }
-
+        Set<Actor> actors = new HashSet<>();
         for (Integer actorId : movieInsertRequest.actorIds()) {
             Optional<Actor> actor = actorRepository.findById(actorId);
-            if (actor.isPresent())
-                movie.addActor(actor.get());
+            if (actor.isPresent()){
+                actor.get().addMovie(movie);
+                actors.add(actor.get());
+            }
         }
+        movie.setActors(actors);
 
+        Set<Director> directors = new HashSet<>();
         for (Integer directorId : movieInsertRequest.directorIds()) {
             Optional<Director> director = directorRepository.findById(directorId);
-            if (director.isPresent())
-                movie.addDirector(director.get());
+            if (director.isPresent()){
+                director.get().addMovie(movie);
+                directors.add(director.get());
+            }
         }
+        movie.setDirectors(directors);
+
         movieRepository.save(movie);
 
         var movieHalls = movieHallRepository.findAll();
-        for (int i = 0; i < movieHalls.size()/3; i++) {
-            var movieScreening = generatorService.generateMovieScreening(movie,movieHalls.get(i));
+        for (int i = 0; i < movieHalls.size() / 3; i++) {
+            var movieScreening = generatorService.generateMovieScreening(movie, movieHalls.get(i));
         }
 
         return movie;

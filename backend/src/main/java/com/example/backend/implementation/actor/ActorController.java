@@ -19,16 +19,13 @@ public class ActorController {
         var actors = actorRepository.findAll();
         return ResponseEntity.ok(actors);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getActorById(@PathVariable int id) {
         var actor = actorRepository.findById(id);
-        if (!actor.isPresent()) return ResponseEntity.notFound().build();
+        if (actor.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(
-                Map.of(
-                        "actorId", actor.get().getId(),
-                        "firstName", actor.get().getFirstname(),
-                        "lastName", actor.get().getLastname()
-                )
+                new ActorResponse(actor.get().getId(), actor.get().getFirstname(), actor.get().getLastname())
         );
     }
 }

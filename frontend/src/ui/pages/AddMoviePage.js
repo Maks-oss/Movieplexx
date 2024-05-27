@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Chip, FormLabel, MenuItem, OutlinedInput, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, Chip, FormLabel, MenuItem, Modal, OutlinedInput, Select, TextField, Typography } from "@mui/material";
 import { addMovie, fetchApi } from "../../utils/ApiCalls";
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +10,8 @@ const AddMoviePage = () => {
     const [directors, setDirectors] = useState([]);
     const [actorsId, setActorsId] = useState([]);
     const [directorsId, setDirectorsId] = useState([]);
+    const [success, setSuccess] = useState(false);
+
     const navigation = useNavigate();
 
     useEffect(() => {
@@ -20,6 +22,12 @@ const AddMoviePage = () => {
             setDirectors(data);
         })
     }, [])
+
+    const handleCloseSuccessModal = () => {
+        setSuccess(false);
+        navigation("/movies"); // Redirect to movies page
+    }
+
     const handleChange = (e) => {
 
         if (e.target.name === "runTime" || e.target.name === "ageRating") {
@@ -27,7 +35,7 @@ const AddMoviePage = () => {
             if (e.target.value === '' || re.test(e.target.value)) {
                 setinsertMovie((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
             }
-            else{
+            else {
                 setinsertMovie((prevState) => ({ ...prevState, [e.target.name]: "" }));
             }
             return;
@@ -51,11 +59,13 @@ const AddMoviePage = () => {
             directorIds
         };
         console.log(movieData);
-        addMovie(movieData).then((data) => {
-            console.log("Returned data -> ");
-            console.log(data);
-        });
-        navigation("/movies");
+        addMovie(movieData)
+            .then((data) => {
+                setSuccess(true);
+            })
+            .catch((error) => {
+                console.error("Error adding movie: ", error);
+            });
     }
     const handleActorChange = (e) => {
         setActorsId(e.target.value);
@@ -145,6 +155,34 @@ const AddMoviePage = () => {
 
                 </Box>
             </form>
+            <Modal
+                open={success}
+                onClose={handleCloseSuccessModal}
+                aria-labelledby="success-modal-title"
+                aria-describedby="success-modal-description"
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Box sx={{
+                    bgcolor: 'white',
+                    p: 3,
+                    borderRadius: "8px",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection:"column"
+                }}>
+                    <Typography variant="h6" id="success-modal-title" align="center" sx={{ color: "black" }}>
+                        Movie Added Successfully
+                    </Typography>
+                    <Button variant="contained" onClick={handleCloseSuccessModal} size='small' >
+                        OK
+                    </Button>
+                </Box>
+            </Modal>
         </div>
     )
 }

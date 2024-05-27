@@ -19,16 +19,13 @@ public class DirectorController {
         var directors = directorRepository.findAll();
         return ResponseEntity.ok(directors);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getDirectorById(@PathVariable int id) {
         var director = directorRepository.findById(id);
-        if (!director.isPresent()) return ResponseEntity.notFound().build();
+        if (director.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(
-                Map.of(
-                        "directorId", director.get().getId(),
-                        "firstName", director.get().getFirstname(),
-                        "lastName", director.get().getLastname()
-                )
+                new DirectorResponse(director.get().getId(), director.get().getFirstname(), director.get().getLastname())
         );
     }
 }

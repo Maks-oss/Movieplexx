@@ -4,22 +4,22 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class MoviePromoId implements Serializable {
-    private Integer movie;
+    private Movie movie;
     private Integer moviePromoId;
 
     public MoviePromoId() {
     }
 
-    public MoviePromoId(Integer movie, Integer moviePromoId) {
+    public MoviePromoId(Movie movie, Integer moviePromoId) {
         this.movie = movie;
         this.moviePromoId = moviePromoId;
     }
 
-    public Integer getMovie() {
+    public Movie getMovie() {
         return movie;
     }
 
-    public void setMovie(Integer movie) {
+    public void setMovie(Movie movie) {
         this.movie = movie;
     }
 
