@@ -40,8 +40,9 @@ public class MovieService {
         for (Integer actorId : movieInsertRequest.actorIds()) {
             Optional<Actor> actor = actorRepository.findById(actorId);
             if (actor.isPresent()){
-                actor.get().addMovie(movie);
-                actors.add(actor.get());
+                Actor a = actor.get();
+                a.addMovie(movie);
+                actors.add(a);
             }
         }
         movie.setActors(actors);
@@ -50,8 +51,9 @@ public class MovieService {
         for (Integer directorId : movieInsertRequest.directorIds()) {
             Optional<Director> director = directorRepository.findById(directorId);
             if (director.isPresent()){
-                director.get().addMovie(movie);
-                directors.add(director.get());
+                Director d = director.get();
+                d.addMovie(movie);
+                directors.add(d);
             }
         }
         movie.setDirectors(directors);

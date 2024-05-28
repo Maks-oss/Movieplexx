@@ -3,6 +3,7 @@ package com.example.backend.implementation.movie;
 import com.example.backend.data.Movie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class MovieController {
     private final MovieScreeningRepository movieScreeningRepository;
     private final MovieService movieService;
 
-    public MovieController(MovieRepository movieRepository, MovieScreeningRepository movieScreeningRepository,MovieService movieService) {
+    public MovieController(MovieRepository movieRepository, MovieScreeningRepository movieScreeningRepository, MovieService movieService) {
         this.movieRepository = movieRepository;
         this.movieScreeningRepository = movieScreeningRepository;
         this.movieService = movieService;
@@ -46,9 +47,11 @@ public class MovieController {
                 )
         );
     }
+
     @PostMapping
-    public ResponseEntity<?> insertMovie(@RequestBody MovieInsertRequest movieToInsert){
+    public ResponseEntity<?> insertMovie(@RequestBody MovieInsertRequest movieToInsert, UriComponentsBuilder uriComponentsBuilder) {
         var insertedMovie = movieService.insertMovie(movieToInsert);
-        return  ResponseEntity.noContent().build();
+        var uri = uriComponentsBuilder.path("/movies/" + insertedMovie.getId()).build().toUri();
+        return ResponseEntity.created(uri).build();
     }
 }

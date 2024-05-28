@@ -143,8 +143,6 @@ public class DataGeneratorService {
         movie.setReleaseDate(faker.date().birthdayLocalDate());
         movie.setRuntime(faker.number().numberBetween(90, 180));
         movie.setAgeRating(faker.number().numberBetween(6, 18));
-        movie.setActors(new HashSet<>());
-        movie.setDirectors(new HashSet<>());
 
         for (Actor el : actors) {
             el.addMovie(movie);
