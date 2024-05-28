@@ -26,8 +26,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=test
     ports:
       - "5433:8080"
-    volumes:
-      - ./backend/src/main/java/com/example/backend:/app
     networks:
       - data-tier
       - frontend-tier
@@ -35,8 +33,6 @@ services:
 
   movieplexxdb:
     image: postgres:14-alpine
-    expose:
-      - "5432:5432"
     volumes:
       - movieplexxdata:/var/lib/postgresql/data
     environment:

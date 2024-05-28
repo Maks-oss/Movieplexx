@@ -4,14 +4,20 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "moviepromo")
+@IdClass(MoviePromoId.class)
 public class MoviePromo {
-    @Id
-    @Column(name = "title", length = Integer.MAX_VALUE)
-    private String title;
 
+    @Id
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "movieid")
     private Movie movie;
+
+    @Id
+    @Column(name = "moviepromoid")
+    private Integer moviePromoId;
+
+    @Column(name = "title", length = Integer.MAX_VALUE)
+    private String title;
 
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
@@ -33,6 +39,14 @@ public class MoviePromo {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public Integer getMoviePromoId() {
+        return moviePromoId;
+    }
+
+    public void setMoviePromoId(Integer moviePromoId) {
+        this.moviePromoId = moviePromoId;
     }
 
     public String getDescription() {

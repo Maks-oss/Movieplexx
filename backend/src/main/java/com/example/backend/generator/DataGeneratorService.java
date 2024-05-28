@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -30,10 +28,10 @@ public class DataGeneratorService {
     public void generateData() {
         if (!isTableEmpty()) clearData();
         generateFirstEmployeesWithRoles();
+        var actors = generateActors(5);
+        var directors = generateDirectors(2);
         for (int i = 0; i < 10; i++) {
-            var movie = generateMovie(i);
-            generateActors(movie);
-            generateDirectors(movie);
+            var movie = generateMovie(i, actors, directors);
             generateMoviePromo(movie, i);
             /*
              * For each movie, generate random num of cinemas
@@ -88,7 +86,7 @@ public class DataGeneratorService {
                         .createQuery("""
                                 SELECT c, t.price FROM Customer c
                                 INNER JOIN Ticket t on t.customer.id = c.id
-                             
+                                                             
                                 """, Map.class).getResultList();
             }
             case TICKET -> {
@@ -136,7 +134,7 @@ public class DataGeneratorService {
         generatorLogger.log(Level.INFO, "Deletion " + isTableEmpty());
     }
 
-    private Movie generateMovie(int i) {
+    private Movie generateMovie(int i, Set<Actor> actors, Set<Director> directors) {
         var movie = new Movie();
         var oscarMovie = faker.oscarMovie();
         movie.setName(oscarMovie.movieName());
@@ -145,6 +143,18 @@ public class DataGeneratorService {
         movie.setReleaseDate(faker.date().birthdayLocalDate());
         movie.setRuntime(faker.number().numberBetween(90, 180));
         movie.setAgeRating(faker.number().numberBetween(6, 18));
+
+        for (Actor el : actors) {
+            el.addMovie(movie);
+        }
+        movie.setActors(actors);
+
+        for (Director el : directors) {
+            el.addMovie(movie);
+        }
+        movie.setDirectors(directors);
+
+
         entityManager.persist(movie);
         return movie;
     }
@@ -168,7 +178,8 @@ public class DataGeneratorService {
         return movieHall;
     }
 
-    private MovieScreening generateMovieScreening(Movie movie, MovieHall movieHall) {
+    @Transactional
+    public MovieScreening generateMovieScreening(Movie movie, MovieHall movieHall) {
         var movieScreening = new MovieScreening();
         Timestamp start = Timestamp.valueOf(faker.date().future(30, TimeUnit.DAYS).toLocalDateTime().withMinute(0).withSecond(0).withNano(0));
         Timestamp end = new Timestamp(start.getTime() + TimeUnit.MINUTES.toMillis(movie.getRuntime()));
@@ -180,29 +191,34 @@ public class DataGeneratorService {
         return movieScreening;
     }
 
-    private void generateActors(Movie movie) {
-        for (int i = 0; i < 5; i++) {
+    private Set<Actor> generateActors(int numberOfAct) {
+        Set<Actor> actors = new HashSet<>();
+        for (int i = 0; i < numberOfAct; i++) {
             var actor = new Actor();
-            actor.setFirstname(faker.elderScrolls().firstName());
-            actor.setLastname(faker.elderScrolls().lastName());
-            actor.setMovie(movie);
+            actor.setFirstname(faker.eldenRing().npc());
+            actor.setLastname(faker.name().lastName());
             entityManager.persist(actor);
+            actors.add(actor);
         }
+        return actors;
     }
 
-    private void generateDirectors(Movie movie) {
-        for (int i = 0; i < 2; i++) {
+    private Set<Director> generateDirectors(int numberOfDir) {
+        Set<Director> directors = new HashSet<>();
+        for (int i = 0; i < numberOfDir; i++) {
             var director = new Director();
-            director.setFirstname(faker.elderScrolls().firstName());
-            director.setLastname(faker.elderScrolls().lastName());
-            director.setMovie(movie);
+            director.setFirstname(faker.leagueOfLegends().champion());
+            director.setLastname(faker.name().lastName());
             entityManager.persist(director);
+            directors.add(director);
         }
+        return directors;
     }
 
     private void generateMoviePromo(Movie movie, int i) {
         var moviePromo = new MoviePromo();
         moviePromo.setMovie(movie);
+        moviePromo.setMoviePromoId(i);
         moviePromo.setTitle(faker.videoGame().title());
         moviePromo.setDescription(faker.movie().quote());
         moviePromo.setImage("https://source.unsplash.com/random/400x400?sig=" + i);

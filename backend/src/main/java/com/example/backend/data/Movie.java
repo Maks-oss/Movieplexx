@@ -1,13 +1,17 @@
 package com.example.backend.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "movie")
 public class Movie {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "movieid", nullable = false)
     private Integer id;
 
@@ -28,6 +32,12 @@ public class Movie {
 
     @Column(name = "agerating")
     private Integer ageRating;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "movies")
+    private Set<Actor> actors;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "movies")
+    private Set<Director> directors;
 
     public Integer getId() {
         return id;
@@ -35,6 +45,22 @@ public class Movie {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Set<Actor> getActors() {
+        return actors;
+    }
+
+    public void setActors(Set<Actor> actors) {
+        this.actors = actors;
+    }
+
+    public Set<Director> getDirectors() {
+        return directors;
+    }
+
+    public void setDirectors(Set<Director> directors) {
+        this.directors = directors;
     }
 
     public String getName() {
