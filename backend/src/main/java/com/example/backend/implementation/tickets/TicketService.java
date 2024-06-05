@@ -4,6 +4,7 @@ import com.example.backend.data.Seat;
 import com.example.backend.data.Ticket;
 import com.example.backend.implementation.seats.SeatsRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -73,7 +74,7 @@ public class TicketService {
         }
     }
     private List<Seat> getPreferredSeats(List<Integer> seatsIds, int movieHallId) {
-        var seats = seatsRepository.findSeatsByMovieHallId(movieHallId);
+        var seats = seatsRepository.findSeatsByMovieHallId(movieHallId, Sort.by(Sort.Direction.ASC, "number"));
         var occupiedSeats = new ArrayList<Seat>();
         for (var seat: seats) {
             if (seatsIds.contains(seat.getId())) {

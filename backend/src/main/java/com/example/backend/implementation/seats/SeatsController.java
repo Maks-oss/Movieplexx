@@ -1,5 +1,6 @@
 package com.example.backend.implementation.seats;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,7 @@ public class SeatsController {
 
     @GetMapping("/{movieHallId}")
     public ResponseEntity<?> getSeatsForMovieHall(@PathVariable int movieHallId) {
-        return ResponseEntity.ok(seatsRepository.findSeatsByMovieHallId(movieHallId));
+        return ResponseEntity.ok(seatsRepository.findSeatsByMovieHallId(movieHallId, Sort.by(Sort.Direction.ASC, "number")));
     }
     /*@PostMapping
     public ResponseEntity<?> pickSeats(@RequestBody List<Integer> seatIds, UriComponentsBuilder uriComponentsBuilder) {

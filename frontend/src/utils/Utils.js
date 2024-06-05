@@ -12,6 +12,7 @@ export function groupSeatsByRow(seats) {
             type: seat.type,
             occupied: seat.ticket !== null
         });
+        // console.log('seats: ' + JSON.stringify(Object.entries(acc).slice(0,3)))
         return acc;
     }, {});
 }
