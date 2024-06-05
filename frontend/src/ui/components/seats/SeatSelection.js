@@ -65,7 +65,7 @@ const SeatSelection = ({seats, movieScreening}) => {
             <div className="container">
                 <div className="screen"></div>
                 {Object.entries(rows).map(([row, {rowSeats}], rowIndex) => (
-                    <div className="row" key={row}>
+                    <div className="row" key={rowIndex}>
                         {rowSeats.map((data, seatIndex) => (
                             <div
                                 key={seatIndex}
