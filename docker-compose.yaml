@@ -14,8 +14,8 @@ services:
       - frontend-tier
   backend:
     build:
-      context: backend
-    container_name: backend
+      context: backend-sql
+    container_name: backend-sql
     depends_on:
       - movieplexxdb
     environment:
