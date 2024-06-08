@@ -10,40 +10,27 @@ import java.util.Map;
 @RestController
 @RequestMapping("movies")
 public class MovieController {
-    private final MovieRepository movieRepository;
-    private final MovieScreeningRepository movieScreeningRepository;
     private final MovieService movieService;
 
-    public MovieController(MovieRepository movieRepository, MovieScreeningRepository movieScreeningRepository, MovieService movieService) {
-        this.movieRepository = movieRepository;
-        this.movieScreeningRepository = movieScreeningRepository;
+    public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
 
     @GetMapping
     public ResponseEntity<?> getMovieItems() {
-        return ResponseEntity.ok(movieRepository.findAll().stream().map(movie ->
-                new MovieItemResponse(movie.getId(), movie.getName(), movie.getImage(), movie.getReleaseDate().toString())
-        ));
+        return ResponseEntity.ok(movieService.getMovieItemsList());
     }
 
-    //    @GetMapping("/cast")
-//    public ResponseEntity<?> getMovieStaff() {
-//        var movie = movieRepository.findAll().get(0);
-//        return ResponseEntity.ok(movieRepository.findMovieCast(movie.getId()));
-//    }
     @GetMapping("/{id}")
     public ResponseEntity<?> getMovieDetails(@PathVariable int id) {
-        var screenings = movieScreeningRepository.findAllByMovieId(id);
-        var actors = movieRepository.findMovieActors(id);
-        var directors = movieRepository.findMovieDirectors(id);
-        if (screenings == null || actors == null) return ResponseEntity.notFound().build();
+        var screenings = movieService.getMovieScreenings(id);
+        var movieCast = movieService.getMovieCast(id);
+        if (screenings == null || movieCast.get("actors") == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(
                 Map.of(
                         "movieInfo", screenings.get(0).getMovie(),
                         "movieScreenings", screenings,
-                        "movieActors", actors,
-                        "movieDirectors", directors
+                        "movieCast", movieCast
                 )
         );
     }

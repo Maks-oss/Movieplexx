@@ -5,6 +5,7 @@ import MovieScreeningsPage from "./pages/MovieScreeningsPage";
 import SeatPickerPage from "./pages/SeatPickerPage";
 import TicketPage from "./pages/TicketPage";
 import AddMoviePage from "./pages/AddMoviePage";
+import FirstReportPage from "./pages/FirstReportPage";
 function App() {
     return (
         <Router>
@@ -13,10 +14,11 @@ function App() {
                 <Route path="/" element={<Outlet/>}>
                     <Route index element={<p> Home page</p>}/>
                     <Route path="/movies" element={<MoviesListPage/>}/>
-                    <Route path="/movies/screening" element={<MovieScreeningsPage/>} />
-                    <Route path="/movies/screening/seatPicker" element={<SeatPickerPage/>} />
-                    <Route path="/movies/screening/seatPicker/ticket" element={<TicketPage/>} />
+                    <Route path="/movies/:movieid" element={<MovieScreeningsPage/>} />
+                    <Route path="/movies/:movieid/:hallid" element={<SeatPickerPage/>} />
+                    <Route path="/movies/:movieid/:hallid/:ticket" element={<TicketPage/>} />
                     <Route path="/newmovie" element={<AddMoviePage/>} />
+                    <Route path="/firstreport" element={<FirstReportPage/>} />
                     <Route path="*" element={<p>Not found</p>}/>
                 </Route>
             </Routes>

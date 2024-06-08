@@ -25,7 +25,7 @@ function MovieplexxAppBar() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const pages = ['Movies', 'New movie'];
+    const pages = ['Movies', 'New movie', 'First report'];
     const settings = ['Profile', 'Logout'];
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);

@@ -13,7 +13,6 @@ services:
     networks:
       - frontend-tier
   backend:
-    image: 'docker-spring-boot-postgres:latest'
     build:
       context: backend
     container_name: backend

@@ -2,16 +2,20 @@ package com.example.backend.data;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "seat")
+//@IdClass(SeatId.class)
 public class Seat {
     @Id @GeneratedValue
     @Column(name = "seatid", nullable = false)
-    private Integer id;
+    private Integer seatId;
 
     @ManyToOne
     @JoinColumn(name = "hallid")
     private MovieHall movieHall;
+
 
     @Column(name = "\"row\"", length = Integer.MAX_VALUE)
     private String row;
@@ -22,27 +26,25 @@ public class Seat {
     @Column(name = "number")
     private Integer number;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "ticketid")
-    private Ticket ticket;
+
 
     @Column(name = "price")
     private Float price;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public MovieHall getMovieHall() {
-        return movieHall;
+    public void setSeatId(Integer seatId) {
+        this.seatId = seatId;
     }
 
     public void setMovieHall(MovieHall movieHall) {
         this.movieHall = movieHall;
+    }
+
+    public Integer getSeatId() {
+        return seatId;
+    }
+
+    public MovieHall getMovieHall() {
+        return movieHall;
     }
 
     public String getRow() {
@@ -69,9 +71,6 @@ public class Seat {
         this.number = number;
     }
 
-    public Ticket getTicket() {
-        return ticket;
-    }
 
     public Float getPrice() {
         return price;
@@ -81,16 +80,24 @@ public class Seat {
         this.price = price;
     }
 
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
-    }
 
     @Override
     public String toString() {
         return "Seat{" +
                ", row='" + row + '\'' +
                ", number=" + number +
-               ", ticket=" + ticket +
                '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Seat seat)) return false;
+        return Objects.equals(getSeatId(), seat.getSeatId()) && Objects.equals(getMovieHall(), seat.getMovieHall()) && Objects.equals(getRow(), seat.getRow()) && Objects.equals(getType(), seat.getType()) && Objects.equals(getNumber(), seat.getNumber()) && Objects.equals(getPrice(), seat.getPrice());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSeatId(), getMovieHall(), getRow(), getType(), getNumber(), getPrice());
     }
 }

@@ -7,7 +7,7 @@ export async function fetchApi(endpoint) {
 }
 export async function createTicketRequest(paymentMethod , data={}) {
     console.log('BEFORE SEND: ' + JSON.stringify(data))
-    const response = await fetch(`http://localhost:5433/ticket?paymentMethod=${paymentMethod}`, {
+    const response = await fetch(`http://localhost:5433/tickets?paymentMethod=${paymentMethod}`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

@@ -8,14 +8,43 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "ticket")
+@IdClass(TicketId.class)
 public class Ticket {
-    @Id
-    @Column(name = "ticketid", nullable = false)
-    private String id;
+//    @Id
+//    @Column(name = "ticketid", nullable = false)
+//    private String id;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "screeningid")
+//    private MovieScreening screening;
+//    @Id
+//    @ManyToOne
+////    @JoinColumns({
+////            @JoinColumn(name = "seatid", referencedColumnName = "seatid"),
+////            @JoinColumn(name = "hallid", referencedColumnName = "hallid")
+////    })
+//    private Seat seat;
 
-    @ManyToOne
+//    @Id
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name = "screeningid", nullable = false)
+//    private MovieScreening screening;
+
+//    @EmbeddedId
+//    private TicketId id;
+
+    @Id @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "screeningid")
     private MovieScreening screening;
+
+    @Id @ManyToOne
+//    @JoinColumns({
+//            @JoinColumn(name = "seatid", referencedColumnName = "seatid"),
+//            @JoinColumn(name = "hallid", referencedColumnName = "hallid")
+//    })
+    private Seat seat;
+
+
 
     @ManyToOne
     @JoinColumn(name = "customerid")
@@ -31,16 +60,13 @@ public class Ticket {
     @Column(name = "dateofissue")
     private LocalDate dateOfIssue;
 
-    public Ticket() {
-        id = UUID.randomUUID().toString();
+
+    public Seat getSeat() {
+        return seat;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setSeat(Seat seat) {
+        this.seat = seat;
     }
 
     public MovieScreening getScreening() {
@@ -88,7 +114,7 @@ public class Ticket {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ticket ticket = (Ticket) o;
-        return Objects.equals(id, ticket.id) &&
+        return
                Objects.equals(screening, ticket.screening) &&
                Objects.equals(customer, ticket.customer) &&
                Objects.equals(employee, ticket.employee) &&
@@ -98,6 +124,6 @@ public class Ticket {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, screening, customer, employee, price, dateOfIssue);
+        return Objects.hash(screening, customer, employee, price, dateOfIssue);
     }
 }

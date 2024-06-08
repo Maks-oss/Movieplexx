@@ -2,6 +2,8 @@ package com.example.backend.data;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "cinema")
 public class Cinema {
@@ -68,4 +70,15 @@ public class Cinema {
         this.address = address;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Cinema cinema)) return false;
+        return Objects.equals(getId(), cinema.getId()) && Objects.equals(getCity(), cinema.getCity()) && Objects.equals(getName(), cinema.getName()) && Objects.equals(getCountry(), cinema.getCountry()) && Objects.equals(getAddress(), cinema.getAddress());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getCity(), getName(), getCountry(), getAddress());
+    }
 }

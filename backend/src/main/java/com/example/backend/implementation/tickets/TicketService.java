@@ -8,15 +8,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
-    private TicketRepository ticketRepository;
-    private SeatsRepository seatsRepository;
+    private final TicketRepository ticketRepository;
+    private final SeatsRepository seatsRepository;
     private final Logger ticketLogger = Logger.getLogger("ticket");
 
     public TicketService(TicketRepository ticketRepository, SeatsRepository seatsRepository) {
@@ -26,19 +24,19 @@ public class TicketService {
     @Transactional
     public TicketResponse createTicketResponse(CreateTicketRequestBody createTicketRequestBody) {
         var ticket = createTicket(createTicketRequestBody);
-        var ticketSeats = seatsRepository.findSeatsByTicket(ticket);
-        var movieHall = ticketSeats.get(0).getMovieHall();
+        var seat = ticket.getSeat();
+        var movieHall = seat.getMovieHall();
         var cinema = movieHall.getCinema();
         var screening = ticket.getScreening();
+        var movie = screening.getMovie();
         return new TicketResponse(
-                ticket.getId(),
-                screening.getMovie().getName(),
+                movie.getName(),
                 ticket.getPrice(),
                 ticket.getDateOfIssue(),
                 movieHall.getType() + " " + movieHall.getNumber(),
                 cinema.getName(),
                 screening.getStartTime().toString(),
-                ticketSeats.stream().map(seat -> seat.getRow() + " " + seat.getNumber()).collect(Collectors.toList())
+                seat.getRow() + " " + seat.getNumber()
         );
     }
 
@@ -48,7 +46,6 @@ public class TicketService {
 
     @Transactional
     public void clearAll() {
-        ticketRepository.findAll().forEach(t -> seatsRepository.dissociateTicket(t.getId()));
         ticketRepository.deleteAll();
     }
 
@@ -62,26 +59,31 @@ public class TicketService {
             ticket.setEmployee(createTicketRequestBody.employee());
         }
         ticket.setDateOfIssue(LocalDate.now());
-        var seats = getPreferredSeats(createTicketRequestBody.seatsIds(), ticket.getScreening().getMoviehall().getId());
-        ticket.setPrice((float) seats.stream().mapToDouble(Seat::getPrice).sum());
-        Ticket saved = ticketRepository.save(ticket);
-        reserveSeats(seats, saved);
-        return saved;
+        List<Integer> seatId = createTicketRequestBody.seatId();
+        var seat = getPreferredSeat(seatId.get(0), seatId.get(1), createTicketRequestBody.movieScreening().getId());
+        if (seat == null) throw new RuntimeException("Invalid seat");
+        ticket.setPrice(seat.getPrice());
+        ticket.setSeat(seat);
+        return ticketRepository.save(ticket);
     }
-    private void reserveSeats(List<Seat> seats, Ticket ticket) {
+    private Seat getPreferredSeat(int seatId, int movieHallId, int screeningId) {
+        if (isSeatOccupied(seatId, screeningId)) throw new IllegalArgumentException("Seat is already occupied");
+        var seats = seatsRepository.findSeatsByMovieHallId(movieHallId, Sort.unsorted());
         for (var seat: seats) {
-            seat.setTicket(ticket);
-        }
-    }
-    private List<Seat> getPreferredSeats(List<Integer> seatsIds, int movieHallId) {
-        var seats = seatsRepository.findSeatsByMovieHallId(movieHallId, Sort.by(Sort.Direction.ASC, "number"));
-        var occupiedSeats = new ArrayList<Seat>();
-        for (var seat: seats) {
-            if (seatsIds.contains(seat.getId())) {
-                occupiedSeats.add(seat);
+            if (seat.getSeatId() == seatId) {
+                return seat;
             }
         }
-        return occupiedSeats;
+        return null;
+    }
+    private boolean isSeatOccupied(int seatId, int screeningId) {
+        var occupiedSeats = seatsRepository.findSeatsByScreening(screeningId);
+        for (var seat: occupiedSeats) {
+            if (seat.getSeatId() == seatId) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("ticket")
+@RequestMapping("tickets")
 public class TicketController {
     private final TicketService ticketService;
     private final PaymentService paymentService;

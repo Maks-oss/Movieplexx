@@ -4,27 +4,27 @@ import com.example.backend.data.*;
 import com.example.backend.generator.DataGeneratorService;
 import com.example.backend.implementation.actor.ActorRepository;
 import com.example.backend.implementation.director.DirectorRepository;
-import com.example.backend.implementation.movieHall.MovieHallRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
-    private MovieRepository movieRepository;
-    private ActorRepository actorRepository;
-    private DirectorRepository directorRepository;
-    private MovieHallRepository movieHallRepository;
-    private DataGeneratorService generatorService;
+    private final MovieRepository movieRepository;
+    private final ActorRepository actorRepository;
+    private final DirectorRepository directorRepository;
+    private final MovieHallRepository movieHallRepository;
+    private final DataGeneratorService generatorService;
+    private final MovieScreeningRepository movieScreeningRepository;
 
-    public MovieService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository, MovieHallRepository movieHallRepository, DataGeneratorService generatorService) {
+    public MovieService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository, MovieHallRepository movieHallRepository, DataGeneratorService generatorService, MovieScreeningRepository movieScreeningRepository) {
         this.movieRepository = movieRepository;
         this.actorRepository = actorRepository;
         this.directorRepository = directorRepository;
         this.movieHallRepository = movieHallRepository;
         this.generatorService = generatorService;
+        this.movieScreeningRepository = movieScreeningRepository;
     }
 
     public Movie insertMovie(MovieInsertRequest movieInsertRequest) {
@@ -66,6 +66,23 @@ public class MovieService {
         }
 
         return movie;
+    }
+
+    public List<MovieItemResponse> getMovieItemsList() {
+        return movieRepository.findAll().stream().map(movie ->
+                new MovieItemResponse(movie.getId(), movie.getName(), movie.getImage(), movie.getReleaseDate().toString())
+        ).collect(Collectors.toList());
+    }
+
+    public Map<String, Object> getMovieCast(int movieId) {
+        return Map.of(
+                "actors", movieRepository.findMovieActors(movieId),
+                "directors", movieRepository.findMovieDirectors(movieId)
+        );
+    }
+
+    public List<MovieScreening> getMovieScreenings(int movieId) {
+        return movieScreeningRepository.findAllByMovieIdOrderByStartTimeAsc(movieId);
     }
 
 }

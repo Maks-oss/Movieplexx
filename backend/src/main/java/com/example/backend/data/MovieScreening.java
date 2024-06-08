@@ -79,4 +79,15 @@ public class MovieScreening {
     public int hashCode() {
         return Objects.hash(getId(), getMovie(), getMoviehall(), getStartTime(), getEndTime());
     }
+
+    @Override
+    public String toString() {
+        return "MovieScreening{" +
+               "id=" + id +
+               ", movie=" + movie +
+               ", moviehall=" + moviehall +
+               ", startTime=" + startTime +
+               ", endTime=" + endTime +
+               '}';
+    }
 }
