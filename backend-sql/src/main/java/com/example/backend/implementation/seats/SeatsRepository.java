@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SeatsRepository extends JpaRepository<Seat, Integer> {
 
-    @Query("SELECT s  FROM Seat s WHERE s.movieHall.id=:movieHallId")
+    @Query("SELECT s FROM Seat s WHERE s.movieHall.id=:movieHallId")
     List<Seat> findSeatsByMovieHallId(int movieHallId, Sort sort);
 
     @Query("""

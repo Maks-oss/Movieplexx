@@ -284,7 +284,7 @@ public class DataGeneratorService {
 
     private List<Seat> generateSeats(MovieHall movieHall) {
         int rowsNum = faker.number().numberBetween(10, 15);
-        int seatsPerRow = 10;
+        int seatsPerRow = faker.number().numberBetween(8, 12);
         var seats = new ArrayList<Seat>();
         for (int i = 1; i < rowsNum * seatsPerRow; i++) {
             var seat = new Seat();

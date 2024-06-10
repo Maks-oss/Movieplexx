@@ -4,6 +4,7 @@ import com.example.backend.data.*;
 import com.example.backend.generator.DataGeneratorService;
 import com.example.backend.implementation.actor.ActorRepository;
 import com.example.backend.implementation.director.DirectorRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -82,7 +83,7 @@ public class MovieService {
     }
 
     public List<MovieScreening> getMovieScreenings(int movieId) {
-        return movieScreeningRepository.findAllByMovieIdOrderByStartTimeAsc(movieId);
+        return movieScreeningRepository.findAllByMovieId(movieId, Sort.by(Sort.Direction.ASC, "moviehall"));
     }
 
 }

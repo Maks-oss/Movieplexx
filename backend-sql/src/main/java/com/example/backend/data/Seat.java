@@ -26,8 +26,6 @@ public class Seat {
     @Column(name = "number")
     private Integer number;
 
-
-
     @Column(name = "price")
     private Float price;
 
