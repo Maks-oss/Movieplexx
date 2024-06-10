@@ -40,7 +40,7 @@ const TicketPage = () => {
             <TicketContent>
                 <Typography variant="body1">Cinema: {state.cinemaBranch}</Typography>
                 <Typography variant="body1">Hall: {state.movieHall}</Typography>
-                <Typography variant="body1">Seats: {state.seats.join(', ')}</Typography>
+                <Typography variant="body1">Seat: {state.seat}</Typography>
                 <Typography variant="body1">DateOfIssue: {state.dateOfIssue}</Typography>
                 <Typography variant="body1">Time: {getTime(state.movieStartTime)}</Typography>
                 <TicketDetails>

@@ -12,10 +12,7 @@ function MovieScreeningsPage() {
     const [movieDetails, setMovieDetails] = useState(null);
     const navigation = useNavigate()
     const handleOnScreeningClick = (screening) => {
-        console.log('Selected screening: ' + screening.id)
-        // TicketStorageUtil.addMovieScreening(screening)
-        // setMovieScreening(screening)
-        navigation('seatPicker', {
+        navigation(`${screening.moviehall.type}${screening.moviehall.id}`, {
             state: {
                 hallId: screening.moviehall.id,
                 movieScreening: screening
@@ -30,8 +27,8 @@ function MovieScreeningsPage() {
     if (movieDetails) {
         return (
                 <Stack direction="row" spacing={4} sx={{margin: '20px'}}>
-                    <MovieDetailsCard movieInfo={movieDetails.movieInfo} movieActors={movieDetails.movieActors}
-                                      movieDirectors={movieDetails.movieDirectors}/>
+                    <MovieDetailsCard movieInfo={movieDetails.movieInfo} movieActors={movieDetails.movieCast.actors}
+                                      movieDirectors={movieDetails.movieCast.directors}/>
                     <MovieScreenings movieScreenings={movieDetails.movieScreenings}
                                      onScreeningClick={handleOnScreeningClick}/>
                 </Stack>

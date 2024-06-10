@@ -7,10 +7,10 @@ export function groupSeatsByRow(seats) {
             };
         }
         acc[row].rowSeats.push({
-            id: seat.id,
+            id: [seat.seatId, seat.movieHallId],
             number: seat.number,
             type: seat.type,
-            occupied: seat.ticket !== null
+            occupied: seat.isOccupied
         });
         // console.log('seats: ' + JSON.stringify(Object.entries(acc).slice(0,3)))
         return acc;
@@ -44,4 +44,19 @@ export function getTime(timestamp) {
     return (utcHours < 10 ? `0${utcHours}` : utcHours)
         + ':' +
         (utcMinutes < 10 ? `0${utcMinutes}` : utcMinutes);
+}
+export function getDayAndMonth(timestamp) {
+    return new Date(timestamp).getUTCDate();
+}
+
+function arraysEqual(a, b) {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+}
+
+export function includesArray(arr, target) {
+    return arr.some(item => arraysEqual(item, target));
 }

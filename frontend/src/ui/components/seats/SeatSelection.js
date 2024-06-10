@@ -5,10 +5,10 @@ import Fade from '@mui/material/Fade';
 import PaymentMethodModal from "../PaymentMethodModal";
 import {createTicketRequest} from "../../../utils/ApiCalls";
 import {useNavigate} from "react-router-dom";
-import {groupSeatsByRow, sleep} from "../../../utils/Utils";
+import {groupSeatsByRow, includesArray, sleep} from "../../../utils/Utils";
 
 const SeatSelection = ({seats, movieScreening}) => {
-    const [selectedSeats, setSelectedSeats] = useState([]);
+    const [selectedSeat, setSelectedSeat] = useState(null);
     const [isConfirm, setIsConfirm] = React.useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [confirm, setConfirm] = useState(false)
@@ -19,24 +19,19 @@ const SeatSelection = ({seats, movieScreening}) => {
     const handleConfirmClick = async () => {
         setConfirm(true)
         createTicketRequest(selectedMethod, {
-            seatsIds: selectedSeats,
+            seatId: selectedSeat,
             movieScreening: movieScreening
         }).then((data) => {
-            navigation('/movies/screening/seatPicker/ticket', {
+            navigation(`ticket${data.movieName}`, {
                 state: data
             })
             setConfirm(false)
         })
     };
     const toggleSeatSelection = (seatId) => {
-        const newSelectedSeats = [...selectedSeats];
-        if (newSelectedSeats.includes(seatId)) {
-            newSelectedSeats.splice(newSelectedSeats.indexOf(seatId), 1);
-        } else {
-            newSelectedSeats.push(seatId);
-        }
-        setSelectedSeats(newSelectedSeats);
-        setIsConfirm(newSelectedSeats.length !== 0)
+        console.log("Seat id: " +seatId)
+        setSelectedSeat(seatId);
+        setIsConfirm(true)
     };
 
 
@@ -70,7 +65,7 @@ const SeatSelection = ({seats, movieScreening}) => {
                             <div
                                 key={seatIndex}
                                 className={`seat ${
-                                    data.occupied ? 'occupied' : selectedSeats.includes(data.id) ? 'selected' : ''
+                                    data.occupied ? 'occupied' : JSON.stringify(selectedSeat) === JSON.stringify(data.id) ? 'selected' : ''
                                 }`}
                                 onClick={() => !data.occupied && toggleSeatSelection(data.id)}
                             ></div>

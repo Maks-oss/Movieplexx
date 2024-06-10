@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ListItem = ({ image, title, releaseDate, itemId}) => {
     const navigation = useNavigate();
     const onMovieItemClicked = () => {
-        navigation(`/movies/screening`, {
+        navigation(`${title}${itemId}`, {
             state: itemId
         })
     };
