@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-@Document
-public class Customer {
+@Document("Customer")
+public class CustomerDocument {
     @Id
     private Integer id;
 

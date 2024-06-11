@@ -9,8 +9,8 @@ RUN gradle clean build -i --stacktrace -x bootJar
 FROM gradle:8.7.0-jdk17 AS build
 
 # Set the working directory in the container
-#COPY --chown=gradle:gradle . /home/gradle/src
-COPY --from=cache /home/gradle/cache_home /home/gradle/.gradle
+COPY --chown=gradle:gradle . /home/gradle/src
+#COPY --from=cache /home/gradle/cache_home /home/gradle/.gradle
 COPY . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle build -x test

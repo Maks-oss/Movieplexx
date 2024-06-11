@@ -45,7 +45,7 @@ public class DataGeneratorService {
                  * For each cinema, generate random num of customers, movie-halls, seats and movie screenings
                  * */
                 for (int k = 0; k < faker.number().numberBetween(3, 10); k++) {
-                    var customer = generateCustomer();
+                    var customerDocument = generateCustomer();
                     var movieHall = generateMovieHall(cinema);
                     /* generate random num of seats for movie-hall*/
                     var seats = generateSeats(movieHall);
@@ -55,10 +55,10 @@ public class DataGeneratorService {
                     for (int n = 0; n < 2; n++) {
                         var movieScreening = generateMovieScreening(movie, movieHall);
                         /*
-                         * for each customer, generate random num of tickets for that customer and that movie screening.
+                         * for each customerDocument, generate random num of tickets for that customerDocument and that movie screening.
                          * */
                         for (int j = 0; j < faker.number().numberBetween(1, 6); j++) {
-                            generateTicket(customer, movieScreening, seats.get(j));
+                            generateTicket(customerDocument, movieScreening, seats.get(j));
                         }
                     }
                 }
@@ -245,18 +245,18 @@ public class DataGeneratorService {
     }
 
     private Customer generateCustomer() {
-        var customer = new Customer();
-        customer.setFirstname(faker.name().firstName());
-        customer.setLastname(faker.name().lastName());
-        customer.setEmail(faker.internet().emailAddress());
-        customer.setPassword(faker.internet().password());
-        entityManager.persist(customer);
-        return customer;
+        var customerDocument = new Customer();
+        customerDocument.setFirstname(faker.name().firstName());
+        customerDocument.setLastname(faker.name().lastName());
+        customerDocument.setEmail(faker.internet().emailAddress());
+        customerDocument.setPassword(faker.internet().password());
+        entityManager.persist(customerDocument);
+        return customerDocument;
     }
 
-    private void generateTicket(Customer customer, MovieScreening screening, Seat seat) {
+    private void generateTicket(Customer customerDocument, MovieScreening screening, Seat seat) {
         var ticket = new Ticket();
-        ticket.setCustomer(customer);
+        ticket.setCustomer(customerDocument);
         ticket.setScreening(screening);
         ticket.setPrice(ThreadLocalRandom.current().nextFloat(2.99f, 50.99f));
         ticket.setDateOfIssue(LocalDate.now());

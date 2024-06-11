@@ -15,9 +15,11 @@ services:
   backend:
     build:
       context: backend
+      dockerfile: Dockerfile
     container_name: backend
     depends_on:
       - movieplexxdb
+      - movieplexxmongodb
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://movieplexxdb:5432/movieplexx
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -41,6 +43,8 @@ services:
       - data-tier
   movieplexxmongodb:
     image: mongo:5.0.27
+    ports:
+      - "27017:27017"
     volumes:
       - movieplexxmongodata:/data/db
     networks:

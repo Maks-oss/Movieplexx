@@ -48,7 +48,7 @@ public class Ticket {
 
 
     @DocumentReference
-    private Customer customer;
+    private CustomerDocument customer;
 
     @DocumentReference
     private Employee employee;
@@ -74,12 +74,12 @@ public class Ticket {
         ticketId.setScreening(screening);
     }
 
-    public Customer getCustomer() {
+    public CustomerDocument getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomer(CustomerDocument customerDocument) {
+        this.customer = customerDocument;
     }
 
     public Employee getEmployee() {

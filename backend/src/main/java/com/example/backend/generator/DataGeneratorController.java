@@ -21,7 +21,8 @@ public class DataGeneratorController {
 
     @RequestMapping("/generate")
     public ResponseEntity<?> getGeneratedData(@RequestParam(defaultValue = "emp") String type) {
-        return ResponseEntity.ok(generatorService.retrieveGeneratedData(type));
+//        return ResponseEntity.ok(generatorService.retrieveGeneratedData(type));
+        return ResponseEntity.ok("Test");
     }
 
 }
