@@ -38,6 +38,10 @@ public class Movie {
     @JsonIgnore
     @ManyToMany(mappedBy = "movies")
     private Set<Director> directors;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "managerid")
+    private Employee manager;
 
     public Integer getId() {
         return id;
@@ -61,6 +65,14 @@ public class Movie {
 
     public void setDirectors(Set<Director> directors) {
         this.directors = directors;
+    }
+
+    public Employee getManager() {
+        return manager;
+    }
+
+    public void setManager(Employee manager) {
+        this.manager = manager;
     }
 
     public String getName() {

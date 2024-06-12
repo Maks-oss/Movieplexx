@@ -1,5 +1,6 @@
 package com.example.backend.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -17,6 +18,7 @@ public class Role {
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Set<Employee> employees;
 

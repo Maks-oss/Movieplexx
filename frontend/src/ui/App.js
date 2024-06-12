@@ -6,6 +6,7 @@ import SeatPickerPage from "./pages/SeatPickerPage";
 import TicketPage from "./pages/TicketPage";
 import AddMoviePage from "./pages/AddMoviePage";
 import FirstReportPage from "./pages/FirstReportPage";
+import SecondReportPage from "./pages/SecondReportPage";
 function App() {
     return (
         <Router>
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/movies/:movieid/:hallid/:ticket" element={<TicketPage/>} />
                     <Route path="/newmovie" element={<AddMoviePage/>} />
                     <Route path="/firstreport" element={<FirstReportPage/>} />
+                    <Route path="/secondreport" element={<SecondReportPage/>} />
                     <Route path="*" element={<p>Not found</p>}/>
                 </Route>
             </Routes>

@@ -9,6 +9,7 @@ public record MovieInsertRequest (
         int runTime,
         LocalDate releaseDate,
         int ageRating,
+        Integer managerId,
         List<Integer> actorIds,
         List<Integer> directorIds
 ) {

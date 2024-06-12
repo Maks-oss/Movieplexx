@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import App from "./ui/App";
-import {ThemeProvider, createTheme} from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { UserProvider } from './utils/UserContext';
 
 const darkTheme = createTheme({
     palette: {
@@ -14,10 +15,12 @@ const darkTheme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <ThemeProvider theme={darkTheme}>
-            <CssBaseline />
-            <App/>
-        </ThemeProvider>
+        <UserProvider>
+            <ThemeProvider theme={darkTheme}>
+                <CssBaseline />
+                <App />
+            </ThemeProvider>
+        </UserProvider>
     </React.StrictMode>
 );
 
