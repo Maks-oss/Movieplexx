@@ -3,7 +3,7 @@ package com.example.backend.generator;
 public enum DataType {
     EMPLOYEE("emp"),
     CUSTOMER("cus"),
-    MOVIE_DATA("mov"),
+    MOVIE("mov"),
     TICKET("tic"),
     SEAT("seat"),
     CINEMA("cin");
@@ -18,7 +18,6 @@ public enum DataType {
         return stringValue;
     }
 
-    // Method to convert string to enum
     public static DataType fromString(String text) {
         for (DataType value : DataType.values()) {
             if (value.stringValue.equalsIgnoreCase(text)) {

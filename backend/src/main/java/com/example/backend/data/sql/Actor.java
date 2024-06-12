@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -61,5 +62,27 @@ public class Actor {
 
     public void addMovie(Movie movie) {
         this.movies.add(movie);
+    }
+
+    @Override
+    public String toString() {
+        return "Actor{" +
+               "id=" + id +
+               ", firstname='" + firstname + '\'' +
+               ", lastname='" + lastname + '\'' +
+               ", movies=" + movies +
+               '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Actor actor)) return false;
+        return Objects.equals(getId(), actor.getId()) && Objects.equals(getFirstname(), actor.getFirstname()) && Objects.equals(getLastname(), actor.getLastname()) && Objects.equals(getMovies(), actor.getMovies());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFirstname(), getLastname(), getMovies());
     }
 }

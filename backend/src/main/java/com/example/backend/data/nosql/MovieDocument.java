@@ -6,12 +6,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
-@Document
-public class Movie {
+@Document("Movie")
+public class MovieDocument {
     @Id
     private Integer id;
 
@@ -26,12 +28,12 @@ public class Movie {
     private LocalDate releaseDate;
 
     private Integer ageRating;
-    @JsonIgnore
+//    @JsonIgnore
     @DocumentReference
-    private Set<Actor> actors;
-    @JsonIgnore
+    private List<ActorDocument> actors = new ArrayList<>();
+//    @JsonIgnore
     @DocumentReference
-    private Set<Director> directors;
+    private List<DirectorDocument> directors = new ArrayList<>();
 
     @DocumentReference
     private Employee employee;
@@ -45,19 +47,19 @@ public class Movie {
         this.id = id;
     }
 
-    public Set<Actor> getActors() {
+    public List<ActorDocument> getActors() {
         return actors;
     }
 
-    public void setActors(Set<Actor> actors) {
+    public void setActors(List<ActorDocument> actors) {
         this.actors = actors;
     }
 
-    public Set<Director> getDirectors() {
+    public List<DirectorDocument> getDirectors() {
         return directors;
     }
 
-    public void setDirectors(Set<Director> directors) {
+    public void setDirectors(List<DirectorDocument> directors) {
         this.directors = directors;
     }
 

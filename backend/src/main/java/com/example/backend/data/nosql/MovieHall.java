@@ -18,7 +18,7 @@ public class MovieHall {
     private String type;
 
     @DocumentReference
-    private Cinema cinema;
+    private CinemaDocument cinema;
 
     private List<Seat> seatList = new ArrayList<>();
 
@@ -46,11 +46,11 @@ public class MovieHall {
         this.type = type;
     }
 
-    public Cinema getCinema() {
+    public CinemaDocument getCinema() {
         return cinema;
     }
 
-    public void setCinema(Cinema cinema) {
+    public void setCinema(CinemaDocument cinema) {
         this.cinema = cinema;
     }
 

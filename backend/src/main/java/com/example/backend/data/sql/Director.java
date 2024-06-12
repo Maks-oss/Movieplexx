@@ -61,4 +61,14 @@ public class Director {
     public void addMovie(Movie movie) {
         this.movies.add(movie);
     }
+
+    @Override
+    public String toString() {
+        return "Director{" +
+               "id=" + id +
+               ", firstname='" + firstname + '\'' +
+               ", lastname='" + lastname + '\'' +
+               ", movies=" + movies +
+               '}';
+    }
 }

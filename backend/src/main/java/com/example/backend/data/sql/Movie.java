@@ -2,8 +2,10 @@ package com.example.backend.data.sql;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -57,6 +59,7 @@ public class Movie {
     public Set<Actor> getActors() {
         return actors;
     }
+
 
     public void setActors(Set<Actor> actors) {
         this.actors = actors;
@@ -124,5 +127,34 @@ public class Movie {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    @Transactional
+    public String toString() {
+        return "Movie{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", image='" + image + '\'' +
+               ", description='" + description + '\'' +
+               ", runtime=" + runtime +
+               ", releaseDate=" + releaseDate +
+               ", ageRating=" + ageRating +
+               ", actors=" + actors +
+               ", directors=" + directors +
+               ", employee=" + employee +
+               '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Movie movie)) return false;
+        return Objects.equals(getId(), movie.getId()) && Objects.equals(getName(), movie.getName()) && Objects.equals(getImage(), movie.getImage()) && Objects.equals(getDescription(), movie.getDescription()) && Objects.equals(getRuntime(), movie.getRuntime()) && Objects.equals(getReleaseDate(), movie.getReleaseDate()) && Objects.equals(getAgeRating(), movie.getAgeRating()) && Objects.equals(getActors(), movie.getActors()) && Objects.equals(getDirectors(), movie.getDirectors()) && Objects.equals(employee, movie.employee);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getImage(), getDescription(), getRuntime(), getReleaseDate(), getAgeRating(), getActors(), getDirectors(), employee);
     }
 }

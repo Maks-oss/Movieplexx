@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class DataGeneratorService {
@@ -45,7 +46,7 @@ public class DataGeneratorService {
                  * For each cinema, generate random num of customers, movie-halls, seats and movie screenings
                  * */
                 for (int k = 0; k < faker.number().numberBetween(3, 10); k++) {
-                    var customerDocument = generateCustomer();
+                    var customer = generateCustomer();
                     var movieHall = generateMovieHall(cinema);
                     /* generate random num of seats for movie-hall*/
                     var seats = generateSeats(movieHall);
@@ -55,10 +56,10 @@ public class DataGeneratorService {
                     for (int n = 0; n < 2; n++) {
                         var movieScreening = generateMovieScreening(movie, movieHall);
                         /*
-                         * for each customerDocument, generate random num of tickets for that customerDocument and that movie screening.
+                         * for each customer, generate random num of tickets for that customer and that movie screening.
                          * */
                         for (int j = 0; j < faker.number().numberBetween(1, 6); j++) {
-                            generateTicket(customerDocument, movieScreening, seats.get(j));
+                            generateTicket(customer, movieScreening, seats.get(j));
                         }
                     }
                 }
@@ -78,16 +79,11 @@ public class DataGeneratorService {
     public List<?> retrieveGeneratedData(String type) {
         DataType dataType = DataType.fromString(type);
         switch (dataType) {
-            case MOVIE_DATA -> {
+            case MOVIE -> {
                 return entityManager
                         .createQuery("""
-                                SELECT m.name AS moviename, mp.title AS movietitle, mh.number AS hallnumber, mv.startTime AS screeningtime,  CONCAT(d.firstname, ' ', d.lastname) AS director, c.name AS branchname, c.address AS branchlocation FROM Movie m
-                                INNER JOIN MovieScreening mv on mv.movie.id = m.id
-                                INNER JOIN MovieHall mh on mh.id = mv.moviehall.id
-                                INNER JOIN MoviePromo mp on mp.movie.id = m.id
-                                INNER JOIN Director d on d.id = m.id
-                                INNER JOIN Cinema c on c.id = mh.cinema.id
-                                """, Map.class).getResultList();
+                                SELECT m FROM Movie m
+                                """, Movie.class).getResultList();
             }
             case EMPLOYEE -> {
                 return entityManager
@@ -160,12 +156,12 @@ public class DataGeneratorService {
         movie.setReleaseDate(faker.date().birthdayLocalDate());
         movie.setRuntime(faker.number().numberBetween(90, 180));
         movie.setAgeRating(faker.number().numberBetween(6, 18));
-
-        for (Actor el : actors) {
-            el.addMovie(movie);
+        int randomActorsNum = faker.number().numberBetween(2, actors.size() - 1);
+        var actorsList = actors.stream().toList();
+        for (int j = 0; j< randomActorsNum; j++) {
+            actorsList.get(faker.number().numberBetween(2, randomActorsNum)).addMovie(movie);
         }
-        movie.setActors(actors);
-
+        movie.setActors(new HashSet<>(actorsList));
         for (Director el : directors) {
             el.addMovie(movie);
         }

@@ -14,7 +14,7 @@ public class MovieScreening {
 
 
     @DocumentReference
-    private Movie movie;
+    private MovieDocument movie;
 
     @DocumentReference
     private MovieHall moviehall;
@@ -32,11 +32,11 @@ public class MovieScreening {
     public void setId(Integer id) {
         this.id = id;
     }
-    public Movie getMovie() {
+    public MovieDocument getMovie() {
         return movie;
     }
 
-    public void setMovie(Movie movie) {
+    public void setMovie(MovieDocument movie) {
         this.movie = movie;
     }
 

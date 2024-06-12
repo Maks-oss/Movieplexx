@@ -1,15 +1,11 @@
 package com.example.backend.data.nosql;
 
-import jakarta.persistence.*;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
-
 //@Document
 //@IdClass(MoviePromoId.class)
 public class MoviePromo {
 
 //    @Id
-    private Movie movie;
+    private MovieDocument movie;
 
     private Integer moviePromoId;
 
@@ -27,11 +23,11 @@ public class MoviePromo {
         this.title = title;
     }
 
-    public Movie getMovie() {
+    public MovieDocument getMovie() {
         return movie;
     }
 
-    public void setMovie(Movie movie) {
+    public void setMovie(MovieDocument movie) {
         this.movie = movie;
     }
 

@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-@Document
-public class Cinema {
+@Document("Cinema")
+public class CinemaDocument {
     @Id
     private Integer id;
 
@@ -22,7 +22,7 @@ public class Cinema {
 //        this.id = id;
 //    }
 
-    public Cinema() {
+    public CinemaDocument() {
     }
 
     public Integer getId() {
@@ -68,7 +68,7 @@ public class Cinema {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof Cinema cinema)) return false;
+        if (!(object instanceof CinemaDocument cinema)) return false;
         return Objects.equals(getId(), cinema.getId()) && Objects.equals(getCity(), cinema.getCity()) && Objects.equals(getName(), cinema.getName()) && Objects.equals(getCountry(), cinema.getCountry()) && Objects.equals(getAddress(), cinema.getAddress());
     }
 

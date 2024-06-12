@@ -1,15 +1,16 @@
 package com.example.backend.data.nosql;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Document
-public class Director {
+@Document("Director")
+public class DirectorDocument {
     @Id
     private Integer id;
 
@@ -17,7 +18,7 @@ public class Director {
 
     private String lastname;
     @DocumentReference
-    private Set<Movie> movies = new HashSet<>();
+    private List<MovieDocument> movies = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -27,11 +28,11 @@ public class Director {
         this.id = id;
     }
 
-    public Set<Movie> getMovies() {
+    public List<MovieDocument> getMovies() {
         return movies;
     }
 
-    public void setMovies(Set<Movie> movies) {
+    public void setMovies(List<MovieDocument> movies) {
         this.movies = movies;
     }
 
@@ -51,7 +52,7 @@ public class Director {
         this.lastname = lastname;
     }
 
-    public void addMovie(Movie movie) {
+    public void addMovie(MovieDocument movie) {
         this.movies.add(movie);
     }
 }

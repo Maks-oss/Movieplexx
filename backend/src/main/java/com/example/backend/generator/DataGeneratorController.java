@@ -1,17 +1,21 @@
 package com.example.backend.generator;
 
+import com.example.backend.migration.MigrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController
 public class DataGeneratorController {
     @Autowired
     private DataGeneratorService generatorService;
+//    @Autowired
+//    private MigrationService migrationService;
+
     @PostMapping("/generate")
     public ResponseEntity<?> generateData(UriComponentsBuilder uriComponentsBuilder) {
         generatorService.generateData();
@@ -21,8 +25,12 @@ public class DataGeneratorController {
 
     @RequestMapping("/generate")
     public ResponseEntity<?> getGeneratedData(@RequestParam(defaultValue = "emp") String type) {
-//        return ResponseEntity.ok(generatorService.retrieveGeneratedData(type));
-        return ResponseEntity.ok("Test");
+        return ResponseEntity.ok(generatorService.retrieveGeneratedData(type));
     }
-
+//    @GetMapping("/migrate")
+//    public String migrate() throws Exception {
+////        migrationLogger.log(Level.INFO, "Start migration: " + toMigrate);
+//        Thread.sleep(1000); // simulated delay
+//        return migrationService.migrate();
+//    }
 }
