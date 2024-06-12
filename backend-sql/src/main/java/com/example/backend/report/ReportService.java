@@ -51,7 +51,7 @@ public class ReportService {
                 """, Employee.class).getResultList();
         Map<String, Object> map = new HashMap<>();
         for (Employee manager : managers) {
-            map.put(manager.getLastname() + " " + manager.getFirstname(), entityManager
+            map.put(manager.getFirstname() + " " + manager.getLastname(), entityManager
                     .createQuery("""
                     SELECT m.id AS movieId, m.name AS movieName, SUM(t.price) AS totalPrice
                     FROM Ticket t
