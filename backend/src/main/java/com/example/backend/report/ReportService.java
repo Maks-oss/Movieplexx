@@ -1,8 +1,8 @@
 package com.example.backend.report;
 
-import com.example.backend.data.Cinema;
-import com.example.backend.data.Employee;
 
+import com.example.backend.data.sql.Cinema;
+import com.example.backend.data.sql.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 @Service
 public class ReportService {
     @PersistenceContext

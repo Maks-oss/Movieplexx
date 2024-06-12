@@ -1,9 +1,6 @@
 package com.example.backend.implementation.movie;
 
-import com.example.backend.data.sql.Actor;
-import com.example.backend.data.sql.Director;
-import com.example.backend.data.sql.Movie;
-import com.example.backend.data.sql.MovieScreening;
+import com.example.backend.data.sql.*;
 import com.example.backend.generator.DataGeneratorService;
 import com.example.backend.implementation.actor.ActorRepository;
 import com.example.backend.implementation.director.DirectorRepository;

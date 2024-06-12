@@ -78,11 +78,11 @@ public class Actor {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof Actor actor)) return false;
-        return Objects.equals(getId(), actor.getId()) && Objects.equals(getFirstname(), actor.getFirstname()) && Objects.equals(getLastname(), actor.getLastname()) && Objects.equals(getMovies(), actor.getMovies());
+        return Objects.equals(getId(), actor.getId()) && Objects.equals(getFirstname(), actor.getFirstname()) && Objects.equals(getLastname(), actor.getLastname());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstname(), getLastname(), getMovies());
+        return Objects.hash(getId(), getFirstname(), getLastname());
     }
 }
