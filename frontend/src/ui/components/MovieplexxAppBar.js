@@ -2,34 +2,50 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import Modal from '@mui/material/Modal';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { generate } from '../../utils/ApiCalls';
+import { fetchApi, generate } from '../../utils/ApiCalls';
+import { useUserContext } from '../../utils/UserContext';
 
 
 function MovieplexxAppBar() {
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
-    const navigate = useNavigate();
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
+    const { user, setUser } = useUserContext();
+    const [customer, setCustomer] = React.useState(null);
+    const [manager, setManager] = React.useState(null);
 
-    const pages = ['Movies', 'New movie', 'First report'];
-    const settings = ['Profile', 'Logout'];
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+
+        fetchApi('http://localhost:5433/customers')
+            .then((data) => {
+                setCustomer(data[0]);
+                setUser(data[0]);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+        fetchApi('http://localhost:5433/employees')
+            .then((data) => {
+                data.forEach(element => {
+                    element.roles.forEach(role => {
+                        if (role.name === 'Manager')
+                            setManager(element);
+                    });
+                });
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+
+
+    }, [setUser]);
 
     const handleGenerateData = async () => {
         setLoading(true);
@@ -43,6 +59,14 @@ function MovieplexxAppBar() {
             window.location.reload();
         }
     };
+
+    const handleToggleUserType = () => {
+        setUser(prevType => prevType === customer ? manager : customer);
+    };
+
+    const pages = user === manager
+        ? ['Movies', 'New movie', 'First report', 'Second report']
+        : ['Movies'];
 
     return (
         <>
@@ -89,34 +113,11 @@ function MovieplexxAppBar() {
                             </Button>
                         </Box>
 
-                        <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar>U</Avatar>
-                                </IconButton>
-                            </Tooltip>
-                            <Menu
-                                sx={{ mt: '45px' }}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
+                        <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
+                            <Button onClick={handleToggleUserType}
+                                sx={{ my: 2, color: 'white', display: 'block', borderRadius: '8px', marginRight: '18px' }}>
+                                Toggle User
+                            </Button>
                         </Box>
                     </Toolbar>
                 </Container>

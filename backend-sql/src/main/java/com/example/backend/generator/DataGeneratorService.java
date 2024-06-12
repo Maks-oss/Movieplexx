@@ -27,12 +27,15 @@ public class DataGeneratorService {
     @Transactional
     public void generateData() {
         if (!isTableEmpty()) clearData();
-        generateFirstEmployeesWithRoles();
+        var managers = generateFirstEmployeesWithRoles();
         var actors = generateActors(5);
         var directors = generateDirectors(2);
+        List<Movie> generatedMovies = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            var movie = generateMovie(i, actors, directors);
+            var movie = generateMovie(i, actors, directors, managers.get(i % 2));
             generateMoviePromo(movie, i);
+            generatedMovies.add(movie);
+
             /*
              * For each movie, generate random num of cinemas
              * */
@@ -47,8 +50,8 @@ public class DataGeneratorService {
                     /* generate random num of seats for movie-hall*/
                     var seats = generateSeats(movieHall);
                     /* for demonstration purposes. generate 2 screenings for movie halls,
-                    *  so that we can assign same seat on same movie hall but with different screening time
-                    *  */
+                     *  so that we can assign same seat on same movie hall but with different screening time
+                     *  */
                     for (int n = 0; n < 2; n++) {
                         var movieScreening = generateMovieScreening(movie, movieHall);
                         /*
@@ -61,6 +64,14 @@ public class DataGeneratorService {
                 }
             }
         }
+        int middle = generatedMovies.size() / 2;
+        List<Movie> firstHalfList = generatedMovies.subList(0, middle-1);
+        List<Movie> secondHalfList = generatedMovies.subList(middle, generatedMovies.size()-1);
+        Set<Movie> firstHalf = new HashSet<>(firstHalfList);
+        Set<Movie> secondHalf = new HashSet<>(secondHalfList);
+
+        entityManager.find(Employee.class, managers.get(0).getId()).setManagedMovies(firstHalf);
+        entityManager.find(Employee.class, managers.get(1).getId()).setManagedMovies(secondHalf);
 
     }
 
@@ -139,11 +150,11 @@ public class DataGeneratorService {
         generatorLogger.log(Level.INFO, "Deletion " + isTableEmpty());
     }
 
-    private Movie generateMovie(int i, Set<Actor> actors, Set<Director> directors) {
+    private Movie generateMovie(int i, Set<Actor> actors, Set<Director> directors, Employee manager) {
         var movie = new Movie();
         var oscarMovie = faker.oscarMovie();
         movie.setName(oscarMovie.movieName());
-        movie.setImage(faker.internet().image(400,400, String.valueOf(new Random(i).nextInt())));
+        movie.setImage(faker.internet().image(400, 400, String.valueOf(new Random(i).nextInt())));
         movie.setDescription(oscarMovie.quote());
 
         movie.setReleaseDate(faker.date().birthdayLocalDate());
@@ -160,6 +171,7 @@ public class DataGeneratorService {
         }
         movie.setDirectors(directors);
 
+        movie.setManager(manager);
 
         entityManager.persist(movie);
         return movie;
@@ -228,7 +240,7 @@ public class DataGeneratorService {
         moviePromo.setMoviePromoId(i);
         moviePromo.setTitle(faker.videoGame().title());
         moviePromo.setDescription(faker.movie().quote());
-        moviePromo.setImage(faker.internet().image(400,400, String.valueOf(i)));
+        moviePromo.setImage(faker.internet().image(400, 400, String.valueOf(i)));
         entityManager.persist(moviePromo);
     }
 
@@ -252,18 +264,25 @@ public class DataGeneratorService {
         entityManager.persist(ticket);
     }
 
-    private void generateFirstEmployeesWithRoles() {
+    private List<Employee> generateFirstEmployeesWithRoles() {
         Role cashierRole = new Role("Cashier", "Sell tickets");
         Role managerRole = new Role("Manager", "Supervises cashier and updates movies");
-        Employee manager = new Employee();
-        manager.setFirstname(faker.elderScrolls().firstName());
-        manager.setLastname(faker.elderScrolls().lastName());
-        manager.setEmail(faker.internet().emailAddress());
-        manager.setPassword(faker.internet().password());
-        manager.setRoles(
-                Set.of(managerRole, cashierRole)
-        );
-        entityManager.persist(manager);
+        List<Employee> managers = new ArrayList<>();
+        for (int i = 0; i< 2 ; i++) {
+            Employee manager = new Employee();
+            manager.setFirstname(faker.elderScrolls().firstName());
+            manager.setLastname(faker.elderScrolls().lastName());
+            manager.setEmail(faker.internet().emailAddress());
+            manager.setPassword(faker.internet().password());
+            manager.setRoles(
+                    Set.of(managerRole, cashierRole)
+            );
+
+            entityManager.persist(manager);
+            managerRole.setEmployees(Set.of(manager));
+            entityManager.persist(managerRole);
+            managers.add(manager);
+        }
         for (int i = 0; i < 3; i++) {
             Employee cashier = new Employee();
             cashier.setFirstname(faker.naruto().character());
@@ -273,13 +292,21 @@ public class DataGeneratorService {
             cashier.setRoles(
                     Set.of(cashierRole)
             );
-            cashier.setManager(manager);
-            entityManager.persist(cashier);
-            cashierRole.setEmployees(Set.of(manager, cashier));
-            entityManager.persist(cashierRole);
+            if (i % 2 == 0) {
+                cashier.setManager(managers.get(0));
+                entityManager.persist(cashier);
+                cashierRole.setEmployees(Set.of(managers.get(0), cashier));
+                entityManager.persist(cashierRole);
+            } else {
+                cashier.setManager(managers.get(1));
+                entityManager.persist(cashier);
+                cashierRole.setEmployees(Set.of(managers.get(1), cashier));
+                entityManager.persist(cashierRole);
+            }
+
         }
-        managerRole.setEmployees(Set.of(manager));
-        entityManager.persist(managerRole);
+
+        return managers;
     }
 
     private List<Seat> generateSeats(MovieHall movieHall) {

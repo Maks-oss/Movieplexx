@@ -16,4 +16,10 @@ public class ReportController {
     public ResponseEntity<?> generateReport() {
         return ResponseEntity.ok(reportService.createReport());
     }
+
+    @GetMapping("/nedim")
+    public ResponseEntity<?> generateReportNedim() {
+        return ResponseEntity.ok(reportService.createReportNedim());
+    }
+
 }

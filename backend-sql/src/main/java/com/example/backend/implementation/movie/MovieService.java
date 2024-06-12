@@ -4,6 +4,7 @@ import com.example.backend.data.*;
 import com.example.backend.generator.DataGeneratorService;
 import com.example.backend.implementation.actor.ActorRepository;
 import com.example.backend.implementation.director.DirectorRepository;
+import com.example.backend.implementation.employee.EmployeeRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +19,17 @@ public class MovieService {
     private final MovieHallRepository movieHallRepository;
     private final DataGeneratorService generatorService;
     private final MovieScreeningRepository movieScreeningRepository;
+    private final EmployeeRepository employeeRepository;
 
-    public MovieService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository, MovieHallRepository movieHallRepository, DataGeneratorService generatorService, MovieScreeningRepository movieScreeningRepository) {
+
+    public MovieService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository, MovieHallRepository movieHallRepository, DataGeneratorService generatorService, MovieScreeningRepository movieScreeningRepository, EmployeeRepository employeeRepository) {
         this.movieRepository = movieRepository;
         this.actorRepository = actorRepository;
         this.directorRepository = directorRepository;
         this.movieHallRepository = movieHallRepository;
         this.generatorService = generatorService;
         this.movieScreeningRepository = movieScreeningRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public Movie insertMovie(MovieInsertRequest movieInsertRequest) {
@@ -36,6 +40,8 @@ public class MovieService {
         movie.setRuntime(movieInsertRequest.runTime());
         movie.setReleaseDate(movieInsertRequest.releaseDate());
         movie.setAgeRating(movieInsertRequest.ageRating());
+        Employee manager = employeeRepository.findById(movieInsertRequest.managerId()).get();
+        movie.setManager(manager);
 
         Set<Actor> actors = new HashSet<>();
         for (Integer actorId : movieInsertRequest.actorIds()) {
@@ -65,6 +71,9 @@ public class MovieService {
         for (int i = 0; i < movieHalls.size() / 3; i++) {
             var movieScreening = generatorService.generateMovieScreening(movie, movieHalls.get(i));
         }
+        Set<Movie> movies = manager.getManagedMovies();
+        movies.add(movie);
+        manager.setManagedMovies(movies);
 
         return movie;
     }

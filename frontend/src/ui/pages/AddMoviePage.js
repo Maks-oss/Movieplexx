@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Box, Button, Chip, FormLabel, MenuItem, Modal, OutlinedInput, Select, TextField, Typography } from "@mui/material";
 import { addMovie, fetchApi } from "../../utils/ApiCalls";
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../../utils/UserContext';
 
 
 const AddMoviePage = () => {
-    const [insertMovie, setinsertMovie] = useState({ name: "", description: "", image: "", runTime: "", releaseDate: "", ageRating: "" });
+    const [insertMovie, setinsertMovie] = useState({ name: "", description: "", image: "", runTime: "", releaseDate: "", ageRating: "", managerId: "" });
     const [actors, setActors] = useState([]);
     const [directors, setDirectors] = useState([]);
     const [actorsId, setActorsId] = useState([]);
     const [directorsId, setDirectorsId] = useState([]);
     const [success, setSuccess] = useState(false);
+    const { user } = useUserContext();
 
     const navigation = useNavigate();
 
@@ -46,7 +48,7 @@ const AddMoviePage = () => {
         e.preventDefault();
         let actorIds = [];
         let directorIds = [];
-
+        insertMovie.managerId = user ? user.id : '';
         actorsId.forEach(element => {
             actorIds.push(element.id);
         });
