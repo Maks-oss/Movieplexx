@@ -5,9 +5,9 @@ export async function fetchApi(endpoint) {
     console.log(data);
     return data
 }
-export async function createTicketRequest(paymentMethod , data={}) {
+export async function createTicketRequest(paymentMethod , data={}, endpoints) {
     console.log('BEFORE SEND: ' + JSON.stringify(data))
-    const response = await fetch(`http://localhost:5433/tickets?paymentMethod=${paymentMethod}`, {
+    const response = await fetch(`http://localhost:5433${endpoints.postTicket}${paymentMethod}`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -24,9 +24,9 @@ export async function createTicketRequest(paymentMethod , data={}) {
     console.log(json)
     return json;
 }
-export async function addMovie( data={}) {
+export async function addMovie( data={}, endpoints) {
     console.log('BEFORE SEND: ' + JSON.stringify(data))
-    const response = await fetch(`http://localhost:5433/movies`, {
+    const response = await fetch(`http://localhost:5433${endpoints.getMovies}`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -42,8 +42,8 @@ export async function addMovie( data={}) {
     let res = response;
     return res;
 }
-export async function generate( ) {
-    const response = await fetch(`http://localhost:5433/generate`, {
+export async function generate(endpoints) {
+    const response = await fetch(`http://localhost:5433${endpoints.postGenerate}`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -58,8 +58,8 @@ export async function generate( ) {
     let json = response;
     return json;
 }
-export async function migrate( ) {
-    const response = await fetch(`http://localhost:5433/migrate`, { // Change migrate if it is different !
+export async function migrate(endpoints) {
+    const response = await fetch(`http://localhost:5433${endpoints.postMigrate}`, { // Change migrate if it is different !
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

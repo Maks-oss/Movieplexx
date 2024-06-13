@@ -6,6 +6,7 @@ import PaymentMethodModal from "../PaymentMethodModal";
 import {createTicketRequest} from "../../../utils/ApiCalls";
 import {useNavigate} from "react-router-dom";
 import {groupSeatsByRow, includesArray, sleep} from "../../../utils/Utils";
+import { useMovieplexxContext } from '../../../utils/MovieplexxContext';
 
 const SeatSelection = ({seats, movieScreening}) => {
     const [selectedSeat, setSelectedSeat] = useState(null);
@@ -13,6 +14,7 @@ const SeatSelection = ({seats, movieScreening}) => {
     const [openModal, setOpenModal] = React.useState(false);
     const [confirm, setConfirm] = useState(false)
     const [selectedMethod, setSelectedMethod] = useState('');
+    const { endpoints } = useMovieplexxContext();
 
     const rows = groupSeatsByRow(seats);
     const navigation = useNavigate();
@@ -21,7 +23,7 @@ const SeatSelection = ({seats, movieScreening}) => {
         createTicketRequest(selectedMethod, {
             seatId: selectedSeat,
             movieScreening: movieScreening
-        }).then((data) => {
+        },endpoints).then((data) => {
             navigation(`ticket${data.movieName}`, {
                 state: data
             })

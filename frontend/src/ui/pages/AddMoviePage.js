@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Box, Button, Chip, FormLabel, MenuItem, Modal, OutlinedInput, Select, TextField, Typography } from "@mui/material";
 import { addMovie, fetchApi } from "../../utils/ApiCalls";
 import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../../utils/UserContext';
+import { useMovieplexxContext } from '../../utils/MovieplexxContext';
 
 
 const AddMoviePage = () => {
@@ -12,18 +12,18 @@ const AddMoviePage = () => {
     const [actorsId, setActorsId] = useState([]);
     const [directorsId, setDirectorsId] = useState([]);
     const [success, setSuccess] = useState(false);
-    const { user } = useUserContext();
+    const { user, endpoints } = useMovieplexxContext();
 
     const navigation = useNavigate();
 
     useEffect(() => {
-        fetchApi(`http://localhost:5433/actors`).then((data) => {
+        fetchApi(`http://localhost:5433${endpoints.getActors}`).then((data) => {
             setActors(data);
         })
-        fetchApi(`http://localhost:5433/directors`).then((data) => {
+        fetchApi(`http://localhost:5433${endpoints.getDirectors}`).then((data) => {
             setDirectors(data);
         })
-    }, [])
+    }, [endpoints])
 
     const handleCloseSuccessModal = () => {
         setSuccess(false);
@@ -61,7 +61,7 @@ const AddMoviePage = () => {
             directorIds
         };
         console.log(movieData);
-        addMovie(movieData)
+        addMovie(movieData, endpoints)
             .then((data) => {
                 setSuccess(true);
             })
@@ -175,7 +175,7 @@ const AddMoviePage = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    flexDirection:"column"
+                    flexDirection: "column"
                 }}>
                     <Typography variant="h6" id="success-modal-title" align="center" sx={{ color: "black" }}>
                         Movie Added Successfully

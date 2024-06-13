@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import {Stack} from '@mui/material';
 import {fetchApi} from "../../utils/ApiCalls";
+import { useMovieplexxContext } from '../../utils/MovieplexxContext';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -74,13 +75,15 @@ const CinemaPicker = ({branches, cinema, onChange}) => {
 function FirstReportPage() {
     const [report, setReport] = React.useState(null);
     const [currCinema, setCurrCinema] = React.useState('');
+    const { endpoints } = useMovieplexxContext();
+
 
     React.useEffect(() => {
-        fetchApi('http://localhost:5433/reports/first').then((data) => {
+        fetchApi(`http://localhost:5433${endpoints.getReportMaks}`).then((data) => {
             setReport(data)
             setCurrCinema(Object.keys(data)[0])
         })
-    }, [])
+    }, [endpoints])
 
     const handleChange = (event) => {
         console.log('On handle change: ',event.target.value)
