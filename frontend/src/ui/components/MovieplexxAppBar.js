@@ -23,10 +23,10 @@ const LoadingModal = ({ modalDesc, loading }) => {
             style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'center'
             }}
         >
-            <div>
+            <div style={{backgroundColor: 'black', borderRadius: 5, padding: 20}}>
                 <Typography id="transition-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
                     {modalDesc} data...
                 </Typography>
