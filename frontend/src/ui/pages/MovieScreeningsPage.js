@@ -5,11 +5,13 @@ import {Stack} from '@mui/material';
 import {MovieDetailsCard} from "../components/movie/MovieDetailsCard";
 import {MovieScreenings} from "../components/movie/MovieScreenings";
 import {useNavigate} from "react-router-dom";
+import { useMovieplexxContext } from '../../utils/MovieplexxContext';
 
 
 function MovieScreeningsPage() {
     const {state} = useLocation()
     const [movieDetails, setMovieDetails] = useState(null);
+    const { endpoints } = useMovieplexxContext();
     const navigation = useNavigate()
     const handleOnScreeningClick = (screening) => {
         navigation(`${screening.moviehall.type}${screening.moviehall.id}`, {
@@ -20,10 +22,10 @@ function MovieScreeningsPage() {
         })
     }
     useEffect(() => {
-        fetchApi(`http://localhost:5433/movies/${state}`).then((data) => {
+        fetchApi(`http://localhost:5433${endpoints.getMovies}/${state}`).then((data) => {
             setMovieDetails(data)
         })
-    }, [])
+    }, [endpoints, state])
     if (movieDetails) {
         return (
                 <Stack direction="row" spacing={4} sx={{margin: '20px'}}>

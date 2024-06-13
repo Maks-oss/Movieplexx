@@ -5,18 +5,42 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import Modal from '@mui/material/Modal';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { fetchApi, generate, migrate } from '../../utils/ApiCalls';
-import { useUserContext } from '../../utils/UserContext';
+import { useMovieplexxContext } from '../../utils/MovieplexxContext';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
+const LoadingModal = ({ modalDesc, loading }) => {
+
+    return (
+        <Modal
+            open={loading}
+            aria-labelledby="loading-modal-title"
+            aria-describedby="loading-modal-description"
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <div>
+                <Typography id="transition-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
+                    {modalDesc} data...
+                </Typography>
+                <LinearProgress />
+            </div>
+        </Modal>
+    )
+};
 
 function MovieplexxAppBar() {
+    const [isClicked, setIsClicked] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-    const { user, setUser } = useUserContext();
+    const [modalDesc, setModalDesc] = React.useState("");
+    const { user, setUser, endpoints, setEndpoints } = useMovieplexxContext();
     const [customers, setCustomers] = React.useState([]);
     const [employees, setEmployees] = React.useState([]);
 
@@ -24,7 +48,7 @@ function MovieplexxAppBar() {
 
     React.useEffect(() => {
 
-        fetchApi('http://localhost:5433/customers')
+        fetchApi('http://localhost:5433' + endpoints.getCustomers)
             .then((data) => {
                 setCustomers(data);
                 setUser(data[0]);
@@ -32,7 +56,7 @@ function MovieplexxAppBar() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-        fetchApi('http://localhost:5433/employees')
+        fetchApi('http://localhost:5433' + endpoints.getEmployees)
             .then((data) => {
                 setEmployees(data);
             })
@@ -41,12 +65,13 @@ function MovieplexxAppBar() {
             });
 
 
-    }, [setUser]);
+    }, [setUser, endpoints]);
 
     const handleGenerateData = async () => {
         setLoading(true);
+        setModalDesc("Generating ");
         try {
-            const data = await generate();
+            const data = await generate(endpoints);
             console.log("Returned data -> ", data);
         } catch (error) {
             console.error("Error generating data: ", error);
@@ -58,14 +83,30 @@ function MovieplexxAppBar() {
 
     const handleMigrateData = async () => {
         setLoading(true);
+        setModalDesc("Migrating ");
+        setIsClicked(true);
         try {
-            const data = await migrate();
+            const data = await migrate(endpoints);
             console.log("Returned data -> ", data);
         } catch (error) {
             console.error("Error generating data: ", error);
         } finally {
             setLoading(false);
-            window.location.reload();
+            setEndpoints({
+                getMovies: '/movies/nosql',
+                getSeats: '/seats/hall/nosql',
+                getScreening: '/screening/nosql',
+                getReportNedim: '/reports/nedim/nosql',
+                getReportMaks: '/reports/first/nosql',
+                getActors: '/actors/nosql',
+                getDirectors: '/directors/nosql',
+                getCustomers: '/customers/nosql',
+                getEmployees: '/employees/nosql',
+                postTicket: '/tickets/nosql?paymentMethod=',
+                postGenerate: '/generate',
+                postMigrate: '/migrate'
+            });
+            navigate("/movies");
         }
     };
 
@@ -128,6 +169,7 @@ function MovieplexxAppBar() {
 
                         <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
                             <Button
+                                disabled = {isClicked}
                                 key="migrate"
                                 onClick={handleMigrateData}
                                 sx={{ my: 2, color: 'white', display: 'block', borderRadius: '8px', marginRight: '18px' }}
@@ -158,18 +200,7 @@ function MovieplexxAppBar() {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Modal
-                open={loading}
-                aria-labelledby="loading-modal-title"
-                aria-describedby="loading-modal-description"
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
-            >
-                <CircularProgress />
-            </Modal>
+            <LoadingModal modalDesc={modalDesc} loading={loading} />
         </>
     );
 }

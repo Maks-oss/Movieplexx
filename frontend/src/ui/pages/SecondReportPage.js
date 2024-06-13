@@ -13,6 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Stack } from '@mui/material';
 import { fetchApi } from "../../utils/ApiCalls";
+import { useMovieplexxContext } from '../../utils/MovieplexxContext';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -71,8 +72,9 @@ const ManagerPicker = ({ names, manager, onChange }) => {
 const SecondReportPage = () => {
     const [reportData, setReportData] = React.useState(null);
     const [currentManager, setCurrentManager] = React.useState('');
+    const { endpoints } = useMovieplexxContext();
     React.useEffect(() => {
-        fetchApi('http://localhost:5433/reports/nedim')
+        fetchApi(`http://localhost:5433${endpoints.getReportNedim}`)
             .then((data) => {
                 setReportData(data);
                 setCurrentManager(Object.keys(data)[0])
@@ -80,7 +82,7 @@ const SecondReportPage = () => {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-    }, []);
+    }, [endpoints]);
     const handleChange = (event) => {
         setCurrentManager(event.target.value);
     };
