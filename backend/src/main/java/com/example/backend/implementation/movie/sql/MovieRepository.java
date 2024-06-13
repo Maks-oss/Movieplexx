@@ -1,4 +1,4 @@
-package com.example.backend.implementation.movie;
+package com.example.backend.implementation.movie.sql;
 
 import com.example.backend.data.sql.Actor;
 import com.example.backend.data.sql.Director;

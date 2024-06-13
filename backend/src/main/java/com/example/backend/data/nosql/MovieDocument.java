@@ -7,9 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Document("Movie")
@@ -35,8 +33,11 @@ public class MovieDocument {
     @DocumentReference
     private List<DirectorDocument> directors = new ArrayList<>();
 
+    private List<Integer> movieScreeningIds;
+
+
     @DocumentReference
-    private Employee employee;
+    private EmployeeDocument employee;
 
     private List<MoviePromo> promoList;
     public Integer getId() {
@@ -109,5 +110,13 @@ public class MovieDocument {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<Integer> getMovieScreeningIds() {
+        return movieScreeningIds;
+    }
+
+    public void setMovieScreeningIds(List<Integer> movieScreeningIds) {
+        this.movieScreeningIds = movieScreeningIds;
     }
 }

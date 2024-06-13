@@ -1,4 +1,4 @@
-package com.example.backend.implementation.tickets;
+package com.example.backend.implementation.tickets.sql;
 
 import com.example.backend.data.sql.MovieScreening;
 import com.example.backend.data.sql.Ticket;

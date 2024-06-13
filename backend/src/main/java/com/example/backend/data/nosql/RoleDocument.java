@@ -6,8 +6,8 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.Set;
 
-@Document
-public class Role {
+@Document("Role")
+public class RoleDocument {
     @Id
     private Integer id;
 
@@ -16,21 +16,21 @@ public class Role {
     private String description;
 
     @DocumentReference
-    private Set<Employee> employees;
+    private Set<EmployeeDocument> employees;
 
-    public Role(String name, String description) {
+    public RoleDocument(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Role() {
+    public RoleDocument() {
     }
 
-    public Set<Employee> getEmployees() {
+    public Set<EmployeeDocument> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<Employee> employees) {
+    public void setEmployees(Set<EmployeeDocument> employees) {
         this.employees = employees;
     }
 

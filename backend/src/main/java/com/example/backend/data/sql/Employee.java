@@ -1,6 +1,9 @@
 package com.example.backend.data.sql;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.Objects;
 import java.util.Set;
@@ -35,6 +38,7 @@ public class Employee {
             inverseJoinColumns = @JoinColumn(name = "roleid"))
     private Set<Role> roles;
     @OneToMany(mappedBy = "manager")
+    @JsonIgnore
     private Set<Movie> managedMovies;
     public void setRoles(Set<Role> roles) {
         this.roles = roles;

@@ -1,6 +1,7 @@
 package com.example.backend.data.sql;
 
 import jakarta.persistence.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 

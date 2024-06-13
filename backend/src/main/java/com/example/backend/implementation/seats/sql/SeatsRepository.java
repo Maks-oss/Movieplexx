@@ -1,4 +1,4 @@
-package com.example.backend.implementation.seats;
+package com.example.backend.implementation.seats.sql;
 
 import com.example.backend.data.sql.Seat;
 import org.springframework.data.domain.Sort;

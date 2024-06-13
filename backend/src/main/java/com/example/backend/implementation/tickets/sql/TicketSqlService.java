@@ -1,8 +1,10 @@
-package com.example.backend.implementation.tickets;
+package com.example.backend.implementation.tickets.sql;
 
 import com.example.backend.data.sql.Seat;
 import com.example.backend.data.sql.Ticket;
-import com.example.backend.implementation.seats.SeatsRepository;
+import com.example.backend.implementation.seats.sql.SeatsRepository;
+import com.example.backend.implementation.tickets.CreateTicketRequestBody;
+import com.example.backend.implementation.tickets.TicketResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -12,12 +14,12 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Service
-public class TicketService {
+public class TicketSqlService {
     private final TicketRepository ticketRepository;
     private final SeatsRepository seatsRepository;
     private final Logger ticketLogger = Logger.getLogger("ticket");
 
-    public TicketService(TicketRepository ticketRepository, SeatsRepository seatsRepository) {
+    public TicketSqlService(TicketRepository ticketRepository, SeatsRepository seatsRepository) {
         this.ticketRepository = ticketRepository;
         this.seatsRepository = seatsRepository;
     }

@@ -1,5 +1,6 @@
 package com.example.backend.data.nosql;
 
+import com.example.backend.data.sql.Seat;
 import jakarta.persistence.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -8,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Document
-public class MovieHall {
+@Document("MovieHall")
+public class MovieHallDocument {
     @Id
     private Integer id;
 
@@ -65,7 +66,7 @@ public class MovieHall {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof MovieHall movieHall)) return false;
+        if (!(object instanceof MovieHallDocument movieHall)) return false;
         return Objects.equals(getId(), movieHall.getId()) && Objects.equals(getNumber(), movieHall.getNumber()) && Objects.equals(getType(), movieHall.getType()) && Objects.equals(getCinema(), movieHall.getCinema());
     }
 

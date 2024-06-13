@@ -40,7 +40,7 @@ public class Movie {
     @JsonIgnore
     @ManyToMany(mappedBy = "movies")
     private Set<Director> directors;
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "managerid")
     private Employee manager;

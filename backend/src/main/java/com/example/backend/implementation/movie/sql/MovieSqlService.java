@@ -1,10 +1,12 @@
-package com.example.backend.implementation.movie;
+package com.example.backend.implementation.movie.sql;
 
 import com.example.backend.data.sql.*;
 import com.example.backend.generator.DataGeneratorService;
 import com.example.backend.implementation.actor.ActorRepository;
 import com.example.backend.implementation.director.DirectorRepository;
 import com.example.backend.implementation.employee.EmployeeRepository;
+import com.example.backend.implementation.movie.MovieInsertRequest;
+import com.example.backend.implementation.movie.MovieItemResponse;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class MovieService {
+public class MovieSqlService {
     private final MovieRepository movieRepository;
     private final ActorRepository actorRepository;
     private final DirectorRepository directorRepository;
@@ -22,7 +24,7 @@ public class MovieService {
     private final EmployeeRepository employeeRepository;
 
 
-    public MovieService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository, MovieHallRepository movieHallRepository, DataGeneratorService generatorService, MovieScreeningRepository movieScreeningRepository, EmployeeRepository employeeRepository) {
+    public MovieSqlService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository, MovieHallRepository movieHallRepository, DataGeneratorService generatorService, MovieScreeningRepository movieScreeningRepository, EmployeeRepository employeeRepository) {
         this.movieRepository = movieRepository;
         this.actorRepository = actorRepository;
         this.directorRepository = directorRepository;
@@ -93,6 +95,16 @@ public class MovieService {
 
     public List<MovieScreening> getMovieScreenings(int movieId) {
         return movieScreeningRepository.findAllByMovieId(movieId, Sort.by(Sort.Direction.ASC, "moviehall"));
+    }
+    public Map<String, Object> getMovieDetails(int movieId) {
+        var screenings = getMovieScreenings(movieId);
+        var movieCast = getMovieCast(movieId);
+        if (screenings == null || movieCast.get("actors") == null) throw new NoSuchElementException("Actors or screening are absent");
+        return Map.of(
+                "movieInfo", screenings.get(0).getMovie(),
+                "movieScreenings", screenings,
+                "movieCast", movieCast
+        );
     }
 
 }

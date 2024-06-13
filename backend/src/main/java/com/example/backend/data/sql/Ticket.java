@@ -1,6 +1,8 @@
 package com.example.backend.data.sql;
 
 import jakarta.persistence.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -9,28 +11,7 @@ import java.util.Objects;
 @Table(name = "ticket")
 @IdClass(TicketId.class)
 public class Ticket {
-//    @Id
-//    @Column(name = "ticketid", nullable = false)
-//    private String id;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "screeningid")
-//    private MovieScreening screening;
-//    @Id
-//    @ManyToOne
-////    @JoinColumns({
-////            @JoinColumn(name = "seatid", referencedColumnName = "seatid"),
-////            @JoinColumn(name = "hallid", referencedColumnName = "hallid")
-////    })
-//    private Seat seat;
 
-//    @Id
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "screeningid", nullable = false)
-//    private MovieScreening screening;
-
-//    @EmbeddedId
-//    private TicketId id;
 
     @Id @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "screeningid")

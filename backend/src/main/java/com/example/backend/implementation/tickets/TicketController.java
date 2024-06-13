@@ -1,36 +1,45 @@
 package com.example.backend.implementation.tickets;
 
 import com.example.backend.implementation.payment.PaymentService;
+import com.example.backend.implementation.tickets.nosql.TicketNoSqlService;
+import com.example.backend.implementation.tickets.sql.TicketSqlService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("tickets")
 public class TicketController {
-    private final TicketService ticketService;
+    private final TicketSqlService ticketSqlService;
+    private final TicketNoSqlService ticketNoSqlService;
     private final PaymentService paymentService;
 
-    public TicketController(TicketService ticketService, PaymentService paymentService) {
-        this.ticketService = ticketService;
+    public TicketController(TicketSqlService ticketSqlService, TicketNoSqlService ticketNoSqlService, PaymentService paymentService) {
+        this.ticketSqlService = ticketSqlService;
+        this.ticketNoSqlService = ticketNoSqlService;
         this.paymentService = paymentService;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createTicket(
+    @PostMapping("/sql")
+    public ResponseEntity<?> createTicketSql(
             @RequestParam String paymentMethod,
             @RequestBody CreateTicketRequestBody createTicketRequestBody
     ) {
         paymentService.processPayment(paymentMethod);
-        return ResponseEntity.ok(ticketService.createTicketResponse(createTicketRequestBody));
+        return ResponseEntity.ok(ticketSqlService.createTicketResponse(createTicketRequestBody));
     }
-    @GetMapping("/{customerId}")
-    public ResponseEntity<?> getCustomerTickets(@PathVariable int customerId) {
-        return ResponseEntity.ok(ticketService.getCustomerTickets(customerId));
+
+    @PostMapping("/nosql")
+    public ResponseEntity<?> createTicketNoSql(
+            @RequestParam String paymentMethod,
+            @RequestBody CreateTicketRequestBody createTicketRequestBody
+    ) {
+        paymentService.processPayment(paymentMethod);
+        return ResponseEntity.ok(ticketNoSqlService.createTicketResponse(createTicketRequestBody));
     }
 
     @GetMapping("/clear")
     public ResponseEntity<?> clearTickets() {
-        ticketService.clearAll();
+        ticketSqlService.clearAll();
         return ResponseEntity.noContent().build();
     }
 }

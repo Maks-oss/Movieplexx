@@ -1,106 +1,76 @@
 package com.example.backend.data.nosql;
 
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.io.Serializable;
 import java.util.Objects;
-public class TicketId implements Serializable {
-    private Seat seat;
-    private MovieHall movieHall;
 
-    private MovieScreening screening;
+public class TicketId implements Serializable {
+
+    @Field("seatId")
+    private Integer seatId;
+
+    @Field("hallId")
+    private Integer hallId;
+
+    @Field("screeningId")
+    private Integer screeningId;
+
+    // Getters and Setters
+    public Integer getSeatId() {
+        return seatId;
+    }
+
+    public TicketId(Integer seatId, Integer hallId, Integer screeningId) {
+        this.seatId = seatId;
+        this.hallId = hallId;
+        this.screeningId = screeningId;
+    }
 
     public TicketId() {
     }
 
-    public TicketId(Seat seat, MovieHall movieHall, MovieScreening screening) {
-        this.seat = seat;
-        this.movieHall = movieHall;
-        this.screening = screening;
+    public void setSeatId(Integer seatId) {
+        this.seatId = seatId;
+    }
+
+    public Integer getHallId() {
+        return hallId;
+    }
+
+    public void setHallId(Integer hallId) {
+        this.hallId = hallId;
+    }
+
+    public Integer getScreeningId() {
+        return screeningId;
+    }
+
+    public void setScreeningId(Integer screeningId) {
+        this.screeningId = screeningId;
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (!(object instanceof TicketId ticketId)) return false;
-        return Objects.equals(getSeat(), ticketId.getSeat()) && Objects.equals(getMovieHall(), ticketId.getMovieHall()) && Objects.equals(getScreening(), ticketId.getScreening());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TicketId ticketId = (TicketId) o;
+        return Objects.equals(seatId, ticketId.seatId) &&
+               Objects.equals(hallId, ticketId.hallId) &&
+               Objects.equals(screeningId, ticketId.screeningId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getSeat(), getMovieHall(), getScreening());
-    }
-
-    public Seat getSeat() {
-        return seat;
-    }
-
-    public void setSeat(Seat seat) {
-        this.seat = seat;
-    }
-
-    public MovieHall getMovieHall() {
-        return movieHall;
-    }
-
-    public void setMovieHall(MovieHall movieHall) {
-        this.movieHall = movieHall;
-    }
-
-    public MovieScreening getScreening() {
-        return screening;
-    }
-
-    public void setScreening(MovieScreening screening) {
-        this.screening = screening;
+        return Objects.hash(seatId, hallId, screeningId);
     }
 
     @Override
     public String toString() {
         return "TicketId{" +
-               "seat=" + seat +
-               ", movieHall=" + movieHall +
-               ", screening=" + screening +
+               "seatId=" + seatId +
+               ", hallId=" + hallId +
+               ", screeningId=" + screeningId +
                '}';
     }
 }
-//@Embeddable
-//public class TicketId implements Serializable {
-//    private SeatId seatId;
-//    private Integer screeningId;
-//
-//    public SeatId getSeatId() {
-//        return seatId;
-//    }
-//
-//    public void setSeatId(SeatId seatId) {
-//        this.seatId = seatId;
-//    }
-//
-//    public Integer getScreeningId() {
-//        return screeningId;
-//    }
-//
-//    public void setScreeningId(Integer screeningId) {
-//        this.screeningId = screeningId;
-//    }
-//
-//    public TicketId() {}
-//
-//    public TicketId(SeatId seatId, Integer screeningId) {
-//        this.seatId = seatId;
-//        this.screeningId = screeningId;
-//    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        TicketId ticketId = (TicketId) o;
-//        return Objects.equals(seatId, ticketId.seatId) &&
-//               Objects.equals(screeningId, ticketId.screeningId);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(seatId, screeningId);
-//    }
-//}

@@ -24,7 +24,6 @@ public class MovieTranslator implements ItemTranslator<Movie, MovieDocument> {
             movieDocument.setActors(movie.getActors().stream().map(actor -> {
                 var actorDocument = new ActorDocument();
                 BeanUtils.copyProperties(actor, actorDocument);
-//                actorDocument.setMovies(input.stream().filter(actorMovie -> actorMovie.getActors().contains(actor)).map(this::createMovieDocument).collect(Collectors.toList()));
                 return actorDocument;
             }).collect(Collectors.toList()));
             movieDocument.setDirectors(movie.getDirectors().stream().map(director -> {

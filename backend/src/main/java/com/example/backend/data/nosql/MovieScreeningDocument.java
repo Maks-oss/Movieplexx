@@ -3,21 +3,20 @@ package com.example.backend.data.nosql;
 import jakarta.persistence.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 import java.util.Objects;
 
-@Document
-public class MovieScreening {
+@Document("MovieScreening")
+public class MovieScreeningDocument {
     @Id
     private Integer id;
 
+    private Integer movieId;
 
     @DocumentReference
-    private MovieDocument movie;
-
-    @DocumentReference
-    private MovieHall moviehall;
+    private MovieHallDocument moviehall;
 
     @Column(name = "starttime")
     private Instant startTime;
@@ -32,19 +31,19 @@ public class MovieScreening {
     public void setId(Integer id) {
         this.id = id;
     }
-    public MovieDocument getMovie() {
-        return movie;
+    public int getMovie() {
+        return movieId;
     }
 
-    public void setMovie(MovieDocument movie) {
-        this.movie = movie;
+    public void setMovie(int movie) {
+        this.movieId = movie;
     }
 
-    public MovieHall getMoviehall() {
+    public MovieHallDocument getMoviehall() {
         return moviehall;
     }
 
-    public void setMoviehall(MovieHall moviehall) {
+    public void setMoviehall(MovieHallDocument moviehall) {
         this.moviehall = moviehall;
     }
 
@@ -67,7 +66,7 @@ public class MovieScreening {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof MovieScreening that)) return false;
+        if (!(object instanceof MovieScreeningDocument that)) return false;
         return Objects.equals(getId(), that.getId()) && Objects.equals(getMovie(), that.getMovie()) && Objects.equals(getMoviehall(), that.getMoviehall()) && Objects.equals(getStartTime(), that.getStartTime()) && Objects.equals(getEndTime(), that.getEndTime());
     }
 
@@ -80,7 +79,7 @@ public class MovieScreening {
     public String toString() {
         return "MovieScreening{" +
                "id=" + id +
-               ", movie=" + movie +
+               ", movie=" + movieId +
                ", moviehall=" + moviehall +
                ", startTime=" + startTime +
                ", endTime=" + endTime +

@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-@Document
-public class Employee {
+@Document("Employee")
+public class EmployeeDocument {
     @Id
     private Integer id;
 
 
-    private List<Employee> supervises;
+    private List<EmployeeDocument> supervises;
 
     @Column(name = "firstname", length = Integer.MAX_VALUE)
     private String firstname;
@@ -29,9 +29,9 @@ public class Employee {
     private String password;
 
     @DocumentReference
-    private Set<Role> roles;
+    private Set<RoleDocument> roles;
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<RoleDocument> roles) {
         this.roles = roles;
     }
 
@@ -43,11 +43,11 @@ public class Employee {
         this.id = id;
     }
 
-    public List<Employee> getSupervises() {
+    public List<EmployeeDocument> getSupervises() {
         return supervises;
     }
 
-    public void setSupervises(List<Employee> supervises) {
+    public void setSupervises(List<EmployeeDocument> supervises) {
         this.supervises = supervises;
     }
 
@@ -83,7 +83,7 @@ public class Employee {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public Set<RoleDocument> getRoles() {
         return roles;
     }
 
@@ -103,7 +103,7 @@ public class Employee {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof Employee employee)) return false;
+        if (!(object instanceof EmployeeDocument employee)) return false;
         return Objects.equals(getId(), employee.getId()) && Objects.equals(getSupervises(), employee.getSupervises()) && Objects.equals(getFirstname(), employee.getFirstname()) && Objects.equals(getLastname(), employee.getLastname()) && Objects.equals(getEmail(), employee.getEmail()) && Objects.equals(getPassword(), employee.getPassword()) && Objects.equals(getRoles(), employee.getRoles());
     }
 

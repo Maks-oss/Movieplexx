@@ -6,6 +6,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import net.datafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -21,7 +23,6 @@ import java.util.stream.Collectors;
 public class DataGeneratorService {
     private final Faker faker = new Faker();
     private Logger generatorLogger = Logger.getLogger("generator");
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -264,7 +265,7 @@ public class DataGeneratorService {
         Role cashierRole = new Role("Cashier", "Sell tickets");
         Role managerRole = new Role("Manager", "Supervises cashier and updates movies");
         List<Employee> managers = new ArrayList<>();
-        for (int i = 0; i< 2 ; i++) {
+        for (int i = 0; i < 2 ; i++) {
             Employee manager = new Employee();
             manager.setFirstname(faker.elderScrolls().firstName());
             manager.setLastname(faker.elderScrolls().lastName());
@@ -278,6 +279,7 @@ public class DataGeneratorService {
             managerRole.setEmployees(Set.of(manager));
             entityManager.persist(managerRole);
             managers.add(manager);
+
         }
         for (int i = 0; i < 3; i++) {
             Employee cashier = new Employee();
