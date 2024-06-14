@@ -12,14 +12,24 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @GetMapping("/first")
-    public ResponseEntity<?> generateReport() {
+    @GetMapping("/first/sql")
+    public ResponseEntity<?> generateReportSql() {
         return ResponseEntity.ok(reportService.createReport());
     }
 
-    @GetMapping("/nedim")
-    public ResponseEntity<?> generateReportNedim() {
-        return ResponseEntity.ok(reportService.createReportNedim());
+    @GetMapping("/first/nosql")
+    public ResponseEntity<?> generateReportNoSql() {
+        return ResponseEntity.ok(reportService.createReportNoSql());
+    }
+
+    @GetMapping("/nedim/sql")
+    public ResponseEntity<?> generateReportNedimSql() {
+        return ResponseEntity.ok(reportService.createReportNedimSql());
+    }
+
+    @GetMapping("/nedim/nosql")
+    public ResponseEntity<?> generateReportNedimNoSql() {
+        return ResponseEntity.ok(reportService.createReportNedimNoSql());
     }
 
 }
