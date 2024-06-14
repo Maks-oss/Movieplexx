@@ -29,7 +29,8 @@ services:
     ports:
       - "5433:8080"
     networks:
-      - data-tier
+      - data-nosql-tier
+      - data-sql-tier
       - frontend-tier
   movieplexxdb:
     image: postgres:14-alpine
@@ -40,13 +41,11 @@ services:
       - 'POSTGRES_DB=movieplexx'
       - 'POSTGRES_PASSWORD=test'
     networks:
-      - data-tier
+      - data-sql-tier
   movieplexxmongodb:
     image: mongo:5.0.27
     networks:
-      - data-tier
-    ports:
-      - "27017:27017"
+      - data-nosql-tier
   mongoexpress:
     image: mongo-express:1.0.2-18
     depends_on:
@@ -58,12 +57,14 @@ services:
     ports:
       - "8888:8081"
     networks:
-      - data-tier
+      - data-nosql-tier
 
 volumes:
   movieplexxdata:
 networks:
-  data-tier:
+  data-sql-tier:
+    driver: bridge
+  data-nosql-tier:
     driver: bridge
   frontend-tier:
     driver: bridge

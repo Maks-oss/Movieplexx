@@ -33,7 +33,6 @@ public class ReportService {
     private EntityManager entityManager;
     @Autowired
     private MongoTemplate mongoTemplate;
-    private Logger logger = Logger.getLogger("Report");
     public Map<String, Object> createReportNoSql() {
         var cinemas = mongoTemplate.findAll(CinemaDocument.class);
         Map<String, Object> map = new HashMap<>();
