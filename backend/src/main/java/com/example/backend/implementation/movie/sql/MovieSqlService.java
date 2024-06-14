@@ -73,9 +73,6 @@ public class MovieSqlService {
         for (int i = 0; i < movieHalls.size() / 3; i++) {
             var movieScreening = generatorService.generateMovieScreening(movie, movieHalls.get(i));
         }
-        Set<Movie> movies = manager.getManagedMovies();
-        movies.add(movie);
-        manager.setManagedMovies(movies);
 
         return movie;
     }

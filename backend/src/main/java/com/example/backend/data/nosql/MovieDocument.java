@@ -1,10 +1,12 @@
 package com.example.backend.data.nosql;
 
+import com.example.backend.data.sql.Employee;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,22 +28,27 @@ public class MovieDocument {
     private LocalDate releaseDate;
 
     private Integer ageRating;
-//    @JsonIgnore
     @DocumentReference
+    private EmployeeDocument manager;
+    @JsonIgnore
     private List<ActorDocument> actors = new ArrayList<>();
-//    @JsonIgnore
-    @DocumentReference
+    @JsonIgnore
     private List<DirectorDocument> directors = new ArrayList<>();
 
-    private List<Integer> movieScreeningIds;
 
 
     @DocumentReference
     private EmployeeDocument employee;
-
-    private List<MoviePromo> promoList;
     public Integer getId() {
         return id;
+    }
+
+    public EmployeeDocument getManager() {
+        return manager;
+    }
+
+    public void setManager(EmployeeDocument manager) {
+        this.manager = manager;
     }
 
     public void setId(Integer id) {
@@ -112,11 +119,11 @@ public class MovieDocument {
         this.image = image;
     }
 
-    public List<Integer> getMovieScreeningIds() {
-        return movieScreeningIds;
+    public EmployeeDocument getEmployee() {
+        return employee;
     }
 
-    public void setMovieScreeningIds(List<Integer> movieScreeningIds) {
-        this.movieScreeningIds = movieScreeningIds;
+    public void setEmployee(EmployeeDocument employee) {
+        this.employee = employee;
     }
 }

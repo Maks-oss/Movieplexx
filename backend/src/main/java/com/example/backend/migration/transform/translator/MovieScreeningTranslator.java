@@ -6,12 +6,15 @@ import com.example.backend.data.nosql.MovieScreeningDocument;
 import com.example.backend.data.sql.Cinema;
 import com.example.backend.data.sql.MovieHall;
 import com.example.backend.data.sql.MovieScreening;
+import org.apache.juli.logging.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component("movie_screening_translator")

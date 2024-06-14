@@ -1,5 +1,6 @@
 package com.example.backend.migration.transform.translator;
 
+import com.example.backend.data.nosql.CinemaDocument;
 import com.example.backend.data.nosql.MovieHallDocument;
 import com.example.backend.data.sql.MovieHall;
 import com.example.backend.data.sql.Seat;
@@ -20,6 +21,9 @@ public class MovieHallTranslator implements ItemTranslator<Map<String, Object>, 
             var movieHallDocument = new MovieHallDocument();
             BeanUtils.copyProperties(movieHall, movieHallDocument);
             movieHallDocument.setSeatList(seats);
+            var cinemaDocument = new CinemaDocument();
+            BeanUtils.copyProperties(movieHall.getCinema(), cinemaDocument);
+            movieHallDocument.setCinema(cinemaDocument);
             return movieHallDocument;
         }).collect(Collectors.toList());
     }

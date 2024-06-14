@@ -28,7 +28,6 @@ public class EmployeeDocument {
     @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
-    @DocumentReference
     private Set<RoleDocument> roles;
 
     public void setRoles(Set<RoleDocument> roles) {

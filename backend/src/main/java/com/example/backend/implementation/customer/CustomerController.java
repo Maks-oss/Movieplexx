@@ -1,6 +1,8 @@
 package com.example.backend.implementation.customer;
 
+import com.example.backend.data.nosql.CustomerDocument;
 import com.example.backend.data.sql.Customer;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,16 +16,30 @@ import java.util.List;
 @RequestMapping("customers")
 public class CustomerController {
     private final CustomerRepository customerRepository;
+    private final MongoTemplate mongoTemplate;
 
-    public CustomerController(CustomerRepository customerRepository) {
+    public CustomerController(CustomerRepository customerRepository, MongoTemplate mongoTemplate) {
         this.customerRepository = customerRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getCustomers() {
+
+    @GetMapping("/sql")
+    public ResponseEntity<?> getCustomersSql() {
         var customers = customerRepository.findAll();
         List<CustomerResponse> response = new ArrayList<>();
         for (Customer el :
+                customers) {
+            response.add(new CustomerResponse(el.getId(),el.getFirstname(),el.getLastname(),el.getEmail()));
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/nosql")
+    public ResponseEntity<?> getCustomersNoSql() {
+        var customers = mongoTemplate.findAll(CustomerDocument.class);
+        List<CustomerResponse> response = new ArrayList<>();
+        for (CustomerDocument el :
                 customers) {
             response.add(new CustomerResponse(el.getId(),el.getFirstname(),el.getLastname(),el.getEmail()));
         }

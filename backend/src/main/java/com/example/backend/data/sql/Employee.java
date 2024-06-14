@@ -37,9 +37,6 @@ public class Employee {
             joinColumns = @JoinColumn(name = "employeeid"),
             inverseJoinColumns = @JoinColumn(name = "roleid"))
     private Set<Role> roles;
-    @OneToMany(mappedBy = "manager")
-    @JsonIgnore
-    private Set<Movie> managedMovies;
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
@@ -96,13 +93,6 @@ public class Employee {
         return roles;
     }
 
-    public Set<Movie> getManagedMovies() {
-        return managedMovies;
-    }
-
-    public void setManagedMovies(Set<Movie> managedMovies) {
-        this.managedMovies = managedMovies;
-    }
 
     @Override
     public String toString() {
@@ -114,7 +104,6 @@ public class Employee {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
-                ", managedMovies=" + managedMovies +
                 '}';
     }
 
@@ -122,11 +111,11 @@ public class Employee {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof Employee employee)) return false;
-        return Objects.equals(getId(), employee.getId()) && Objects.equals(getManager(), employee.getManager()) && Objects.equals(getFirstname(), employee.getFirstname()) && Objects.equals(getLastname(), employee.getLastname()) && Objects.equals(getEmail(), employee.getEmail()) && Objects.equals(getPassword(), employee.getPassword()) && Objects.equals(getRoles(), employee.getRoles()) && Objects.equals(getManagedMovies(), employee.getManagedMovies());
+        return Objects.equals(getId(), employee.getId()) && Objects.equals(getManager(), employee.getManager()) && Objects.equals(getFirstname(), employee.getFirstname()) && Objects.equals(getLastname(), employee.getLastname()) && Objects.equals(getEmail(), employee.getEmail()) && Objects.equals(getPassword(), employee.getPassword()) && Objects.equals(getRoles(), employee.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getManager(), getFirstname(), getLastname(), getEmail(), getPassword(), getRoles(), getManagedMovies());
+        return Objects.hash(getId(), getManager(), getFirstname(), getLastname(), getEmail(), getPassword(), getRoles());
     }
 }

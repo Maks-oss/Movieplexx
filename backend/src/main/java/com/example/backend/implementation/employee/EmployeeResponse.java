@@ -11,8 +11,7 @@ public record EmployeeResponse (
         String firstName,
         String lastName,
         String email,
-        Set<Role> roles,
-        Set<Movie> movies
+        Set<Role> roles
 ) {
 
 }

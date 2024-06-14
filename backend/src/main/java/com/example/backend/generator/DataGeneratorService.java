@@ -32,11 +32,9 @@ public class DataGeneratorService {
         var managers = generateFirstEmployeesWithRoles();
         var actors = generateActors(5);
         var directors = generateDirectors(2);
-        List<Movie> generatedMovies = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             var movie = generateMovie(i, actors, directors, managers.get(i % 2));
             generateMoviePromo(movie, i);
-            generatedMovies.add(movie);
 
             /*
              * For each movie, generate random num of cinemas
@@ -66,15 +64,6 @@ public class DataGeneratorService {
                 }
             }
         }
-        int middle = generatedMovies.size() / 2;
-        List<Movie> firstHalfList = generatedMovies.subList(0, middle-1);
-        List<Movie> secondHalfList = generatedMovies.subList(middle, generatedMovies.size()-1);
-        Set<Movie> firstHalf = new HashSet<>(firstHalfList);
-        Set<Movie> secondHalf = new HashSet<>(secondHalfList);
-
-        entityManager.find(Employee.class, managers.get(0).getId()).setManagedMovies(firstHalf);
-        entityManager.find(Employee.class, managers.get(1).getId()).setManagedMovies(secondHalf);
-
     }
 
     public List<?> retrieveGeneratedData(String type) {
@@ -157,12 +146,10 @@ public class DataGeneratorService {
         movie.setReleaseDate(faker.date().birthdayLocalDate());
         movie.setRuntime(faker.number().numberBetween(90, 180));
         movie.setAgeRating(faker.number().numberBetween(6, 18));
-        int randomActorsNum = faker.number().numberBetween(2, actors.size() - 1);
-        var actorsList = actors.stream().toList();
-        for (int j = 0; j< randomActorsNum; j++) {
-            actorsList.get(faker.number().numberBetween(2, randomActorsNum)).addMovie(movie);
+        for (Actor el: actors) {
+            el.addMovie(movie);
         }
-        movie.setActors(new HashSet<>(actorsList));
+        movie.setActors(new HashSet<>(actors));
         for (Director el : directors) {
             el.addMovie(movie);
         }

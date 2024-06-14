@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,7 @@ public class SeatsNoSqlService {
 
     public List<SeatResponse> findSeatsForScreeningAndHall(int hallId, int screeningId) {
         var seats = mongoTemplate.findById(hallId, MovieHallDocument.class).getSeatList();
+        seats.sort(Comparator.comparingInt(Seat::getNumber));
         var ticketQuery = new Query(Criteria.where("_id.screeningId").is(screeningId)
                 .and("_id.hallId").is(hallId));
         var ticketsSeatIds = mongoTemplate.find(ticketQuery, TicketDocument.class).stream().map(t -> t.getId().getSeatId()).collect(Collectors.toList());

@@ -2,6 +2,7 @@ package com.example.backend.migration.transform.translator;
 
 import com.example.backend.data.nosql.ActorDocument;
 import com.example.backend.data.nosql.DirectorDocument;
+import com.example.backend.data.nosql.EmployeeDocument;
 import com.example.backend.data.nosql.MovieDocument;
 import com.example.backend.data.sql.Movie;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,7 @@ public class MovieTranslator implements ItemTranslator<Movie, MovieDocument> {
                 BeanUtils.copyProperties(director, directorDocument);
                 return directorDocument;
             }).collect(Collectors.toList()));
+            movieDocument.setEmployee(createEmployeeDocument(movie));
             return movieDocument;
         }).collect(Collectors.toList());
     }
@@ -39,5 +41,10 @@ public class MovieTranslator implements ItemTranslator<Movie, MovieDocument> {
         var movieDocument = new MovieDocument();
         BeanUtils.copyProperties(movie, movieDocument);
         return movieDocument;
+    }
+    private EmployeeDocument createEmployeeDocument(Movie movie) {
+        var employee = new EmployeeDocument();
+        BeanUtils.copyProperties(movie.getManager(), employee);
+        return employee;
     }
 }

@@ -6,7 +6,7 @@ export const MovieplexxProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [endpoints, setEndpoints] = useState({
         getMovies: '/movies/sql',
-        getSeats: '/seats/hall/sql',
+        getSeats: '/seats/sql/hall',
         getScreening: '/screening/sql',
         getReportNedim: '/reports/nedim/sql',
         getReportMaks: '/reports/first/sql',

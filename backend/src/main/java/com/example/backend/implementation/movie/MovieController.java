@@ -37,9 +37,15 @@ public class MovieController {
         return ResponseEntity.ok(movieNoSqlService.getMovieDetails(id));
     }
 
-    @PostMapping
-    public ResponseEntity<?> insertMovie(@RequestBody MovieInsertRequest movieToInsert, UriComponentsBuilder uriComponentsBuilder) {
+    @PostMapping("/sql")
+    public ResponseEntity<?> insertMovieSql(@RequestBody MovieInsertRequest movieToInsert, UriComponentsBuilder uriComponentsBuilder) {
         var insertedMovie = movieSqlService.insertMovie(movieToInsert);
+        var uri = uriComponentsBuilder.path("/movies/" + insertedMovie.getId()).build().toUri();
+        return ResponseEntity.created(uri).build();
+    }
+    @PostMapping("/nosql")
+    public ResponseEntity<?> insertMovie(@RequestBody MovieInsertRequest movieToInsert, UriComponentsBuilder uriComponentsBuilder) {
+        var insertedMovie = movieNoSqlService.insertMovie(movieToInsert);
         var uri = uriComponentsBuilder.path("/movies/" + insertedMovie.getId()).build().toUri();
         return ResponseEntity.created(uri).build();
     }

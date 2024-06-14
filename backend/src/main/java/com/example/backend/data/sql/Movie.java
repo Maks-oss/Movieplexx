@@ -150,11 +150,11 @@ public class Movie {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof Movie movie)) return false;
-        return Objects.equals(getId(), movie.getId()) && Objects.equals(getName(), movie.getName()) && Objects.equals(getImage(), movie.getImage()) && Objects.equals(getDescription(), movie.getDescription()) && Objects.equals(getRuntime(), movie.getRuntime()) && Objects.equals(getReleaseDate(), movie.getReleaseDate()) && Objects.equals(getAgeRating(), movie.getAgeRating()) && Objects.equals(employee, movie.employee);
+        return Objects.equals(getId(), movie.getId()) && Objects.equals(getName(), movie.getName()) && Objects.equals(getImage(), movie.getImage()) && Objects.equals(getDescription(), movie.getDescription()) && Objects.equals(getRuntime(), movie.getRuntime()) && Objects.equals(getReleaseDate(), movie.getReleaseDate()) && Objects.equals(getAgeRating(), movie.getAgeRating()) ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getImage(), getDescription(), getRuntime(), getReleaseDate(), getAgeRating(), employee);
+        return Objects.hash(getId(), getName(), getImage(), getDescription(), getRuntime(), getReleaseDate(), getAgeRating());
     }
 }

@@ -15,7 +15,6 @@ public class RoleDocument {
 
     private String description;
 
-    @DocumentReference
     private Set<EmployeeDocument> employees;
 
     public RoleDocument(String name, String description) {

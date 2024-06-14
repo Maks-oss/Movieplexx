@@ -5,14 +5,10 @@ import com.example.backend.data.sql.*;
 import com.example.backend.migration.transform.reader.*;
 import com.example.backend.migration.transform.translator.*;
 import com.example.backend.migration.transform.writer.MongoItemWriter;
-import com.example.backend.migration.transform.writer.MovieItemWriter;
-import com.example.backend.ApplicationContextUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.Objects;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -69,14 +65,14 @@ public class MigrationTaskFactory {
                 (MongoItemWriter<MovieHallDocument>) applicationContext.getBean("mongo_writer")
         );
     }
-    public MigrationTask<Actor, ActorDocument> createActorMigrationTask() {
+    public MigrationTask<Map, ActorDocument> createActorMigrationTask() {
         return new MigrationTask<>(
                 applicationContext.getBean("actor_reader", ActorReader.class),
                 applicationContext.getBean("actor_translator", ActorTranslator.class),
                 (MongoItemWriter<ActorDocument>) applicationContext.getBean("mongo_writer")
         );
     }
-    public MigrationTask<Director, DirectorDocument> createDirectorMigrationTask() {
+    public MigrationTask<Map, DirectorDocument> createDirectorMigrationTask() {
         return new MigrationTask<>(
                 applicationContext.getBean("director_reader", DirectorReader.class),
                 applicationContext.getBean("director_translator", DirectorTranslator.class),

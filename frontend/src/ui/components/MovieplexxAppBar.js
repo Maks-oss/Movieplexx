@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchApi, generate, migrate } from '../../utils/ApiCalls';
 import { useMovieplexxContext } from '../../utils/MovieplexxContext';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {sleep} from "../../utils/Utils";
 
 const LoadingModal = ({ modalDesc, loading }) => {
 
@@ -88,14 +89,15 @@ function MovieplexxAppBar() {
         try {
             const data = await migrate(endpoints);
             console.log("Returned data -> ", data);
+
         } catch (error) {
             console.error("Error generating data: ", error);
         } finally {
+            await sleep(1000)
             setLoading(false);
             setEndpoints({
                 getMovies: '/movies/nosql',
-                getSeats: '/seats/hall/nosql',
-                getScreening: '/screening/nosql',
+                getSeats: '/seats/nosql/hall',
                 getReportNedim: '/reports/nedim/nosql',
                 getReportMaks: '/reports/first/nosql',
                 getActors: '/actors/nosql',
@@ -116,7 +118,7 @@ function MovieplexxAppBar() {
         navigate("/movies");
     };
 
-    const allUsers = [...customers, ...employees];
+    const allUsers = [ ...employees, ...customers];
 
     const pages = allUsers.includes(user) && user?.roles?.some(role => role.name === 'Manager')
         ? ['Movies', 'New movie', 'First report', 'Second report']

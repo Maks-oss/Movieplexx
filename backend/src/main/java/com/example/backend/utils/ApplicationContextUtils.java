@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.utils;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

@@ -5,21 +5,24 @@ import com.example.backend.data.nosql.DirectorDocument;
 import com.example.backend.data.nosql.MovieDocument;
 import com.example.backend.data.sql.Actor;
 import com.example.backend.data.sql.Director;
+import com.example.backend.data.sql.Movie;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component("director_translator")
-public class DirectorTranslator implements ItemTranslator<Director, DirectorDocument> {
+public class DirectorTranslator implements ItemTranslator<Map, DirectorDocument> {
     @Override
     @Transactional
-    public List<DirectorDocument> transformData(List<Director> input) {
+    public List<DirectorDocument> transformData(List<Map> input) {
         return input.stream().map(director -> {
             var directorDocument = createDirectorDocument(director);
-            directorDocument.setMovies(director.getMovies().stream().map(movie -> {
+            List<Movie> movies = (List<Movie>) director.get("movies");
+            directorDocument.setMovies(movies.stream().map(movie -> {
                 var movieDocument = new MovieDocument();
                 BeanUtils.copyProperties(movie, movieDocument);
                 return movieDocument;
@@ -28,9 +31,11 @@ public class DirectorTranslator implements ItemTranslator<Director, DirectorDocu
         }).collect(Collectors.toList());
     }
 
-    private DirectorDocument createDirectorDocument(Director director) {
+    private DirectorDocument createDirectorDocument(Map director) {
         var directorDocument = new DirectorDocument();
-        BeanUtils.copyProperties(director, directorDocument);
+        directorDocument.setId((Integer) director.get("id"));
+        directorDocument.setFirstname((String) director.get("firstName"));
+        directorDocument.setLastname((String) director.get("lastName"));
         return directorDocument;
     }
 }

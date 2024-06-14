@@ -1,5 +1,6 @@
 package com.example.backend.data.nosql;
 
+import com.example.backend.data.sql.Movie;
 import jakarta.persistence.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -14,6 +15,9 @@ public class MovieScreeningDocument {
     private Integer id;
 
     private Integer movieId;
+
+    @DocumentReference
+    private MovieDocument movie;
 
     @DocumentReference
     private MovieHallDocument moviehall;
@@ -31,8 +35,20 @@ public class MovieScreeningDocument {
     public void setId(Integer id) {
         this.id = id;
     }
-    public int getMovie() {
+    public MovieDocument getMovie() {
+        return movie;
+    }
+
+    public Integer getMovieId() {
         return movieId;
+    }
+
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
+    }
+
+    public void setMovie(MovieDocument movie) {
+        this.movie = movie;
     }
 
     public void setMovie(int movie) {
