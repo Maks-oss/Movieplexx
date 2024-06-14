@@ -14,7 +14,7 @@ const SeatSelection = ({seats, movieScreening}) => {
     const [openModal, setOpenModal] = React.useState(false);
     const [confirm, setConfirm] = useState(false)
     const [selectedMethod, setSelectedMethod] = useState('');
-    const { endpoints } = useMovieplexxContext();
+    const { endpoints, user } = useMovieplexxContext();
 
     const rows = groupSeatsByRow(seats);
     const navigation = useNavigate();
@@ -22,7 +22,9 @@ const SeatSelection = ({seats, movieScreening}) => {
         setConfirm(true)
         createTicketRequest(selectedMethod, {
             seatId: selectedSeat,
-            movieScreening: movieScreening
+            movieScreening: movieScreening,
+            userId: user.id,
+            isEmployee: user.roles != null
         },endpoints).then((data) => {
             navigation(`ticket${data.movieName}`, {
                 state: data

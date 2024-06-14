@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Component("movie_translator")
 public class MovieTranslator implements ItemTranslator<Movie, MovieDocument> {
-    private Logger logger = Logger.getLogger("Movie translator");
     @Override
     @Transactional
     public List<MovieDocument> transformData(List<Movie> input) {

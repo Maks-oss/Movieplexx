@@ -28,6 +28,13 @@ public class TicketController {
         return ResponseEntity.ok(ticketSqlService.createTicketResponse(createTicketRequestBody));
     }
 
+    @GetMapping("/sql/{id}")
+    public ResponseEntity<?> getCustomerTickets(
+            @PathVariable int id
+    ) {
+        return ResponseEntity.ok(ticketSqlService.getCustomerTickets(id));
+    }
+
     @PostMapping("/nosql")
     public ResponseEntity<?> createTicketNoSql(
             @RequestParam String paymentMethod,

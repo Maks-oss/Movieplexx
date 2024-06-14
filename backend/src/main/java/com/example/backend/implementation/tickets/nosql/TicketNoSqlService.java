@@ -52,13 +52,11 @@ public class TicketNoSqlService {
     private TicketDocument createTicket(CreateTicketRequestBody createTicketRequestBody, Seat seat) {
         var ticket = new TicketDocument();
         ticket.setDateOfIssue(LocalDate.now());
-        if (createTicketRequestBody.customer() != null) {
-            ticket.setCustomerId(createTicketRequestBody.customer().getId());
+        if (createTicketRequestBody.isEmployee()) {
+            ticket.setEmployeeId(createTicketRequestBody.userId());
+        } else {
+            ticket.setCustomerId(createTicketRequestBody.userId());
         }
-        if (createTicketRequestBody.employee() != null) {
-            ticket.setEmployeeId(createTicketRequestBody.employee().getId());
-        }
-
         if (seat == null) throw new RuntimeException("Invalid seat");
         ticket.setId(new TicketId(seat.getSeatId(), seat.getMovieHall().getId(), createTicketRequestBody.movieScreening().getId()));
         ticket.setPrice(seat.getPrice());

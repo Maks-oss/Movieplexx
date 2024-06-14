@@ -33,8 +33,6 @@ public class MovieDocument {
     @JsonIgnore
     private List<DirectorDocument> directors = new ArrayList<>();
 
-
-
     @DocumentReference
     private EmployeeDocument employee;
     public Integer getId() {

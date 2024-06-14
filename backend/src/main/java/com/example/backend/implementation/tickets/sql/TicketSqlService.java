@@ -2,6 +2,8 @@ package com.example.backend.implementation.tickets.sql;
 
 import com.example.backend.data.sql.Seat;
 import com.example.backend.data.sql.Ticket;
+import com.example.backend.implementation.customer.CustomerRepository;
+import com.example.backend.implementation.employee.EmployeeRepository;
 import com.example.backend.implementation.seats.sql.SeatsRepository;
 import com.example.backend.implementation.tickets.CreateTicketRequestBody;
 import com.example.backend.implementation.tickets.TicketResponse;
@@ -17,12 +19,16 @@ import java.util.logging.Logger;
 public class TicketSqlService {
     private final TicketRepository ticketRepository;
     private final SeatsRepository seatsRepository;
-    private final Logger ticketLogger = Logger.getLogger("ticket");
+    private final EmployeeRepository employeeRepository;
+    private final CustomerRepository customer;
 
-    public TicketSqlService(TicketRepository ticketRepository, SeatsRepository seatsRepository) {
+    public TicketSqlService(TicketRepository ticketRepository, SeatsRepository seatsRepository, EmployeeRepository employeeRepository, CustomerRepository customer) {
         this.ticketRepository = ticketRepository;
         this.seatsRepository = seatsRepository;
+        this.employeeRepository = employeeRepository;
+        this.customer = customer;
     }
+
     @Transactional
     public TicketResponse createTicketResponse(CreateTicketRequestBody createTicketRequestBody) {
         var ticket = createTicket(createTicketRequestBody);
@@ -54,11 +60,10 @@ public class TicketSqlService {
     private Ticket createTicket(CreateTicketRequestBody createTicketRequestBody) {
         var ticket = new Ticket();
         ticket.setScreening(createTicketRequestBody.movieScreening());
-        if (createTicketRequestBody.customer() != null) {
-            ticket.setCustomer(createTicketRequestBody.customer());
-        }
-        if (createTicketRequestBody.employee() != null) {
-            ticket.setEmployee(createTicketRequestBody.employee());
+        if (createTicketRequestBody.isEmployee()) {
+            ticket.setEmployee(employeeRepository.findById(createTicketRequestBody.userId()).orElseThrow());
+        } else {
+            ticket.setCustomer(customer.findById(createTicketRequestBody.userId()).orElseThrow());
         }
         ticket.setDateOfIssue(LocalDate.now());
         List<Integer> seatId = createTicketRequestBody.seatId();

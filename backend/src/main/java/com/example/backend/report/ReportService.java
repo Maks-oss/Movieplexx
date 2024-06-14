@@ -37,27 +37,32 @@ public class ReportService {
         var cinemas = mongoTemplate.findAll(CinemaDocument.class);
         Map<String, Object> map = new HashMap<>();
         for (CinemaDocument cinema : cinemas) {
-            map.put(cinema.getName(), getTop5Customers(cinema.getId()));
+            map.put(String.format("%1$s (%2$s, %3$s)", cinema.getName(), cinema.getCity(), cinema.getCountry()), getTop5Customers(cinema.getId()));
         }
         return map;
     }
 
-    public List<Map> getTop5Customers(int cinemaId) {
+    private List<Map> getTop5Customers(int cinemaId) {
         AggregationOperation lookupTickets = Aggregation.lookup("Ticket", "_id", "customerid", "customer_tickets");
+        AggregationOperation unwindTickets = Aggregation.unwind("customer_tickets");
 
         AggregationOperation lookupScreeningDetails = Aggregation.lookup("MovieScreening",
                 "customer_tickets._id.screeningId", "_id", "screening_details");
+        AggregationOperation unwindScreeningDetails = Aggregation.unwind("screening_details");
 
         AggregationOperation lookupHallDetails = Aggregation.lookup("MovieHall",
                 "screening_details.moviehall", "_id", "hall_details"
         );
+        AggregationOperation unwindHallDetails = Aggregation.unwind("hall_details");
+
         AggregationOperation lookupCinemaDetails = Aggregation.lookup("Cinema",
                 "hall_details.cinema", "_id", "cinema_details");
+        AggregationOperation unwindCinemaDetails = Aggregation.unwind("cinema_details");
 
         AggregationOperation matchCinema = Aggregation.match(
                 Criteria.where("cinema_details._id").is(cinemaId)
         );
-        AggregationOperation unwindTickets = Aggregation.unwind("customer_tickets");
+//        AggregationOperation unwindTickets = Aggregation.unwind("customer_tickets");
 
         AggregationOperation groupByCustomer = Aggregation.group("_id", "firstname", "lastname")
                 .sum("customer_tickets.price").as("totalPrice");
@@ -74,11 +79,14 @@ public class ReportService {
 
         Aggregation aggregation = Aggregation.newAggregation(
                 lookupTickets,
-                lookupScreeningDetails,
-                lookupHallDetails,
-                lookupCinemaDetails,
-                matchCinema,
                 unwindTickets,
+                lookupScreeningDetails,
+                unwindScreeningDetails,
+                lookupHallDetails,
+                unwindHallDetails,
+                lookupCinemaDetails,
+                unwindCinemaDetails,
+                matchCinema,
                 groupByCustomer,
                 projectCustomer,
                 sortByTotalPrice,
@@ -98,7 +106,7 @@ public class ReportService {
         var cinemas = entityManager.createQuery("SELECT c FROM Cinema c", Cinema.class).getResultList();
         Map<String, Object> map = new HashMap<>();
         for (Cinema cinema : cinemas) {
-            map.put(cinema.getName(), entityManager
+            map.put(String.format("%1$s (%2$s, %3$s)", cinema.getName(), cinema.getCity(), cinema.getCountry()), entityManager
                     .createQuery("""
                                 SELECT concat(cus.firstname, ' ', cus.lastname) AS customerName, SUM(t.price) AS totalPrice FROM Customer cus
                                 INNER JOIN Ticket t on t.customer.id = cus.id

@@ -8,8 +8,9 @@ import java.util.List;
 
 public record CreateTicketRequestBody(
         MovieScreening movieScreening,
-        Customer customer,
-        Employee employee,
+        Integer userId,
+        Boolean isEmployee,
         List<Integer> seatId
+
 ) {
 }
