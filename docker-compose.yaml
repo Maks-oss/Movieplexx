@@ -12,35 +12,26 @@ services:
       - ./frontend/src:/app
     networks:
       - frontend-tier
-  backend-sql:
+  backend:
     build:
-      context: backend-sql
-    container_name: backend-sql
+      context: backend
+      dockerfile: Dockerfile
+    container_name: backend
     depends_on:
       - movieplexxdb
+      - movieplexxmongodb
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://movieplexxdb:5432/movieplexx
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=test
+      - SPRING_DATA_MONGODB_URI=mongodb://movieplexxmongodb:27017/movieplexxdb
     ports:
       - "5433:8080"
     networks:
-      - sql-data-tier
+      - data-nosql-tier
+      - data-sql-tier
       - frontend-tier
-#  backend-nosql:
-#    build:
-#      context: backend-nosql
-#    container_name: backend-nosql
-#    depends_on:
-#      - movieplexxmongodb
-#    environment:
-#      - SPRING_DATA_MONGODB_URI=mongodb://movieplexxmongodb:27017/movieplexxdb
-#    ports:
-#      - "5434:8080"
-#    networks:
-#      - no-sql-data-tier
-#      - frontend-tier
   movieplexxdb:
     image: postgres:14-alpine
     volumes:
@@ -50,35 +41,30 @@ services:
       - 'POSTGRES_DB=movieplexx'
       - 'POSTGRES_PASSWORD=test'
     networks:
-      - sql-data-tier
-#  movieplexxmongodb:
-#    image: mongo:5.0.27
-#    volumes:
-#      - movieplexxmongodata:/data/db
-#    ports:
-#      - "27017:27017"
-#    networks:
-#      - no-sql-data-tier
-#  mongoexpress:
-#    image: mongo-express:1.0.2-18
-#    depends_on:
-#      - movieplexxmongodb
-#    environment:
-#      - ME_CONFIG_MONGODB_URL=mongodb://movieplexxmongodb:27017/movieplexxdb
-#      - ME_CONFIG_MONGODB_AUTH_USERNAME='admin'
-#      - ME_CONFIG_MONGODB_AUTH_PASSWORD='pass'
-#    ports:
-#      - "8888:8081"
-#    networks:
-#      - no-sql-data-tier
+      - data-sql-tier
+  movieplexxmongodb:
+    image: mongo:5.0.27
+    networks:
+      - data-nosql-tier
+  mongoexpress:
+    image: mongo-express:1.0.2-18
+    depends_on:
+      - movieplexxmongodb
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://movieplexxmongodb:27017/movieplexxdb
+      - ME_CONFIG_MONGODB_AUTH_USERNAME='admin'
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD='pass'
+    ports:
+      - "8888:8081"
+    networks:
+      - data-nosql-tier
 
 volumes:
   movieplexxdata:
-  movieplexxmongodata:
 networks:
-  sql-data-tier:
+  data-sql-tier:
     driver: bridge
-#  no-sql-data-tier:
-#    driver: bridge
+  data-nosql-tier:
+    driver: bridge
   frontend-tier:
     driver: bridge

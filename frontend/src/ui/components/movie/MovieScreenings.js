@@ -1,10 +1,10 @@
 import {Button, Card, CardContent, CardHeader, Stack} from '@mui/material';
 import {getTime, groupMovieScreeningsByCinema} from "../../../utils/Utils";
 
-export const MovieScreeningsCard = ({cinemaName, screenings, onScreeningClick}) => {
+export const MovieScreeningsCard = ({cinema, screenings, onScreeningClick}) => {
     return (
         <Card>
-            <CardHeader title={`Movieplexx - ${cinemaName}`}/>
+            <CardHeader title={`${cinema.city}, ${cinema.country} - ${cinema.name}`}/>
             <CardContent>
                 <Stack spacing={2} direction="row" sx={{overflow: 'auto'}}>
                     {screenings.map(screening => {
@@ -26,7 +26,7 @@ export const MovieScreenings = ({movieScreenings, onScreeningClick}) => {
 
         <Stack spacing={2} sx={{maxWidth: '60%', height: '100%'}}>
             {Object.entries(cinemasScreenings).map(([cinemaId, {cinema, screenings}]) => {
-                return <MovieScreeningsCard cinemaName={cinema.name} screenings={screenings}
+                return <MovieScreeningsCard cinema={cinema} screenings={screenings}
                                             onScreeningClick={onScreeningClick}/>
             })}
         </Stack>
