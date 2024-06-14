@@ -28,8 +28,6 @@ public class MovieDocument {
     private LocalDate releaseDate;
 
     private Integer ageRating;
-    @DocumentReference
-    private EmployeeDocument manager;
     @JsonIgnore
     private List<ActorDocument> actors = new ArrayList<>();
     @JsonIgnore
@@ -41,14 +39,6 @@ public class MovieDocument {
     private EmployeeDocument employee;
     public Integer getId() {
         return id;
-    }
-
-    public EmployeeDocument getManager() {
-        return manager;
-    }
-
-    public void setManager(EmployeeDocument manager) {
-        this.manager = manager;
     }
 
     public void setId(Integer id) {

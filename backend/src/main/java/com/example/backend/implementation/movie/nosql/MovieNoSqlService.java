@@ -45,7 +45,7 @@ public class MovieNoSqlService {
         movieDocument.setReleaseDate(movieInsertRequest.releaseDate());
         movieDocument.setAgeRating(movieInsertRequest.ageRating());
         EmployeeDocument manager = mongoTemplate.findById(movieInsertRequest.managerId(), EmployeeDocument.class);
-        movieDocument.setManager(manager);
+        movieDocument.setEmployee(manager);
 
         List<ActorDocument> actors = new ArrayList<>();
 
