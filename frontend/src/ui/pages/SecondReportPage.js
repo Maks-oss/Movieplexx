@@ -74,7 +74,7 @@ const SecondReportPage = () => {
     const [currentManager, setCurrentManager] = React.useState('');
     const { endpoints } = useMovieplexxContext();
     React.useEffect(() => {
-        fetchApi(`http://localhost:5433${endpoints.getReportNedim}`)
+        fetchApi(`http://localhost:5433/reports/nedim`)
             .then((data) => {
                 setReportData(data);
                 setCurrentManager(Object.keys(data)[0])

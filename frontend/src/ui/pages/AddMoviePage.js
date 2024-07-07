@@ -17,10 +17,10 @@ const AddMoviePage = () => {
     const navigation = useNavigate();
 
     useEffect(() => {
-        fetchApi(`http://localhost:5433${endpoints.getActors}`).then((data) => {
+        fetchApi(`http://localhost:5433/actors`).then((data) => {
             setActors(data);
         })
-        fetchApi(`http://localhost:5433${endpoints.getDirectors}`).then((data) => {
+        fetchApi(`http://localhost:5433/directors`).then((data) => {
             setDirectors(data);
         })
     }, [endpoints])

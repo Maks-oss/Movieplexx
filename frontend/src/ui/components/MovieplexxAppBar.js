@@ -41,7 +41,7 @@ function MovieplexxAppBar() {
     const [isClicked, setIsClicked] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [modalDesc, setModalDesc] = React.useState("");
-    const { user, setUser, endpoints, setEndpoints } = useMovieplexxContext();
+    const { user, setUser} = useMovieplexxContext();
     const [customers, setCustomers] = React.useState([]);
     const [employees, setEmployees] = React.useState([]);
 
@@ -49,7 +49,7 @@ function MovieplexxAppBar() {
 
     React.useEffect(() => {
 
-        fetchApi('http://localhost:5433' + endpoints.getCustomers)
+        fetchApi('http://localhost:5433/customers')
             .then((data) => {
                 setCustomers(data);
                 setUser(data[0]);
@@ -57,7 +57,7 @@ function MovieplexxAppBar() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-        fetchApi('http://localhost:5433' + endpoints.getEmployees)
+        fetchApi('http://localhost:5433/employees')
             .then((data) => {
                 setEmployees(data);
             })
@@ -66,49 +66,19 @@ function MovieplexxAppBar() {
             });
 
 
-    }, [setUser, endpoints]);
+    }, [setUser]);
 
     const handleGenerateData = async () => {
         setLoading(true);
         setModalDesc("Generating ");
         try {
-            const data = await generate(endpoints);
+            const data = await generate();
             console.log("Returned data -> ", data);
         } catch (error) {
             console.error("Error generating data: ", error);
         } finally {
             setLoading(false);
             window.location.reload();
-        }
-    };
-
-    const handleMigrateData = async () => {
-        setLoading(true);
-        setModalDesc("Migrating ");
-        setIsClicked(true);
-        try {
-            const data = await migrate(endpoints);
-            console.log("Returned data -> ", data);
-
-        } catch (error) {
-            console.error("Error generating data: ", error);
-        } finally {
-            await sleep(1000)
-            setLoading(false);
-            setEndpoints({
-                getMovies: '/movies/nosql',
-                getSeats: '/seats/nosql/hall',
-                getReportNedim: '/reports/nedim/nosql',
-                getReportMaks: '/reports/first/nosql',
-                getActors: '/actors/nosql',
-                getDirectors: '/directors/nosql',
-                getCustomers: '/customers/nosql',
-                getEmployees: '/employees/nosql',
-                postTicket: '/tickets/nosql?paymentMethod=',
-                postGenerate: '/generate',
-                postMigrate: '/migrate'
-            });
-            navigate("/movies");
         }
     };
 
@@ -166,17 +136,6 @@ function MovieplexxAppBar() {
                                 sx={{ my: 2, color: 'white', display: 'block', borderRadius: '8px', marginRight: '18px' }}
                             >
                                 Generate Data
-                            </Button>
-                        </Box>
-
-                        <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
-                            <Button
-                                disabled = {isClicked}
-                                key="migrate"
-                                onClick={handleMigrateData}
-                                sx={{ my: 2, color: 'white', display: 'block', borderRadius: '8px', marginRight: '18px' }}
-                            >
-                                Migrate Data
                             </Button>
                         </Box>
 

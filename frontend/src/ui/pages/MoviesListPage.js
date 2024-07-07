@@ -37,7 +37,7 @@ function MoviesListPage() {
     const [movies, setMovies] = useState(null);
     const { endpoints } = useMovieplexxContext();
     useEffect(() => {
-        fetchApi(`http://localhost:5433${endpoints.getMovies}`).then((data) => {
+        fetchApi(`http://localhost:5433/movies`).then((data) => {
             setMovies(data)
         })
     }, [endpoints])

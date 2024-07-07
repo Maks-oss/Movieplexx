@@ -5,8 +5,8 @@ import Fade from '@mui/material/Fade';
 import PaymentMethodModal from "../PaymentMethodModal";
 import {createTicketRequest} from "../../../utils/ApiCalls";
 import {useNavigate} from "react-router-dom";
-import {groupSeatsByRow, includesArray, sleep} from "../../../utils/Utils";
-import { useMovieplexxContext } from '../../../utils/MovieplexxContext';
+import {groupSeatsByRow} from "../../../utils/Utils";
+import {useMovieplexxContext} from '../../../utils/MovieplexxContext';
 
 const SeatSelection = ({seats, movieScreening}) => {
     const [selectedSeat, setSelectedSeat] = useState(null);
@@ -14,7 +14,7 @@ const SeatSelection = ({seats, movieScreening}) => {
     const [openModal, setOpenModal] = React.useState(false);
     const [confirm, setConfirm] = useState(false)
     const [selectedMethod, setSelectedMethod] = useState('');
-    const { endpoints, user } = useMovieplexxContext();
+    const {endpoints, user} = useMovieplexxContext();
 
     const rows = groupSeatsByRow(seats);
     const navigation = useNavigate();
@@ -25,7 +25,7 @@ const SeatSelection = ({seats, movieScreening}) => {
             movieScreening: movieScreening,
             userId: user.id,
             isEmployee: user.roles != null
-        },endpoints).then((data) => {
+        }, endpoints).then((data) => {
             navigation(`ticket${data.movieName}`, {
                 state: data
             })
@@ -33,7 +33,7 @@ const SeatSelection = ({seats, movieScreening}) => {
         })
     };
     const toggleSeatSelection = (seatId) => {
-        console.log("Seat id: " +seatId)
+        console.log("Seat: " + seatId)
         setSelectedSeat(seatId);
         setIsConfirm(true)
     };
@@ -52,6 +52,10 @@ const SeatSelection = ({seats, movieScreening}) => {
                     <small>N/A</small>
                 </li>
                 <li>
+                    <div className="seat vip"></div>
+                    <small>VIP</small>
+                </li>
+                <li>
                     <div className="seat selected"></div>
                     <small>Selected</small>
                 </li>
@@ -59,23 +63,29 @@ const SeatSelection = ({seats, movieScreening}) => {
                     <div className="seat occupied"></div>
                     <small>Occupied</small>
                 </li>
+
             </ul>
 
             <div className="container">
-                <div className="screen"></div>
+                <div className="screen"/>
                 {Object.entries(rows).map(([row, {rowSeats}], rowIndex) => (
                     <div className="row" key={rowIndex}>
                         {rowSeats.map((data, seatIndex) => (
                             <div
                                 key={seatIndex}
                                 className={`seat ${
-                                    data.occupied ? 'occupied' : JSON.stringify(selectedSeat) === JSON.stringify(data.id) ? 'selected' : ''
+                                    data.occupied ? 'occupied' :
+                                        JSON.stringify(selectedSeat?.id) === JSON.stringify(data.id) ? 'selected'
+                                            : data.type === 'vip' ? 'vip' : ''
                                 }`}
-                                onClick={() => !data.occupied && toggleSeatSelection(data.id)}
+                                onClick={() => !data.occupied && toggleSeatSelection(data)}
                             ></div>
                         ))}
                     </div>
                 ))}
+                {/*<label>*/}
+                {/*    {`Selected seat row: ${selectedSeat?.row} number: ${selectedSeat?.number} price: ${selectedSeat?.price}`}*/}
+                {/*</label>*/}
                 <Fade in={isConfirm}>
                     <Button size="medium" color="secondary" variant="outlined"
                             sx={{flexShrink: 0, borderRadius: '20px', margin: '10px'}} onClick={handleOpen}>
@@ -83,7 +93,6 @@ const SeatSelection = ({seats, movieScreening}) => {
                     </Button>
                 </Fade>
             </div>
-
             <PaymentMethodModal open={openModal} confirm={confirm} handleClose={handleClose}
                                 onConfirmClick={handleConfirmClick} selectedMethod={selectedMethod}
                                 setSelectedMethod={setSelectedMethod}/>

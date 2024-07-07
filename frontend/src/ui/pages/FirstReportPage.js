@@ -79,7 +79,7 @@ function FirstReportPage() {
 
 
     React.useEffect(() => {
-        fetchApi(`http://localhost:5433${endpoints.getReportMaks}`).then((data) => {
+        fetchApi(`http://localhost:5433/reports/first`).then((data) => {
             setReport(data)
             setCurrCinema(Object.keys(data)[0])
         })

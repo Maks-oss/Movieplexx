@@ -9,7 +9,9 @@ export function groupSeatsByRow(seats) {
         acc[row].rowSeats.push({
             id: [seat.seatId, seat.movieHallId],
             number: seat.number,
+            row: seat.row,
             type: seat.type,
+            price: seat.price,
             occupied: seat.isOccupied
         });
         // console.log('seats: ' + JSON.stringify(Object.entries(acc).slice(0,3)))

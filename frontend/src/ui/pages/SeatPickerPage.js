@@ -10,7 +10,7 @@ function SeatPickerPage() {
     const { endpoints } = useMovieplexxContext();
     useEffect(() => {
         //seats/hall/1/screening/1
-        fetchApi(`http://localhost:5433${endpoints.getSeats}/${state.hallId}/screening/${state.movieScreening.id}`).then((data) => {
+        fetchApi(`http://localhost:5433/seats/hall/${state.hallId}/screening/${state.movieScreening.id}`).then((data) => {
             setSeats(data)
         })
     }, [endpoints, state])

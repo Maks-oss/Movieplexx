@@ -22,7 +22,7 @@ function MovieScreeningsPage() {
         })
     }
     useEffect(() => {
-        fetchApi(`http://localhost:5433${endpoints.getMovies}/${state}`).then((data) => {
+        fetchApi(`http://localhost:5433/movies/${state}`).then((data) => {
             setMovieDetails(data)
         })
     }, [endpoints, state])
