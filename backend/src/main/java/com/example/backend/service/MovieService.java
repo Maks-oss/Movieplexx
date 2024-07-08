@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class MovieSqlService {
+public class MovieService {
     private final MovieRepository movieRepository;
     private final ActorRepository actorRepository;
     private final DirectorRepository directorRepository;
@@ -21,7 +21,7 @@ public class MovieSqlService {
     private final EmployeeRepository employeeRepository;
 
 
-    public MovieSqlService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository, MovieHallRepository movieHallRepository, DataGeneratorService generatorService, MovieScreeningRepository movieScreeningRepository, EmployeeRepository employeeRepository) {
+    public MovieService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository, MovieHallRepository movieHallRepository, DataGeneratorService generatorService, MovieScreeningRepository movieScreeningRepository, EmployeeRepository employeeRepository) {
         this.movieRepository = movieRepository;
         this.actorRepository = actorRepository;
         this.directorRepository = directorRepository;

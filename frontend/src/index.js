@@ -15,12 +15,10 @@ const darkTheme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <MovieplexxProvider>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
                 <App />
             </ThemeProvider>
-        </MovieplexxProvider>
     </React.StrictMode>
 );
 

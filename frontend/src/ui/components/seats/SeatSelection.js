@@ -21,7 +21,7 @@ const SeatSelection = ({seats, movieScreening}) => {
     const handleConfirmClick = async () => {
         setConfirm(true)
         createTicketRequest(selectedMethod, {
-            seatId: selectedSeat,
+            seatId: selectedSeat.id,
             movieScreening: movieScreening,
             userId: user.id,
             isEmployee: user.roles != null

@@ -16,13 +16,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class TicketSqlService {
+public class TicketService {
     private final TicketRepository ticketRepository;
     private final SeatsRepository seatsRepository;
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customer;
 
-    public TicketSqlService(TicketRepository ticketRepository, SeatsRepository seatsRepository, EmployeeRepository employeeRepository, CustomerRepository customer) {
+    public TicketService(TicketRepository ticketRepository, SeatsRepository seatsRepository, EmployeeRepository employeeRepository, CustomerRepository customer) {
         this.ticketRepository = ticketRepository;
         this.seatsRepository = seatsRepository;
         this.employeeRepository = employeeRepository;
@@ -63,7 +63,7 @@ public class TicketSqlService {
         if (ticketRequestBody.isEmployee()) {
             ticket.setEmployee(employeeRepository.findById(ticketRequestBody.userId()).orElseThrow());
         } else {
-            ticket.setCustomer(customer.findById(ticketRequestBody.userId()).orElseThrow());
+//            ticket.setCustomer(customer.findById(ticketRequestBody.userId()).orElseThrow());
         }
         ticket.setDateOfIssue(LocalDate.now());
         List<Integer> seatId = ticketRequestBody.seatId();

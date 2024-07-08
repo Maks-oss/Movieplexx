@@ -1,6 +1,6 @@
 package com.example.backend.utils;
 
-public enum DataType {
+public enum GenerationDataType {
     EMPLOYEE("emp"),
     CUSTOMER("cus"),
     MOVIE("mov"),
@@ -10,7 +10,7 @@ public enum DataType {
 
     private final String stringValue;
 
-    DataType(String stringValue) {
+    GenerationDataType(String stringValue) {
         this.stringValue = stringValue;
     }
 
@@ -18,8 +18,8 @@ public enum DataType {
         return stringValue;
     }
 
-    public static DataType fromString(String text) {
-        for (DataType value : DataType.values()) {
+    public static GenerationDataType fromString(String text) {
+        for (GenerationDataType value : GenerationDataType.values()) {
             if (value.stringValue.equalsIgnoreCase(text)) {
                 return value;
             }

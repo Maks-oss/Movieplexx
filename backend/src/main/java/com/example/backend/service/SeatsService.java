@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class SeatsSqlService {
+public class SeatsService {
     private final SeatsRepository seatsRepository;
 
-    public SeatsSqlService(SeatsRepository seatsRepository) {
+    public SeatsService(SeatsRepository seatsRepository) {
         this.seatsRepository = seatsRepository;
     }
 

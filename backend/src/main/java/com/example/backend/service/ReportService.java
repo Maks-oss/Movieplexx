@@ -6,8 +6,6 @@ import com.example.backend.data.persistence.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,9 +16,6 @@ import java.util.Map;
 public class ReportService {
     @PersistenceContext
     private EntityManager entityManager;
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
 
     @Transactional
     public Map<String, Object> createReport() {

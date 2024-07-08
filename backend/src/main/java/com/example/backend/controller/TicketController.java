@@ -2,18 +2,18 @@ package com.example.backend.controller;
 
 import com.example.backend.service.PaymentService;
 import com.example.backend.data.request.TicketRequestBody;
-import com.example.backend.service.TicketSqlService;
+import com.example.backend.service.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("tickets")
 public class TicketController {
-    private final TicketSqlService ticketSqlService;
+    private final TicketService ticketService;
     private final PaymentService paymentService;
 
-    public TicketController(TicketSqlService ticketSqlService, PaymentService paymentService) {
-        this.ticketSqlService = ticketSqlService;
+    public TicketController(TicketService ticketService, PaymentService paymentService) {
+        this.ticketService = ticketService;
         this.paymentService = paymentService;
     }
 
@@ -23,19 +23,19 @@ public class TicketController {
             @RequestBody TicketRequestBody ticketRequestBody
     ) {
         paymentService.processPayment(paymentMethod);
-        return ResponseEntity.ok(ticketSqlService.createTicketResponse(ticketRequestBody));
+        return ResponseEntity.ok(ticketService.createTicketResponse(ticketRequestBody));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCustomerTickets(
             @PathVariable int id
     ) {
-        return ResponseEntity.ok(ticketSqlService.getCustomerTickets(id));
+        return ResponseEntity.ok(ticketService.getCustomerTickets(id));
     }
 
     @GetMapping("/clear")
     public ResponseEntity<?> clearTickets() {
-        ticketSqlService.clearAll();
+        ticketService.clearAll();
         return ResponseEntity.noContent().build();
     }
 }

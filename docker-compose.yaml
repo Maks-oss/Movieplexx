@@ -19,7 +19,6 @@ services:
     container_name: backend
     depends_on:
       - movieplexxdb
-      - movieplexxmongodb
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://movieplexxdb:5432/movieplexx
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -42,22 +41,22 @@ services:
       - 'POSTGRES_PASSWORD=test'
     networks:
       - data-sql-tier
-  movieplexxmongodb:
-    image: mongo:5.0.27
-    networks:
-      - data-nosql-tier
-  mongoexpress:
-    image: mongo-express:1.0.2-18
-    depends_on:
-      - movieplexxmongodb
-    environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://movieplexxmongodb:27017/movieplexxdb
-      - ME_CONFIG_MONGODB_AUTH_USERNAME='admin'
-      - ME_CONFIG_MONGODB_AUTH_PASSWORD='pass'
-    ports:
-      - "8888:8081"
-    networks:
-      - data-nosql-tier
+#  movieplexxmongodb:
+#    image: mongo:5.0.27
+#    networks:
+#      - data-nosql-tier
+#  mongoexpress:
+#    image: mongo-express:1.0.2-18
+#    depends_on:
+#      - movieplexxmongodb
+#    environment:
+#      - ME_CONFIG_MONGODB_URL=mongodb://movieplexxmongodb:27017/movieplexxdb
+#      - ME_CONFIG_MONGODB_AUTH_USERNAME='admin'
+#      - ME_CONFIG_MONGODB_AUTH_PASSWORD='pass'
+#    ports:
+#      - "8888:8081"
+#    networks:
+#      - data-nosql-tier
 
 volumes:
   movieplexxdata:

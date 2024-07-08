@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.data.persistence.*;
-import com.example.backend.utils.DataType;
+import com.example.backend.utils.GenerationDataType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -65,8 +65,8 @@ public class DataGeneratorService {
     }
 
     public List<?> retrieveGeneratedData(String type) {
-        DataType dataType = DataType.fromString(type);
-        switch (dataType) {
+        GenerationDataType generationDataType = GenerationDataType.fromString(type);
+        switch (generationDataType) {
             case MOVIE -> {
                 return entityManager
                         .createQuery("""

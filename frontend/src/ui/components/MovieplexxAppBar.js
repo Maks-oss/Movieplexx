@@ -11,11 +11,13 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { fetchApi, generate, migrate } from '../../utils/ApiCalls';
 import { useMovieplexxContext } from '../../utils/MovieplexxContext';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import {sleep} from "../../utils/Utils";
+import { FormControl, MenuItem, Select } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
 
 const LoadingModal = ({ modalDesc, loading }) => {
-
     return (
         <Modal
             open={loading}
@@ -38,10 +40,9 @@ const LoadingModal = ({ modalDesc, loading }) => {
 };
 
 function MovieplexxAppBar() {
-    const [isClicked, setIsClicked] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [modalDesc, setModalDesc] = React.useState("");
-    const { user, setUser} = useMovieplexxContext();
+    const { user, setUser, logout} = useMovieplexxContext();
     const [customers, setCustomers] = React.useState([]);
     const [employees, setEmployees] = React.useState([]);
 
@@ -82,13 +83,15 @@ function MovieplexxAppBar() {
         }
     };
 
-    const handleChangeUser = (event) => {
-        const selectedUser = event.target.value;
-        setUser(selectedUser);
-        navigate("/movies");
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
     };
-
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
     const allUsers = [ ...employees, ...customers];
+    const settings = ['Profile', 'Logout'];
 
     const pages = allUsers.includes(user) && user?.roles?.some(role => role.name === 'Manager')
         ? ['Movies', 'New movie', 'First report', 'Second report']
@@ -138,25 +141,36 @@ function MovieplexxAppBar() {
                                 Generate Data
                             </Button>
                         </Box>
-
-                        <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
-                            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                                <InputLabel id="user-select-label">User</InputLabel>
-                                <Select
-                                    labelId="user-select-label"
-                                    id="user-select"
-                                    value={user ? user : ""}
-                                    onChange={handleChangeUser}
-                                    label="User"
-                                >
-                                    {allUsers.map((element, index) => (
-                                        <MenuItem key={index} value={element}>
-                                            {element.firstname} {element.lastname}
-                                            {element.roles && element.roles.length > 0 && ` (${element.roles.map(role => role.name).join(', ')})`}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar>U</Avatar>
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {settings.map((setting) => (
+                                    <MenuItem key={setting} onClick={
+                                        setting === 'Logout' ? logout : handleCloseUserMenu
+                                    }>
+                                        <Typography textAlign="center">{setting}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
                         </Box>
                     </Toolbar>
                 </Container>
