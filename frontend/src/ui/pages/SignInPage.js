@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {useMovieplexxContext} from "../../utils/MovieplexxContext";
 
-
 export default function SignInPage() {
     const {login} = useMovieplexxContext()
     const handleSubmit = (event) => {

@@ -19,15 +19,13 @@ function App() {
                     <Route path="/login" element={<SignInPage/>}/>
                     <Route path="/" element={
                         <>
-                            <ProtectedRoute>
-                                <MovieplexxAppBar/>
-                                <Outlet/>
-                            </ProtectedRoute>
+                            <MovieplexxAppBar/>
+                            <Outlet/>
                         </>
                     }>
-                        <Route path="/movies" element={<ProtectedRoute><MoviesListPage/></ProtectedRoute>}/>
+                        <Route path="/movies" element={<MoviesListPage/>}/>
                         <Route path="/movies/:movieid"
-                               element={<ProtectedRoute><MovieScreeningsPage/></ProtectedRoute>}/>
+                               element={<MovieScreeningsPage/>}/>
                         <Route path="/movies/:movieid/:hallid"
                                element={<ProtectedRoute><SeatPickerPage/></ProtectedRoute>}/>
                         <Route path="/movies/:movieid/:hallid/:ticket"
