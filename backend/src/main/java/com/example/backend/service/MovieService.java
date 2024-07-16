@@ -5,6 +5,9 @@ import com.example.backend.data.request.MovieInsertRequest;
 import com.example.backend.data.response.MovieItemResponse;
 import com.example.backend.repository.*;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -100,5 +103,6 @@ public class MovieService {
                 "movieCast", movieCast
         );
     }
+
 
 }

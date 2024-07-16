@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("moviehall")
+@RequestMapping("moviehalls")
 public class MovieHallController {
     private final SeatsService seatsService;
 
@@ -16,7 +16,7 @@ public class MovieHallController {
         this.seatsService = seatsService;
     }
 
-    @GetMapping("/{hallId}/screening/{screeningId}/seats")
+    @GetMapping("/{hallId}/screenings/{screeningId}/seats")
     public ResponseEntity<?> getSeatsForMovieHallAndScreeningSql(@PathVariable int hallId, @PathVariable int screeningId) {
         return ResponseEntity.ok(seatsService.findSeatsForScreeningAndHall(hallId, screeningId));
     }
