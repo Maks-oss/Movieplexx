@@ -8,7 +8,7 @@ import FirstReportPage from "./pages/FirstReportPage";
 import SecondReportPage from "./pages/SecondReportPage";
 import MovieplexxAppBar from "./components/MovieplexxAppBar";
 import SignInPage from "./pages/SignInPage";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ProtectedRoute from "./navigation/ProtectedRoute";
 import {MovieplexxProvider} from "../utils/MovieplexxContext";
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
                                element={<ProtectedRoute><SeatPickerPage/></ProtectedRoute>}/>
                         <Route path="/movies/:movieid/:hallid/:ticket"
                                element={<ProtectedRoute><TicketPage/></ProtectedRoute>}/>
-                        <Route path="/newmovie" element={<ProtectedRoute><AddMoviePage/></ProtectedRoute>}/>
+                        <Route path="/newmovie" element={<ProtectedRoute><AddMoviePage /></ProtectedRoute>}/>
                         <Route path="/firstreport" element={<ProtectedRoute><FirstReportPage/></ProtectedRoute>}/>
                         <Route path="/secondreport" element={<ProtectedRoute><SecondReportPage/></ProtectedRoute>}/>
                         <Route path="*" element={<p>Not found</p>}/>

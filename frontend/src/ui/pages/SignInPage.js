@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,20 +9,43 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {useMovieplexxContext} from "../../utils/MovieplexxContext";
+import {useNavigate} from "react-router-dom";
+import useApiService from "../../utils/ApiService";
+import React, {useState} from 'react'
+
+import {AuthErrorAlert} from "../components/AuthErrorAlert";
+
 
 export default function SignInPage() {
-    const {login} = useMovieplexxContext()
+    const {setUser, setAccessToken} = useMovieplexxContext()
+    const [authError, setAuthError] = useState(null)
+    const [openAuthErrorDialog, setOpenAuthErrorDialog] = useState(false);
+    const navigation = useNavigate();
+    const apiService = useApiService()
+    const handleAuthErrorDialogClose = () => {
+        setOpenAuthErrorDialog(false);
+    };
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        login({
-            email: data.get('email'),
-            password: data.get('password'),
+        apiService.authenticate(data).then(token => {
+            if (!token.ok) {
+                token.json().then(err => {
+                    setAuthError(err)
+                    setOpenAuthErrorDialog(true)
+                })
+                return
+            }
+            setUser({
+                username: data.get('email'),
+                password: data.get('password'),
+            })
+            setAccessToken(token.accessToken)
+            navigation("/movies");
+        }).catch(error => {
+            console.log(error)
         })
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
     };
 
     return (
@@ -49,8 +71,8 @@ export default function SignInPage() {
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
-                        name="email"
+                        label="Email"
+                        name="Email"
                         autoComplete="email"
                         autoFocus
                     />
@@ -86,6 +108,9 @@ export default function SignInPage() {
                     </Grid>
                 </Box>
             </Box>
+            <AuthErrorAlert errorMessage={authError}
+                            open={openAuthErrorDialog}
+                            handleClose={handleAuthErrorDialogClose}/>
         </Container>
     );
 }

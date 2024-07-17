@@ -1,15 +1,16 @@
 import SeatSelection from "../components/seats/SeatSelection";
-import {fetchApi} from "../../utils/ApiCalls";
 import React, {useState, useEffect} from "react";
 import { useLocation} from 'react-router-dom';
 import { useMovieplexxContext } from "../../utils/MovieplexxContext";
+import useApiService from "../../utils/ApiService";
 
 function SeatPickerPage() {
     const {state} = useLocation()
     const [seats, setSeats] = useState(null);
     const { endpoints } = useMovieplexxContext();
+    const apiService = useApiService()
     useEffect(() => {
-        fetchApi(`http://localhost:5433/moviehalls/${state.hallId}/screenings/${state.movieScreening.id}/seats`).then((data) => {
+        apiService.fetchApi(`http://localhost:5433/moviehalls/${state.hallId}/screenings/${state.movieScreening.id}/seats`).then((data) => {
             setSeats(data)
         })
     }, [endpoints, state])

@@ -1,18 +1,18 @@
 import {useLocation} from 'react-router-dom';
-import {fetchApi} from "../../utils/ApiCalls";
 import React, {useState, useEffect} from "react";
 import {Stack} from '@mui/material';
 import {MovieDetailsCard} from "../components/movie/MovieDetailsCard";
 import {MovieScreenings} from "../components/movie/MovieScreenings";
 import {useNavigate} from "react-router-dom";
 import { useMovieplexxContext } from '../../utils/MovieplexxContext';
-
+import useApiService from "../../utils/ApiService";
 
 function MovieScreeningsPage() {
     const {state} = useLocation()
     const [movieDetails, setMovieDetails] = useState(null);
     const { endpoints } = useMovieplexxContext();
     const navigation = useNavigate()
+    const apiService = useApiService()
     const handleOnScreeningClick = (screening) => {
         navigation(`${screening.moviehall.type}${screening.moviehall.id}`, {
             state: {
@@ -22,7 +22,7 @@ function MovieScreeningsPage() {
         })
     }
     useEffect(() => {
-        fetchApi(`http://localhost:5433/movies/${state}`).then((data) => {
+        apiService.fetchApi(`http://localhost:5433/movies/${state}`).then((data) => {
             setMovieDetails(data)
         })
     }, [endpoints, state])

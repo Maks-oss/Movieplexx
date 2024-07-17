@@ -1,8 +1,8 @@
-import {fetchApi} from '../../utils/ApiCalls'
 import React, {useState, useEffect} from "react";
 import {CardActionArea, Card, CardContent, CardMedia, Typography, Grid} from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useMovieplexxContext } from '../../utils/MovieplexxContext';
+import useApiService from "../../utils/ApiService";
 
 const ListItem = ({ image, title, releaseDate, itemId}) => {
     const navigation = useNavigate();
@@ -36,8 +36,10 @@ const ListItem = ({ image, title, releaseDate, itemId}) => {
 function MoviesListPage() {
     const [movies, setMovies] = useState(null);
     const { endpoints } = useMovieplexxContext();
+    const apiService = useApiService()
+
     useEffect(() => {
-        fetchApi(`http://localhost:5433/movies`).then((data) => {
+        apiService.fetchApi(`http://localhost:5433/movies`).then((data) => {
             setMovies(data)
         })
     }, [endpoints])

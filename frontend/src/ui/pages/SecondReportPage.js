@@ -12,8 +12,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Stack } from '@mui/material';
-import { fetchApi } from "../../utils/ApiCalls";
 import { useMovieplexxContext } from '../../utils/MovieplexxContext';
+import useApiService from "../../utils/ApiService";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -70,11 +70,12 @@ const ManagerPicker = ({ names, manager, onChange }) => {
     );
 }
 const SecondReportPage = () => {
+    const apiService = useApiService()
     const [reportData, setReportData] = React.useState(null);
     const [currentManager, setCurrentManager] = React.useState('');
     const { endpoints } = useMovieplexxContext();
     React.useEffect(() => {
-        fetchApi(`http://localhost:5433/reports/nedim`)
+        apiService.fetchApi(`http://localhost:5433/reports/nedim`)
             .then((data) => {
                 setReportData(data);
                 setCurrentManager(Object.keys(data)[0])

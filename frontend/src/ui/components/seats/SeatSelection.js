@@ -3,10 +3,10 @@ import './Seats.css';
 import {Button} from '@mui/material';
 import Fade from '@mui/material/Fade';
 import PaymentMethodModal from "../PaymentMethodModal";
-import {createTicketRequest} from "../../../utils/ApiCalls";
 import {useNavigate} from "react-router-dom";
 import {groupSeatsByRow} from "../../../utils/Utils";
 import {useMovieplexxContext} from '../../../utils/MovieplexxContext';
+import useApiService from "../../../utils/ApiService";
 
 const SeatSelection = ({seats, movieScreening}) => {
     const [selectedSeat, setSelectedSeat] = useState(null);
@@ -15,17 +15,17 @@ const SeatSelection = ({seats, movieScreening}) => {
     const [confirm, setConfirm] = useState(false)
     const [selectedMethod, setSelectedMethod] = useState('');
     const {endpoints, user} = useMovieplexxContext();
-
+    const apiService = useApiService()
     const rows = groupSeatsByRow(seats);
     const navigation = useNavigate();
     const handleConfirmClick = async () => {
         setConfirm(true)
-        createTicketRequest(selectedMethod, {
+        apiService.createTicketRequest(selectedMethod, {
             seatId: selectedSeat.id,
             movieScreening: movieScreening,
             userId: user.id,
             isEmployee: user.roles != null
-        }, endpoints).then((data) => {
+        }).then((data) => {
             navigation(`ticket${data.movieName}`, {
                 state: data
             })

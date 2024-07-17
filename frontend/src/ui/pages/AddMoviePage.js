@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Chip, FormLabel, MenuItem, Modal, OutlinedInput, Select, TextField, Typography } from "@mui/material";
-import { addMovie, fetchApi } from "../../utils/ApiCalls";
 import { useNavigate } from 'react-router-dom';
 import { useMovieplexxContext } from '../../utils/MovieplexxContext';
+import useApiService from "../../utils/ApiService";
 
 
 const AddMoviePage = () => {
@@ -13,14 +13,14 @@ const AddMoviePage = () => {
     const [directorsId, setDirectorsId] = useState([]);
     const [success, setSuccess] = useState(false);
     const { user, endpoints } = useMovieplexxContext();
-
+    const apiService = useApiService();
     const navigation = useNavigate();
 
     useEffect(() => {
-        fetchApi(`http://localhost:5433/actors`).then((data) => {
+        apiService.fetchApi(`http://localhost:5433/actors`).then((data) => {
             setActors(data);
         })
-        fetchApi(`http://localhost:5433/directors`).then((data) => {
+        apiService.fetchApi(`http://localhost:5433/directors`).then((data) => {
             setDirectors(data);
         })
     }, [endpoints])
@@ -61,7 +61,7 @@ const AddMoviePage = () => {
             directorIds
         };
         console.log(movieData);
-        addMovie(movieData, endpoints)
+        apiService.addMovie(movieData, endpoints)
             .then((data) => {
                 setSuccess(true);
             })

@@ -23,7 +23,6 @@ export const MovieScreeningsCard = ({cinema, screenings, onScreeningClick}) => {
 export const MovieScreenings = ({movieScreenings, onScreeningClick}) => {
     const cinemasScreenings = groupMovieScreeningsByCinema(movieScreenings)
     return (
-
         <Stack spacing={2} sx={{maxWidth: '60%', height: '100%'}}>
             {Object.entries(cinemasScreenings).map(([cinemaId, {cinema, screenings}]) => {
                 return <MovieScreeningsCard cinema={cinema} screenings={screenings}

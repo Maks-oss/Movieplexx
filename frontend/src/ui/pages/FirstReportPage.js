@@ -13,8 +13,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import {Stack} from '@mui/material';
-import {fetchApi} from "../../utils/ApiCalls";
 import { useMovieplexxContext } from '../../utils/MovieplexxContext';
+import useApiService from "../../utils/ApiService";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -76,10 +76,10 @@ function FirstReportPage() {
     const [report, setReport] = React.useState(null);
     const [currCinema, setCurrCinema] = React.useState('');
     const { endpoints } = useMovieplexxContext();
-
+    const apiService = useApiService()
 
     React.useEffect(() => {
-        fetchApi(`http://localhost:5433/reports/first`).then((data) => {
+        apiService.fetchApi(`http://localhost:5433/reports/first`).then((data) => {
             setReport(data)
             setCurrCinema(Object.keys(data)[0])
         })

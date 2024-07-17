@@ -7,8 +7,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import Modal from '@mui/material/Modal';
-import {Link, useNavigate} from "react-router-dom";
-import {generate} from '../../utils/ApiCalls';
+import {useNavigate} from "react-router-dom";
 import {useMovieplexxContext} from '../../utils/MovieplexxContext';
 import {MenuItem} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -18,6 +17,7 @@ import Menu from '@mui/material/Menu';
 import Stack from '@mui/material/Stack';
 
 import PersonIcon from '@mui/icons-material/Person';
+import useApiService from "../../utils/ApiService";
 
 const LoadingModal = ({modalDesc, loading}) => {
     return (
@@ -44,10 +44,10 @@ const LoadingModal = ({modalDesc, loading}) => {
 function MovieplexxAppBar() {
     const [loading, setLoading] = React.useState(false);
     const [modalDesc, setModalDesc] = React.useState("");
-    const {user, setUser, logout} = useMovieplexxContext();
+    const {accessToken, user,setUser, logout} = useMovieplexxContext();
     // const [customers, setCustomers] = React.useState([]);
     // const [employees, setEmployees] = React.useState([]);
-
+    const apiService = useApiService()
     const navigate = useNavigate();
 
     // React.useEffect(() => {
@@ -75,7 +75,7 @@ function MovieplexxAppBar() {
         setLoading(true);
         setModalDesc("Generating ");
         try {
-            const data = await generate();
+            const data = await apiService.generate();
             console.log("Returned data -> ", data);
         } catch (error) {
             console.error("Error generating data: ", error);
@@ -150,7 +150,7 @@ function MovieplexxAppBar() {
                         </Box>
                         <Box sx={{flexGrow: 0}}>
                             {
-                                user !== null
+                                accessToken !== null
                                     ? <AuthorizedUser openUserMenu={handleOpenUserMenu} user={user}/>
                                     : <NonAuthorizedUser authorizeUser={handleSignIn}/>
                             }

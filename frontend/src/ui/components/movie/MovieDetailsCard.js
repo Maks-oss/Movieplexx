@@ -86,8 +86,6 @@ export const MovieDetailsCard = ({movieInfo, movieActors, movieDirectors}) => {
                     </Typography>
                 </CardContent>
             </Collapse>
-
-
         </Card>
     );
 }
