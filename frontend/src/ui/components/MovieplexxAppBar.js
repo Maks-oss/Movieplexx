@@ -44,7 +44,7 @@ const LoadingModal = ({modalDesc, loading}) => {
 function MovieplexxAppBar() {
     const [loading, setLoading] = React.useState(false);
     const [modalDesc, setModalDesc] = React.useState("");
-    const {accessToken, user,setUser, logout} = useMovieplexxContext();
+    const {accessToken, user, setUser, logout} = useMovieplexxContext();
     // const [customers, setCustomers] = React.useState([]);
     // const [employees, setEmployees] = React.useState([]);
     const apiService = useApiService()
@@ -74,14 +74,12 @@ function MovieplexxAppBar() {
     const handleGenerateData = async () => {
         setLoading(true);
         setModalDesc("Generating ");
-        try {
-            const data = await apiService.generate();
-            console.log("Returned data -> ", data);
-        } catch (error) {
-            console.error("Error generating data: ", error);
-        } finally {
-            setLoading(false);
+        const generationResponse = await apiService.generate();
+        setLoading(false);
+        if (generationResponse === "generated") {
             window.location.reload();
+        } else {
+            console.error("Failed to generate:", generationResponse.message)
         }
     };
 
@@ -191,7 +189,7 @@ const AuthorizedUser = ({openUserMenu, user}) => {
     return (
         <Tooltip title="Open settings">
             <IconButton onClick={openUserMenu} sx={{p: 0}}>
-                <Avatar>{user.email.charAt(0).toUpperCase()}</Avatar>
+                <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
             </IconButton>
         </Tooltip>
     )

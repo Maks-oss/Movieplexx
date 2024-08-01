@@ -24,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, AuthService authService) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) ->
                         authorize
-                                .requestMatchers("/moviehall/**", "/tickets/**", "/customers/**", "/employees/**").authenticated()
+                                .requestMatchers("/moviehalls/**", "/tickets/**", "/customers/**", "/employees/**", "/generate/**").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())

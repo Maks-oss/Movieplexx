@@ -31,7 +31,6 @@ const AddMoviePage = () => {
     }
 
     const handleChange = (e) => {
-
         if (e.target.name === "runTime" || e.target.name === "ageRating") {
             const re = /^[0-9\b]+$/;
             if (e.target.value === '' || re.test(e.target.value)) {
@@ -44,7 +43,7 @@ const AddMoviePage = () => {
         }
         setinsertMovie((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let actorIds = [];
         let directorIds = [];

@@ -11,15 +11,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Logger;
+
 @RestController
 public class AuthController {
     private final AuthenticationManager authenticationManager;
+    private final Logger logger = Logger.getLogger("Authentication");
     public AuthController(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        logger.info("User credentials: " + loginRequest);
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
         Authentication authenticationResponse = authenticationManager.authenticate(authenticationRequest);
         String token = JwtUtil.generateToken(authenticationResponse.getName());

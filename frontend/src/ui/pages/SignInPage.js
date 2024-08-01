@@ -17,7 +17,7 @@ import {AuthErrorAlert} from "../components/AuthErrorAlert";
 
 
 export default function SignInPage() {
-    const {setUser, setAccessToken} = useMovieplexxContext()
+    const {setUser, setAccessToken, setIsValidToken} = useMovieplexxContext()
     const [authError, setAuthError] = useState(null)
     const [openAuthErrorDialog, setOpenAuthErrorDialog] = useState(false);
     const navigation = useNavigate();
@@ -25,27 +25,25 @@ export default function SignInPage() {
     const handleAuthErrorDialogClose = () => {
         setOpenAuthErrorDialog(false);
     };
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        apiService.authenticate(data).then(token => {
-            if (!token.ok) {
-                token.json().then(err => {
-                    setAuthError(err)
-                    setOpenAuthErrorDialog(true)
-                })
-                return
-            }
-            setUser({
-                username: data.get('email'),
-                password: data.get('password'),
-            })
-            setAccessToken(token.accessToken)
-            navigation("/movies");
-        }).catch(error => {
-            console.log(error)
-        })
-
+        const creds = {
+            username: data.get('email'),
+            password: data.get('password'),
+        }
+        console.log("Creds: " + JSON.stringify(creds))
+        const response = await apiService.authenticate(creds);
+        const json = await response.json();
+        if (response.ok) {
+            setUser(creds)
+            setAccessToken(json.accessToken)
+            setIsValidToken(true)
+            navigation("/movies")
+        } else {
+            setAuthError(json.error)
+            setOpenAuthErrorDialog(true)
+        }
     };
 
     return (
@@ -72,7 +70,7 @@ export default function SignInPage() {
                         fullWidth
                         id="email"
                         label="Email"
-                        name="Email"
+                        name="email"
                         autoComplete="email"
                         autoFocus
                     />
