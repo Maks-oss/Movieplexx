@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import App from "./ui/App";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { MovieplexxProvider } from './utils/MovieplexxContext';
+import { UserProvider } from './utils/MovieplexxContext';
 
 const darkTheme = createTheme({
     palette: {

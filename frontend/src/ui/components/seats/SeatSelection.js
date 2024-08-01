@@ -5,7 +5,7 @@ import Fade from '@mui/material/Fade';
 import PaymentMethodModal from "../PaymentMethodModal";
 import {useNavigate} from "react-router-dom";
 import {groupSeatsByRow} from "../../../utils/Utils";
-import {useMovieplexxContext} from '../../../utils/MovieplexxContext';
+import {useUserContext} from '../../../utils/MovieplexxContext';
 import useApiService from "../../../utils/ApiService";
 
 const SeatSelection = ({seats, movieScreening}) => {
@@ -14,7 +14,7 @@ const SeatSelection = ({seats, movieScreening}) => {
     const [openModal, setOpenModal] = React.useState(false);
     const [confirm, setConfirm] = useState(false)
     const [selectedMethod, setSelectedMethod] = useState('');
-    const {endpoints, user} = useMovieplexxContext();
+    const {user} = useUserContext();
     const apiService = useApiService()
     const rows = groupSeatsByRow(seats);
     const navigation = useNavigate();
@@ -26,9 +26,8 @@ const SeatSelection = ({seats, movieScreening}) => {
             userId: user.id,
             isEmployee: user.roles != null
         }).then((data) => {
-            navigation(`ticket${data.movieName}`, {
-                state: data
-            })
+            localStorage.setItem("ticketData", JSON.stringify(data))
+            navigation(`ticket${data.movieName}`)
             setConfirm(false)
         })
     };

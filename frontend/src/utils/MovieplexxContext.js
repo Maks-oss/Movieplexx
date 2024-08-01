@@ -3,9 +3,9 @@ import {useLocalStorage} from "./LocalStorage";
 import {useNavigate} from "react-router-dom";
 import useApiService from "./ApiService";
 
-const MovieplexxContext = createContext();
-
-export const MovieplexxProvider = ({ children }) => {
+const UserContext = createContext();
+const NavigationContext = createContext()
+export const UserProvider = ({ children }) => {
     const [user, setUser] = useLocalStorage("user",null);
     const [accessToken, setAccessToken] = useLocalStorage("token",null);
     const [isTokenValid, setIsValidToken] = useLocalStorage("tokenValidity",false);
@@ -29,13 +29,28 @@ export const MovieplexxProvider = ({ children }) => {
         [accessToken, isTokenValid]
     );
     return (
-        <MovieplexxContext.Provider value={value}>
+        <UserContext.Provider value={value}>
             {children}
-        </MovieplexxContext.Provider>
+        </UserContext.Provider>
     );
 };
-
-export const useMovieplexxContext = () => {
-    return useContext(MovieplexxContext);
+export const NavigationParamsProvider = ({children}) => {
+    const [params, setParams] = useLocalStorage("params", {})
+    const value = useMemo(
+        () => ({
+            params, setParams
+        }),
+        [params]
+    );
+    return (
+        <NavigationContext.Provider value={value}>
+            {children}
+        </NavigationContext.Provider>
+    );
+}
+export const useUserContext = () => {
+    return useContext(UserContext);
 };
-
+export const useNavigationParamsContext = () => {
+    return useContext(NavigationContext);
+};

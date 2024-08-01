@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Chip, FormLabel, MenuItem, Modal, OutlinedInput, Select, TextField, Typography } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import { useMovieplexxContext } from '../../utils/MovieplexxContext';
+import { useUserContext } from '../../utils/MovieplexxContext';
 import useApiService from "../../utils/ApiService";
 
 
@@ -12,7 +12,7 @@ const AddMoviePage = () => {
     const [actorsId, setActorsId] = useState([]);
     const [directorsId, setDirectorsId] = useState([]);
     const [success, setSuccess] = useState(false);
-    const { user, endpoints } = useMovieplexxContext();
+    const { user, endpoints } = useUserContext();
     const apiService = useApiService();
     const navigation = useNavigate();
 

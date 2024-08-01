@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Stack } from '@mui/material';
-import { useMovieplexxContext } from '../../utils/MovieplexxContext';
+import { useUserContext } from '../../utils/MovieplexxContext';
 import useApiService from "../../utils/ApiService";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -73,7 +73,7 @@ const SecondReportPage = () => {
     const apiService = useApiService()
     const [reportData, setReportData] = React.useState(null);
     const [currentManager, setCurrentManager] = React.useState('');
-    const { endpoints } = useMovieplexxContext();
+    const { endpoints } = useUserContext();
     React.useEffect(() => {
         apiService.fetchApi(`http://localhost:5433/reports/nedim`)
             .then((data) => {

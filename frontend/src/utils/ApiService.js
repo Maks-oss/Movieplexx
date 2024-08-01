@@ -1,7 +1,7 @@
-import {useMovieplexxContext} from "./MovieplexxContext";
+import {useUserContext} from "./MovieplexxContext";
 
 class ApiService {
-    movieplexxContext = useMovieplexxContext()
+    movieplexxContext = useUserContext()
 
     async fetchApi(endpoint, isProtected = false) {
         console.log("Calling: ", endpoint)

@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from "react";
 import {CardActionArea, Card, CardContent, CardMedia, Typography, Grid} from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { useMovieplexxContext } from '../../utils/MovieplexxContext';
+import {useNavigationParamsContext, useUserContext} from '../../utils/MovieplexxContext';
 import useApiService from "../../utils/ApiService";
 
 const ListItem = ({ image, title, releaseDate, itemId}) => {
     const navigation = useNavigate();
+    const navigationParams = useNavigationParamsContext()
     const onMovieItemClicked = () => {
-        navigation(`${title}${itemId}`, {
-            state: itemId
-        })
+        localStorage.setItem("movieId", itemId)
+        navigation(`${title}${itemId}`)
     };
     return (
         <Card>
@@ -35,7 +35,7 @@ const ListItem = ({ image, title, releaseDate, itemId}) => {
 
 function MoviesListPage() {
     const [movies, setMovies] = useState(null);
-    const { endpoints } = useMovieplexxContext();
+    const { endpoints } = useUserContext();
     const apiService = useApiService()
 
     useEffect(() => {

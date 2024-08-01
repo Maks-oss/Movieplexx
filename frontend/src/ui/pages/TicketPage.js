@@ -31,20 +31,20 @@ const TicketDetails = styled(Box)(({ theme }) => ({
 
 
 const TicketPage = () => {
-    const {state} = useLocation()
+    const ticket = JSON.parse(localStorage.getItem("ticketData"))
     return (
         <Ticket>
             <TicketHeader>
-                <Typography variant="h5">{state.movieName}</Typography>
+                <Typography variant="h5">{ticket.movieName}</Typography>
             </TicketHeader>
             <TicketContent>
-                <Typography variant="body1">Cinema: {state.cinemaBranch}</Typography>
-                <Typography variant="body1">Hall: {state.movieHall}</Typography>
-                <Typography variant="body1">Seat: {state.seat}</Typography>
-                <Typography variant="body1">DateOfIssue: {state.dateOfIssue}</Typography>
-                <Typography variant="body1">Time: {getTime(state.movieStartTime)}</Typography>
+                <Typography variant="body1">Cinema: {ticket.cinemaBranch}</Typography>
+                <Typography variant="body1">Hall: {ticket.movieHall}</Typography>
+                <Typography variant="body1">Seat: {ticket.seat}</Typography>
+                <Typography variant="body1">DateOfIssue: {ticket.dateOfIssue}</Typography>
+                <Typography variant="body1">Time: {getTime(ticket.movieStartTime)}</Typography>
                 <TicketDetails>
-                    <Typography variant="body2">Price: ${state.price}</Typography>
+                    <Typography variant="body2">Price: ${ticket.price}</Typography>
                 </TicketDetails>
             </TicketContent>
         </Ticket>

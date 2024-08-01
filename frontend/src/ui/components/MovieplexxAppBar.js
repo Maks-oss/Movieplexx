@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import Modal from '@mui/material/Modal';
 import {useNavigate} from "react-router-dom";
-import {useMovieplexxContext} from '../../utils/MovieplexxContext';
+import {useUserContext} from '../../utils/MovieplexxContext';
 import {MenuItem} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
@@ -44,7 +44,7 @@ const LoadingModal = ({modalDesc, loading}) => {
 function MovieplexxAppBar() {
     const [loading, setLoading] = React.useState(false);
     const [modalDesc, setModalDesc] = React.useState("");
-    const {accessToken, user, setUser, logout} = useMovieplexxContext();
+    const {accessToken, user, setUser, logout} = useUserContext();
     // const [customers, setCustomers] = React.useState([]);
     // const [employees, setEmployees] = React.useState([]);
     const apiService = useApiService()

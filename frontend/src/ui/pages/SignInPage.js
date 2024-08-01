@@ -8,20 +8,23 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {useMovieplexxContext} from "../../utils/MovieplexxContext";
+import {useUserContext} from "../../utils/MovieplexxContext";
 import {useNavigate} from "react-router-dom";
 import useApiService from "../../utils/ApiService";
 import React, {useState} from 'react'
+import { useLocation } from 'react-router-dom';
 
 import {AuthErrorAlert} from "../components/AuthErrorAlert";
 
 
 export default function SignInPage() {
-    const {setUser, setAccessToken, setIsValidToken} = useMovieplexxContext()
+    const {setUser, setAccessToken, setIsValidToken} = useUserContext()
     const [authError, setAuthError] = useState(null)
     const [openAuthErrorDialog, setOpenAuthErrorDialog] = useState(false);
     const navigation = useNavigate();
     const apiService = useApiService()
+    const {state} = useLocation()
+    console.log("Navigate from:",state.from)
     const handleAuthErrorDialogClose = () => {
         setOpenAuthErrorDialog(false);
     };
@@ -39,7 +42,8 @@ export default function SignInPage() {
             setUser(creds)
             setAccessToken(json.accessToken)
             setIsValidToken(true)
-            navigation("/movies")
+            // navigation("/movies")
+            navigation(state.from)
         } else {
             setAuthError(json.error)
             setOpenAuthErrorDialog(true)
