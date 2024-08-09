@@ -4,8 +4,3 @@ services:
     name: Movieplexx
     repo: https://github.com/Maks-oss/Movieplexx.git # Default: Repo containing render.yaml
     dockerCommand: docker-compose up --build  # Default: Dockerfile CMD
-    scaling: # Autoscaling configuration
-      minInstances: 1
-      maxInstances: 3
-      targetMemoryPercent: 60 # Optional if targetCPUPercent is set
-      targetCPUPercent: 60    # Optional if targetMemory is set
